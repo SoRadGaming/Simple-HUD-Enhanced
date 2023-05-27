@@ -3,9 +3,12 @@
   "id": "simplehudenhanced",
   "version": "${version}",
   "name": "Simple Hud Enhanced",
-  "description": "A Simple Mod that enhances the game's HUD by introducing customizable elements and features to display information. The mod is designed to be lightweight and easy to use, allows users to adjust the position, visibility, and other settings of these elements, providing a personalized HUD experience tailored to individual preferences though the ModMenu mod.",
+  "description": "A Simple Mod that enhances the game's HUD by introducing customizable elements and features to display information.",
   "authors": [
     "SoRadGaming"
+  ],
+  "contributors": [
+    ""
   ],
   "contact": {
     "homepage": "https://github.com/soradgaming/Simple-HUD-Enhanced",
