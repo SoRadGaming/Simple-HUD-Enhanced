@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "simplehudenhanced",
+  "version": "${version}",
+  "name": "Simple Hud Enhanced",
+  "description": "A Simple Mod that enhances the game's HUD by introducing customizable elements and features to display information. The mod is designed to be lightweight and easy to use, allows users to adjust the position, visibility, and other settings of these elements, providing a personalized HUD experience tailored to individual preferences though the ModMenu mod.",
+  "authors": [
+    "SoRadGaming"
+  ],
+  "contact": {
+    "homepage": "https://github.com/soradgaming/Simple-HUD-Enhanced",
+    "issues": "https://github.com/soradgaming/Simple-HUD-Enhanced/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/simplehudenhanced/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.soradgaming.simplehudenhanced.client.SimpleHudEnhancedClient"
+    ],
+    "main": [
+      "com.soradgaming.simplehudenhanced.SimpleHudEnhanced"
+    ],
+    "modmenu": [
+      "com.soradgaming.simplehudenhanced.config.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "simplehudenhanced.mixins.json"
+  ],
+  "suggests": {
+    "modmenu": ">=${modmenu_version}"
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
