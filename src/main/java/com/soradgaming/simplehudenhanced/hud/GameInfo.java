@@ -5,16 +5,9 @@ import com.soradgaming.simplehudenhanced.utli.Utilities;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.biome.Biome;
-
-import java.util.Optional;
-
 
 public class GameInfo {
     private final MinecraftClient client;
@@ -47,14 +40,7 @@ public class GameInfo {
 
         if (this.client.world == null) {return "";}
 
-        Optional<RegistryKey<Biome>> biome = this.client.world.getRegistryManager().get(Registry.BIOME_KEY).getKey(this.client.world.getBiome(this.player.getBlockPos()));
-
-        if (biome.isPresent()) {
-            String biomeName = new TranslatableText("biome." + biome.get().getValue().getNamespace() + "." + biome.get().getValue().getPath()).getString();
-            return String.format("%s " + new TranslatableText("text.hud.simplehudenhanced.biome").getString(), Utilities.capitalise(biomeName));
-        }
-
-        return "";
+        return Utilities.getBiome(this.client.world, this.player);
     }
 
     public String getDirection() {
@@ -70,9 +56,9 @@ public class GameInfo {
         }
         String coordsFormat = "X: %.0f, Z: %.0f";
         if (this.player.world.getRegistryKey().getValue().toString().equals("minecraft:overworld")) {
-            return (new TranslatableText("text.hud.simplehudenhanced.nether").getString() + ": " + String.format(coordsFormat, this.player.getX() / 8, this.player.getZ() / 8));
+            return (Utilities.translatable("text.hud.simplehudenhanced.nether").getString() + ": " + String.format(coordsFormat, this.player.getX() / 8, this.player.getZ() / 8));
         } else if (this.player.world.getRegistryKey().getValue().toString().equals("minecraft:the_nether")) {
-            return(new TranslatableText("text.hud.simplehudenhanced.overworld").getString() + ": " + String.format(coordsFormat, this.player.getX() * 8, this.player.getZ() * 8));
+            return(Utilities.translatable("text.hud.simplehudenhanced.overworld").getString() + ": " + String.format(coordsFormat, this.player.getX() * 8, this.player.getZ() * 8));
         }
         return "";
     }
@@ -109,7 +95,7 @@ public class GameInfo {
         if (!config.statusElements.toggleFps) {
             return "";
         }
-        return String.format("%s fps", this.client.fpsDebugString.split(" ")[0]);
+        return Utilities.getFPS(this.client);
     }
 
     public String getSpeed() {
@@ -134,7 +120,7 @@ public class GameInfo {
         if (!config.statusElements.toggleLightLevel) {
             return "";
         }
-        return String.format(new TranslatableText("text.hud.simplehudenhanced.lightlevel").getString() + ": %d", this.player.world.getLightLevel(this.player.getBlockPos()));
+        return String.format(Utilities.translatable("text.hud.simplehudenhanced.lightlevel").getString() + ": %d", this.player.world.getLightLevel(this.player.getBlockPos()));
     }
 
     public String getTime() {
@@ -174,7 +160,7 @@ public class GameInfo {
         if (!config.statusElements.togglePlayerName) {
             return "";
         }
-        return String.format(new TranslatableText("text.hud.simplehudenhanced.player").getString() + ": %s", this.player.getName().getString());
+        return String.format(Utilities.translatable("text.hud.simplehudenhanced.player").getString() + ": %s", this.player.getName().getString());
     }
 
     public String getServer() {
@@ -182,7 +168,7 @@ public class GameInfo {
             return "";
         }
         try {
-            return String.format(new TranslatableText("text.hud.simplehudenhanced.server").getString() + ": %s", this.client.getCurrentServerEntry().name);
+            return String.format(Utilities.translatable("text.hud.simplehudenhanced.server").getString() + ": %s", this.client.getCurrentServerEntry().name);
         } catch (NullPointerException e) {
             return "";
         }
@@ -193,7 +179,7 @@ public class GameInfo {
             return "";
         }
         try {
-            return String.format(new TranslatableText("text.hud.simplehudenhanced.serveraddress").getString() + ": %s", this.client.getCurrentServerEntry().address);
+            return String.format(Utilities.translatable("text.hud.simplehudenhanced.serveraddress").getString() + ": %s", this.client.getCurrentServerEntry().address);
         } catch (NullPointerException e) {
             return "";
         }
