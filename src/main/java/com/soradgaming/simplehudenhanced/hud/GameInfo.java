@@ -56,9 +56,9 @@ public class GameInfo {
         }
         String coordsFormat = "X: %.0f, Z: %.0f";
         if (this.player.world.getRegistryKey().getValue().toString().equals("minecraft:overworld")) {
-            return (Utilities.translatable("text.hud.simplehudenhanced.nether") + ": " + String.format(coordsFormat, this.player.getX() / 8, this.player.getZ() / 8));
+            return (Utilities.translatable("text.hud.simplehudenhanced.nether").getString() + ": " + String.format(coordsFormat, this.player.getX() / 8, this.player.getZ() / 8));
         } else if (this.player.world.getRegistryKey().getValue().toString().equals("minecraft:the_nether")) {
-            return(Utilities.translatable("text.hud.simplehudenhanced.overworld") + ": " + String.format(coordsFormat, this.player.getX() * 8, this.player.getZ() * 8));
+            return(Utilities.translatable("text.hud.simplehudenhanced.overworld").getString() + ": " + String.format(coordsFormat, this.player.getX() * 8, this.player.getZ() * 8));
         }
         return "";
     }
@@ -95,7 +95,7 @@ public class GameInfo {
         if (!config.statusElements.toggleFps) {
             return "";
         }
-        return String.format("%s fps", this.client.fpsDebugString.split(" ")[0]);
+        return Utilities.getFPS(this.client);
     }
 
     public String getSpeed() {
@@ -120,7 +120,7 @@ public class GameInfo {
         if (!config.statusElements.toggleLightLevel) {
             return "";
         }
-        return String.format(Utilities.translatable("text.hud.simplehudenhanced.lightlevel") + ": %d", this.player.world.getLightLevel(this.player.getBlockPos()));
+        return String.format(Utilities.translatable("text.hud.simplehudenhanced.lightlevel").getString() + ": %d", this.player.world.getLightLevel(this.player.getBlockPos()));
     }
 
     public String getTime() {
@@ -160,7 +160,7 @@ public class GameInfo {
         if (!config.statusElements.togglePlayerName) {
             return "";
         }
-        return String.format(Utilities.translatable("text.hud.simplehudenhanced.player") + ": %s", this.player.getName().getString());
+        return String.format(Utilities.translatable("text.hud.simplehudenhanced.player").getString() + ": %s", this.player.getName().getString());
     }
 
     public String getServer() {
@@ -168,7 +168,7 @@ public class GameInfo {
             return "";
         }
         try {
-            return String.format(Utilities.translatable("text.hud.simplehudenhanced.server") + ": %s", this.client.getCurrentServerEntry().name);
+            return String.format(Utilities.translatable("text.hud.simplehudenhanced.server").getString() + ": %s", this.client.getCurrentServerEntry().name);
         } catch (NullPointerException e) {
             return "";
         }
@@ -179,7 +179,7 @@ public class GameInfo {
             return "";
         }
         try {
-            return String.format(Utilities.translatable("text.hud.simplehudenhanced.serveraddress") + ": %s", this.client.getCurrentServerEntry().address);
+            return String.format(Utilities.translatable("text.hud.simplehudenhanced.serveraddress").getString() + ": %s", this.client.getCurrentServerEntry().address);
         } catch (NullPointerException e) {
             return "";
         }

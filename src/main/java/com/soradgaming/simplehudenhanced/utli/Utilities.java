@@ -1,5 +1,6 @@
 package com.soradgaming.simplehudenhanced.utli;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.text.Text;
@@ -21,8 +22,8 @@ public class Utilities {
     }
 
     /**********************************************************
-      Mod Version Management - Separate for Version Management
-    **********************************************************/
+     Mod Version Management - Separate for Version Management
+     **********************************************************/
 
     // Text Management
     public static Text translatable(String key) {
@@ -39,5 +40,10 @@ public class Utilities {
         }
 
         return "";
+    }
+
+    //Get Player FPS
+    public static String getFPS(MinecraftClient client) {
+        return String.format("%s fps", client.fpsDebugString.split(" ")[0]);
     }
 }
