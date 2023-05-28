@@ -1,11 +1,11 @@
 package com.soradgaming.simplehudenhanced.hud;
 
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
+import com.soradgaming.simplehudenhanced.utli.Utilities;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 
 import java.util.ArrayList;
@@ -106,7 +106,7 @@ public class HUD {
 
     // Draw the movement status on the screen
     private void draw(MatrixStack matrixStack, String textKey) {
-        final String text = Text.translatable(textKey).getString();
+        final String text = Utilities.translatable(textKey).getString();
 
         int yAxis = (((this.client.getWindow().getScaledHeight() - this.renderer.fontHeight + 2) - 4) * (config.uiConfig.movementStatus.movementStatusLocationY) / 100);
         int xAxis = (((this.client.getWindow().getScaledWidth() - this.renderer.getWidth(text)) - 4) * (config.uiConfig.movementStatus.movementStatusLocationX) / 100);
