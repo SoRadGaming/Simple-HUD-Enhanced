@@ -1,6 +1,7 @@
 package com.soradgaming.simplehudenhanced.client;
 
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
+import com.soradgaming.simplehudenhanced.utli.Utilities;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
@@ -8,7 +9,6 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.text.TranslatableText;
 import org.lwjgl.glfw.GLFW;
 
 public class SimpleHudEnhancedClient implements ClientModInitializer {
@@ -43,7 +43,7 @@ public class SimpleHudEnhancedClient implements ClientModInitializer {
                     chatMessage = "key.simplehudenhanced.toggle_hud.chat_message.off";
                 }
 
-                client.player.sendMessage(new TranslatableText(chatMessage), true);
+                client.player.sendMessage(Utilities.translatable(chatMessage), true);
                 config.uiConfig.toggleSimpleHUDEnhanced = !config.uiConfig.toggleSimpleHUDEnhanced;
                 // read file and save to file instead of using this method to save config file modifications
                 AutoConfig.getConfigHolder(SimpleHudEnhancedConfig.class).save();
