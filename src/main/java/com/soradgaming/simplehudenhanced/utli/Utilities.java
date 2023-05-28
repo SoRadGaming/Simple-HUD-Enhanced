@@ -36,8 +36,8 @@ public class Utilities {
         Optional<RegistryKey<Biome>> biome = world.getRegistryManager().get(Registry.BIOME_KEY).getKey(world.getBiome(player.getBlockPos()));
 
         if (biome.isPresent()) {
-            String biomeName = new TranslatableText("biome." + biome.get().getValue().getNamespace() + "." + biome.get().getValue().getPath()).getString();
-            return String.format("%s " + new TranslatableText("text.hud.simplehudenhanced.biome").getString(), Utilities.capitalise(biomeName));
+            String biomeName = Utilities.translatable("biome." + biome.get().getValue().getNamespace() + "." + biome.get().getValue().getPath()).getString();
+            return String.format("%s " + Utilities.translatable("text.hud.simplehudenhanced.biome").getString(), Utilities.capitalise(biomeName));
         }
 
         return "";
