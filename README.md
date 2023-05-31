@@ -1,4 +1,8 @@
 # Simple HUD Enhanced
+## Mod Pages
+[CurseForge](https://www.curseforge.com/minecraft/mc-mods/simple-hud-enhanced)
+
+[Modrinth](https://modrinth.com/mod/simple-hud-enhanced)
 ## Description
 A Minecraft mod that enhances the game's Heads-Up Display (HUD) by introducing 
 customizable elements and features to display information.
