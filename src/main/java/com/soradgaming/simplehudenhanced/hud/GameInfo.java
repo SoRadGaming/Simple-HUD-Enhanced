@@ -55,9 +55,9 @@ public class GameInfo {
             return "";
         }
         String coordsFormat = "X: %.0f, Z: %.0f";
-        if (this.player.world.getRegistryKey().getValue().toString().equals("minecraft:overworld")) {
+        if (this.player.getWorld().getRegistryKey().getValue().toString().equals("minecraft:overworld")) {
             return (Utilities.translatable("text.hud.simplehudenhanced.nether").getString() + ": " + String.format(coordsFormat, this.player.getX() / 8, this.player.getZ() / 8));
-        } else if (this.player.world.getRegistryKey().getValue().toString().equals("minecraft:the_nether")) {
+        } else if (this.player.getWorld().getRegistryKey().getValue().toString().equals("minecraft:the_nether")) {
             return(Utilities.translatable("text.hud.simplehudenhanced.overworld").getString() + ": " + String.format(coordsFormat, this.player.getX() * 8, this.player.getZ() * 8));
         }
         return "";
@@ -120,7 +120,7 @@ public class GameInfo {
         if (!config.statusElements.toggleLightLevel) {
             return "";
         }
-        return String.format(Utilities.translatable("text.hud.simplehudenhanced.lightlevel").getString() + ": %d", this.player.world.getLightLevel(this.player.getBlockPos()));
+        return String.format(Utilities.translatable("text.hud.simplehudenhanced.lightlevel").getString() + ": %d", this.player.getWorld().getLightLevel(this.player.getBlockPos()));
     }
 
     public String getTime() {
@@ -128,7 +128,7 @@ public class GameInfo {
             return "";
         }
 
-        long time = this.player.world.getTimeOfDay();
+        long time = this.player.getWorld().getTimeOfDay();
 
         if (config.statusElements.gameTime.toggleGameTime24Hour) {
             //24-hour format

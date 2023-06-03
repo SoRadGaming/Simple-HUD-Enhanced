@@ -5,7 +5,7 @@ import com.soradgaming.simplehudenhanced.utli.Utilities;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.ActionResult;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class HUD {
     }
 
     // Main HUD function to draw all the elements on the screen
-    public void drawHud(MatrixStack matrixStack) {
+    public void drawHud(DrawContext context) {
         // Check if HUD is enabled
         if (!config.uiConfig.toggleSimpleHUDEnhanced) return;
 
@@ -86,26 +86,26 @@ public class HUD {
                 offset = (BoxWidth - lineLength);
             }
 
-            this.renderer.drawWithShadow(matrixStack, line, xAxis + offset, yAxis + 4, config.uiConfig.textColor);
+            context.drawTextWithShadow(this.renderer, line, xAxis + offset, yAxis + 4, config.uiConfig.textColor);
             yAxis += lineHeight;
         }
 
         // Draw Movement Status
         if (config.uiConfig.movementStatus.toggleMovementStatus) {
             if (config.uiConfig.movementStatus.toggleSwimmingStatus && GameInformation.isPlayerSwimming()) {
-                draw(matrixStack, "text.hud.simplehudenhanced.swimming");
+                draw(context, "text.hud.simplehudenhanced.swimming");
             } else if (config.uiConfig.movementStatus.toggleFlyingStatus && GameInformation.isPlayerFlying()) {
-                draw(matrixStack, "text.hud.simplehudenhanced.flying");
+                draw(context, "text.hud.simplehudenhanced.flying");
             } else if (config.uiConfig.movementStatus.toggleSneakStatus && GameInformation.isPlayerSneaking()) {
-                draw(matrixStack, "text.hud.simplehudenhanced.sneaking");
+                draw(context, "text.hud.simplehudenhanced.sneaking");
             } else if (config.uiConfig.movementStatus.toggleSprintStatus && GameInformation.isPlayerSprinting()) {
-                draw(matrixStack, "text.hud.simplehudenhanced.sprinting");
+                draw(context, "text.hud.simplehudenhanced.sprinting");
             }
         }
     }
 
     // Draw the movement status on the screen
-    private void draw(MatrixStack matrixStack, String textKey) {
+    private void draw(DrawContext context, String textKey) {
         final String text = Utilities.translatable(textKey).getString();
 
         int yAxis = (((this.client.getWindow().getScaledHeight() - this.renderer.fontHeight + 2) - 4) * (config.uiConfig.movementStatus.movementStatusLocationY) / 100);
@@ -122,6 +122,6 @@ public class HUD {
         }
 
         // Draw Info
-        this.renderer.drawWithShadow(matrixStack, text, xAxis, yAxis, config.uiConfig.textColor);
+        context.drawTextWithShadow(this.renderer, text, xAxis, yAxis, config.uiConfig.textColor);
     }
 }

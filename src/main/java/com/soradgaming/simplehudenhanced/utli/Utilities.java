@@ -31,7 +31,7 @@ public class Utilities {
 
     // Get Players Biome
     public static String getBiome(ClientWorld world, ClientPlayerEntity player) {
-        Optional<RegistryKey<Biome>> biome = player.world.getBiome(player.getBlockPos()).getKey();
+        Optional<RegistryKey<Biome>> biome = world.getBiome(player.getBlockPos()).getKey();
 
         if (biome.isPresent()) {
             String biomeName = Text.translatable("biome." + biome.get().getValue().getNamespace() + "." + biome.get().getValue().getPath()).getString();
