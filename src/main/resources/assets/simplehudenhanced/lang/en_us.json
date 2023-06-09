@@ -17,6 +17,7 @@
   "text.hud.simplehudenhanced.block": "Block",
   "text.hud.simplehudenhanced.time": "Time",
   "text.hud.simplehudenhanced.player": "Player",
+  "text.hud.simplehudenhanced.ping": "ms",
   "text.hud.simplehudenhanced.server": "Server Name",
   "text.hud.simplehudenhanced.serveraddress": "Server Address",
   
@@ -92,6 +93,8 @@
   
   "text.autoconfig.simplehudenhanced.option.statusElements.togglePlayerName.@Tooltip": "Show your current player name in the HUD",
   "text.autoconfig.simplehudenhanced.option.statusElements.togglePlayerName": "Player Name",
+  "text.autoconfig.simplehudenhanced.option.statusElements.togglePing.@Tooltip": "Show your current server latency in the HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.togglePing": "Server Ping",
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerName.@Tooltip": "Show your current server name in the HUD",
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerName": "Server Name",
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerAddress.@Tooltip": "Show your current server address in the HUD",
