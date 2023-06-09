@@ -36,7 +36,7 @@ public class Utilities {
 
         if (biome.isPresent()) {
             String biomeName = Utilities.translatable("biome." + biome.get().getValue().getNamespace() + "." + biome.get().getValue().getPath()).getString();
-            return String.format("%s " + Utilities.translatable("text.hud.simplehudenhanced.biome"), Utilities.capitalise(biomeName));
+            return String.format("%s " + Utilities.translatable("text.hud.simplehudenhanced.biome").getString(), Utilities.capitalise(biomeName));
         }
 
         return "";
