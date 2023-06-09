@@ -47,7 +47,11 @@ public class GameInfo {
         if (!config.statusElements.coordinates.toggleCoordinates || !config.statusElements.coordinates.toggleDirection) {
             return "";
         }
-        return String.format(" (%s", Utilities.capitalise(this.player.getHorizontalFacing().asString()));
+        if (config.statusElements.coordinates.toggleOffset) {
+            return String.format(" (%s", Utilities.capitalise(this.player.getHorizontalFacing().asString()));
+        } else {
+            return String.format(" (%s)", Utilities.capitalise(this.player.getHorizontalFacing().asString()));
+        }
     }
 
     public String getNether() {
@@ -161,6 +165,17 @@ public class GameInfo {
             return "";
         }
         return String.format(Utilities.translatable("text.hud.simplehudenhanced.player").getString() + ": %s", this.player.getName().getString());
+    }
+
+    public String getPing() {
+        if (!config.statusElements.togglePing) {
+            return "";
+        }
+        try {
+            return String.format("%s " + Utilities.translatable("text.hud.simplehudenhanced.ping").getString(), this.client.getNetworkHandler().getPlayerListEntry(this.player.getUuid()).getLatency());
+        } catch (NullPointerException e) {
+            return "";
+        }
     }
 
     public String getServer() {
