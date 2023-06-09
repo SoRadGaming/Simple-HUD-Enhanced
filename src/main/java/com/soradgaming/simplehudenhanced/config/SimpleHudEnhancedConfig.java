@@ -62,6 +62,8 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         public boolean togglePlayerName = false;
         @ConfigEntry.Gui.Tooltip
+        public boolean togglePing = false;
+        @ConfigEntry.Gui.Tooltip
         public boolean toggleServerName = false;
         @ConfigEntry.Gui.Tooltip
         public boolean toggleServerAddress = false;
