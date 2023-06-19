@@ -92,14 +92,14 @@ public class HUD {
         }
 
         // Draw Movement Status
-        if (config.uiConfig.movementStatus.toggleMovementStatus) {
-            if (config.uiConfig.movementStatus.toggleSwimmingStatus && GameInformation.isPlayerSwimming()) {
+        if (config.toggleMovementStatus) {
+            if (config.movementStatus.toggleSwimmingStatus && GameInformation.isPlayerSwimming()) {
                 draw(context, "text.hud.simplehudenhanced.swimming");
-            } else if (config.uiConfig.movementStatus.toggleFlyingStatus && GameInformation.isPlayerFlying()) {
+            } else if (config.movementStatus.toggleFlyingStatus && GameInformation.isPlayerFlying()) {
                 draw(context, "text.hud.simplehudenhanced.flying");
-            } else if (config.uiConfig.movementStatus.toggleSneakStatus && GameInformation.isPlayerSneaking()) {
+            } else if (config.movementStatus.toggleSneakStatus && GameInformation.isPlayerSneaking()) {
                 draw(context, "text.hud.simplehudenhanced.sneaking");
-            } else if (config.uiConfig.movementStatus.toggleSprintStatus && GameInformation.isPlayerSprinting()) {
+            } else if (config.movementStatus.toggleSprintStatus && GameInformation.isPlayerSprinting()) {
                 draw(context, "text.hud.simplehudenhanced.sprinting");
             }
         }
@@ -109,8 +109,8 @@ public class HUD {
     private void draw(DrawContext context, String textKey) {
         final String text = Utilities.translatable(textKey).getString();
 
-        int yAxis = (((this.client.getWindow().getScaledHeight() - this.renderer.fontHeight + 2) - 4) * (config.uiConfig.movementStatus.movementStatusLocationY) / 100);
-        int xAxis = (((this.client.getWindow().getScaledWidth() - this.renderer.getWidth(text)) - 4) * (config.uiConfig.movementStatus.movementStatusLocationX) / 100);
+        int yAxis = (((this.client.getWindow().getScaledHeight() - this.renderer.fontHeight + 2) - 4) * (config.movementStatus.movementStatusLocationY) / 100);
+        int xAxis = (((this.client.getWindow().getScaledWidth() - this.renderer.getWidth(text)) - 4) * (config.movementStatus.movementStatusLocationX) / 100);
 
         // Add Padding to left of the screen
         if (xAxis <= 4) {

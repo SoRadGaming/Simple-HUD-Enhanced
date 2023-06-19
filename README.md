@@ -19,6 +19,10 @@ tailored to individual preferences though the [Mod Menu mod](https://www.cursefo
 6. Launch the game using the Fabric profile.
 7. Enjoy!
 
-## Why use this mod?
+## Code Contributions
 This mod has been built from the ground up to be modular and faster to update, 
 originally as a fork of Simple Utilities Mod by [johnvictorfs](https://github.com/johnvictorfs/simple-utilities-mod).
+
+This mod has also used code from :
+[A5b84](https://github.com/SoRadGaming/status-effect-bars)
+
