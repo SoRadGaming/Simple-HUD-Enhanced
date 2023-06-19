@@ -4,23 +4,67 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import com.soradgaming.simplehudenhanced.utli.Colours;
+import net.minecraft.entity.effect.StatusEffectInstance;
 
 @Config(name = "simplehudenhanced")
 public class SimpleHudEnhancedConfig implements ConfigData {
+    @ConfigEntry.Category("Status Elements")
+    @ConfigEntry.Gui.TransitiveObject
+    public UIConfig uiConfig = new UIConfig();
+    @ConfigEntry.Category("Status Elements")
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+    public StatusElements statusElements = new StatusElements();
+
+    @ConfigEntry.Category("Effects Status")
+    @ConfigEntry.Gui.Tooltip
+    public boolean toggleEffectsStatus = true;
+    @ConfigEntry.Category("Effects Status")
+    @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+    @ConfigEntry.Gui.Tooltip(count = 4)
+    public ColorMode colorMode = ColorMode.EFFECT_COLOR;
+    @ConfigEntry.Category("Effects Status")
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+    public EffectsStatus effectsStatus = new EffectsStatus();
+
+    @ConfigEntry.Category("Movement Status")
+    @ConfigEntry.Gui.Tooltip
+    public boolean toggleMovementStatus = false;
+
+    @ConfigEntry.Category("Movement Status")
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+    public MovementElements movementStatus = new MovementElements();
+
     public static class UIConfig {
         @ConfigEntry.Gui.Tooltip
         public boolean toggleSimpleHUDEnhanced = true;
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.ColorPicker
         public int textColor = Colours.WHITE;
+    }
+
+    public static class EffectsStatus {
         @ConfigEntry.Gui.Tooltip
-        @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
-        public MovementElements movementStatus = new MovementElements();
+        @ConfigEntry.ColorPicker(allowAlpha = true)
+        public int backgroundColor = 0x80000000;
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.ColorPicker(allowAlpha = true)
+        public int beneficialForegroundColor = 0x80ffffff;
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.ColorPicker(allowAlpha = true)
+        public int harmfulForegroundColor = beneficialForegroundColor;
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.ColorPicker(allowAlpha = true)
+        public int neutralForegroundColor = beneficialForegroundColor;
+    }
+    public int getColor(StatusEffectInstance effect) {
+        if (this.colorMode == null) return Colours.WHITE;
+        return this.colorMode.getColor(this, effect);
     }
 
     public static class MovementElements {
-        @ConfigEntry.Gui.Tooltip
-        public boolean toggleMovementStatus = false;
         @ConfigEntry.Gui.Tooltip
         public boolean toggleSprintStatus = true;
         @ConfigEntry.Gui.Tooltip
@@ -93,11 +137,4 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         public boolean toggleGameTime24Hour = false;
     }
-
-    @ConfigEntry.Gui.TransitiveObject
-    public UIConfig uiConfig = new UIConfig();
-
-    @ConfigEntry.Gui.Tooltip
-    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
-    public StatusElements statusElements = new StatusElements();
 }
