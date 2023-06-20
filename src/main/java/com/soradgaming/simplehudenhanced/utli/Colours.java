@@ -10,4 +10,8 @@ public class Colours {
     public static final int PURPLE = 0xFF00FF;
     public static final int ORANGE = 0xFFA500;
     public static final int GRAY = 0x808080;
+    public static final int lightRed = 0xdb4f4f;
+    public static final int lightYellow = 0xe0ed53;
+    public static final int lightOrange = 0xedb753;
+    public static final int lightGreen = 0x3ade65;
 }
