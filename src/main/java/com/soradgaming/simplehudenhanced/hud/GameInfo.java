@@ -96,7 +96,7 @@ public class GameInfo {
     }
 
     public String getFPS() {
-        if (!config.statusElements.toggleFps) {
+        if (!config.statusElements.fps.toggleFPS) {
             return "";
         }
         return Utilities.getFPS(this.client);
@@ -175,7 +175,7 @@ public class GameInfo {
             formatter = java.time.format.DateTimeFormatter.ofPattern("H:mm");
         }
 
-        return(Utilities.translatable("text.hud.simplehudenhanced.systemtime").getString() + ": " + time.format(formatter));
+        return(time.format(formatter).toUpperCase());
     }
 
     public String getPlayerName() {

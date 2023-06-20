@@ -6,6 +6,8 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import com.soradgaming.simplehudenhanced.utli.Colours;
 import net.minecraft.entity.effect.StatusEffectInstance;
 
+import java.util.function.ToIntBiFunction;
+
 @Config(name = "simplehudenhanced")
 public class SimpleHudEnhancedConfig implements ConfigData {
     @ConfigEntry.Category("Status Elements")
@@ -22,7 +24,7 @@ public class SimpleHudEnhancedConfig implements ConfigData {
     @ConfigEntry.Category("Effects Status")
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     @ConfigEntry.Gui.Tooltip(count = 4)
-    public ColorMode colorMode = ColorMode.EFFECT_COLOR;
+    public ColorModeSelector colorMode = ColorModeSelector.EFFECT_COLOR;
     @ConfigEntry.Category("Effects Status")
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
@@ -69,8 +71,25 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         public int neutralForegroundColor = beneficialForegroundColor;
     }
     public int getColor(StatusEffectInstance effect) {
-        if (this.colorMode == null) return Colours.WHITE;
-        return this.colorMode.getColor(this, effect);
+        // Function for combining two colors (used for background color)
+        ToIntBiFunction<Integer, Integer> convert = Integer::sum;
+        if (colorMode == ColorModeSelector.CUSTOM) {
+            switch (effect.getEffectType().getCategory()) {
+                case BENEFICIAL -> {
+                    return effectsStatus.beneficialForegroundColor;
+                }
+                case HARMFUL -> {
+                    return effectsStatus.harmfulForegroundColor;
+                }
+                default -> {
+                    return effectsStatus.neutralForegroundColor;
+                }
+            }
+        } else if (colorMode == ColorModeSelector.CATEGORY_COLOR) {
+            return convert.applyAsInt(effect.getEffectType().getCategory().getFormatting().getColorValue(), 0xff000000);
+        }
+        // If mode == ColorModeSelector.EFFECT_COLOR or mode == null (default)
+        return convert.applyAsInt(effect.getEffectType().getColor(), 0xff000000);
     }
 
     public static class EquipmentStatus {
@@ -116,7 +135,8 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
         public Coordinates coordinates = new Coordinates();
         @ConfigEntry.Gui.Tooltip
-        public boolean toggleFps = true;
+        @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
+        public FPS fps = new FPS();
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
         public PlayerSpeed playerSpeed = new PlayerSpeed();
@@ -156,6 +176,13 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         public boolean toggleOffset = true;
         @ConfigEntry.Gui.Tooltip
         public boolean toggleNetherCoordinateConversion = false;
+    }
+
+    public static class FPS {
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleFPS = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleColourFPS = false;
     }
 
     public static class GameTime {
