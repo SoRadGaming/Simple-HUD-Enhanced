@@ -37,6 +37,15 @@ public class SimpleHudEnhancedConfig implements ConfigData {
     @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
     public MovementElements movementStatus = new MovementElements();
 
+    @ConfigEntry.Category("Equipment Status")
+    @ConfigEntry.Gui.Tooltip
+    public boolean toggleEquipmentStatus = false;
+
+    @ConfigEntry.Category("Equipment Status")
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+    public EquipmentStatus equipmentStatus = new EquipmentStatus();
+
     public static class UIConfig {
         @ConfigEntry.Gui.Tooltip
         public boolean toggleSimpleHUDEnhanced = true;
@@ -62,6 +71,21 @@ public class SimpleHudEnhancedConfig implements ConfigData {
     public int getColor(StatusEffectInstance effect) {
         if (this.colorMode == null) return Colours.WHITE;
         return this.colorMode.getColor(this, effect);
+    }
+
+    public static class EquipmentStatus {
+        @ConfigEntry.Gui.Tooltip
+        public boolean showCount = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean showDurability = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean showNonTools = true;
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
+        public int equipmentStatusLocationX = 0;
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
+        public int equipmentStatusLocationY = 60;
     }
 
     public static class MovementElements {
