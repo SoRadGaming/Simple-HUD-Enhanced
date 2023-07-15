@@ -48,6 +48,7 @@ public class HUD {
         hudInfo.add(GameInformation.getLightLevel());
         hudInfo.add(GameInformation.getBiome());
         hudInfo.add(GameInformation.getTime());
+        hudInfo.add(GameInformation.getSystemTime());
         hudInfo.add(GameInformation.getPlayerName());
         hudInfo.add(GameInformation.getPing());
         hudInfo.add(GameInformation.getServer());

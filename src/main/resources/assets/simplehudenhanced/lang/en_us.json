@@ -16,6 +16,7 @@
   "text.hud.simplehudenhanced.lightlevel": "Light Level",
   "text.hud.simplehudenhanced.block": "Block",
   "text.hud.simplehudenhanced.time": "Time",
+  "text.hud.simplehudenhanced.systemtime": "System Time",
   "text.hud.simplehudenhanced.player": "Player",
   "text.hud.simplehudenhanced.ping": "ms",
   "text.hud.simplehudenhanced.server": "Server Name",
@@ -136,6 +137,13 @@
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime.toggleGameTime": "In-Game Time Status",
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime.toggleGameTime24Hour.@Tooltip": "Converts Time to 24 Hour Format",
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime.toggleGameTime24Hour": "24 Hour Format",
+  
+  "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.@Tooltip": "Show your current system time in the HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.systemTime": "System Time Status",
+  "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.toggleSystemTime.@Tooltip": "Show your current system time in the HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.toggleSystemTime": "System Time Status",
+  "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.toggleSystemTime24Hour.@Tooltip": "Converts Time to 24 Hour Format",
+  "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.toggleSystemTime24Hour": "24 Hour Format",
   
   "text.autoconfig.simplehudenhanced.option.statusElements.togglePlayerName.@Tooltip": "Show your current player name in the HUD",
   "text.autoconfig.simplehudenhanced.option.statusElements.togglePlayerName": "Player Name",
