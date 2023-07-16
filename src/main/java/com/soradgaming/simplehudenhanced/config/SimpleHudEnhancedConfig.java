@@ -128,6 +128,9 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
         public GameTime gameTime = new GameTime();
         @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
+        public SystemTime systemTime = new SystemTime();
+        @ConfigEntry.Gui.Tooltip
         public boolean togglePlayerName = false;
         @ConfigEntry.Gui.Tooltip
         public boolean togglePing = false;
@@ -160,5 +163,12 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         public boolean toggleGameTime = true;
         @ConfigEntry.Gui.Tooltip
         public boolean toggleGameTime24Hour = false;
+    }
+
+    public static class SystemTime {
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleSystemTime = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleSystemTime24Hour = false;
     }
 }
