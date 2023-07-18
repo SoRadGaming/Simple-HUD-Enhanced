@@ -8,7 +8,7 @@
     "SoRadGaming"
   ],
   "contributors": [
-    ""
+    "yutotakano"
   ],
   "contact": {
     "homepage": "https://github.com/soradgaming/Simple-HUD-Enhanced",
@@ -37,6 +37,6 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "minecraft": "=${minecraft_version}"
+    "minecraft": ">=${minecraft_version}"
   }
 }

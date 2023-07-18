@@ -96,7 +96,7 @@ public class GameInfo {
     }
 
     public String getFPS() {
-        if (!config.statusElements.toggleFps) {
+        if (!config.statusElements.fps.toggleFPS) {
             return "";
         }
         return Utilities.getFPS(this.client);
@@ -158,6 +158,24 @@ public class GameInfo {
         }
 
         return String.format("%d:%02d %s", hour, minute, ampm);
+    }
+
+    public String getSystemTime() {
+        if (!config.statusElements.systemTime.toggleSystemTime) {
+            return "";
+        }
+
+        java.time.LocalDateTime time = java.time.LocalDateTime.now();
+
+        // 12-hour format
+        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("h:mm a");
+
+        if (config.statusElements.systemTime.toggleSystemTime24Hour) {
+            // 24-hour format
+            formatter = java.time.format.DateTimeFormatter.ofPattern("H:mm");
+        }
+
+        return(time.format(formatter).toUpperCase());
     }
 
     public String getPlayerName() {
