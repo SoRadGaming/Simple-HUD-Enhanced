@@ -1,6 +1,7 @@
 package com.soradgaming.simplehudenhanced.hud;
 
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
+import com.soradgaming.simplehudenhanced.utli.Colours;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -8,6 +9,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.ActionResult;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class HUD {
     // Minecraft client variables
@@ -48,7 +50,6 @@ public class HUD {
         hudInfo.add(GameInformation.getLightLevel());
         hudInfo.add(GameInformation.getBiome());
         hudInfo.add(GameInformation.getTime());
-        hudInfo.add(GameInformation.getSystemTime());
         hudInfo.add(GameInformation.getPlayerName());
         hudInfo.add(GameInformation.getPing());
         hudInfo.add(GameInformation.getServer());
@@ -86,8 +87,10 @@ public class HUD {
                 int lineLength = this.renderer.getWidth(line);
                 offset = (BoxWidth - lineLength);
             }
-
-            context.drawTextWithShadow(this.renderer, line, xAxis + offset, yAxis + 4, config.uiConfig.textColor);
+            // Colour Check
+            int colour = getColor(line, GameInformation);
+            // Render the line
+            context.drawTextWithShadow(this.renderer, line, xAxis + offset, yAxis + 4, colour);
             yAxis += lineHeight;
         }
 
@@ -102,5 +105,36 @@ public class HUD {
             Equipment equipment = new Equipment(context, config);
             equipment.init();
         }
+
+        // Draw System Time on Bottom Right of Screen
+        context.drawTextWithShadow(this.renderer, GameInformation.getSystemTime(), (this.client.getWindow().getScaledWidth() - 2 - this.renderer.getWidth(GameInformation.getSystemTime())), (this.client.getWindow().getScaledHeight()) - (lineHeight), config.uiConfig.textColor);
+    }
+
+    public int getColor(String line, GameInfo GameInformation) {
+        int colour = config.uiConfig.textColor;
+
+        // FPS Colour Check
+        if (Objects.equals(line, GameInformation.getFPS())) {
+            if (config.statusElements.fps.toggleColourFPS) {
+                // convert line to int format (102 fps)
+                String[] fps = line.split(" ");
+                int fpsInt = Integer.parseInt(fps[0]);
+
+                // Check FPS and return colour
+                if (fpsInt < 15) {
+                    return Colours.RED;
+                } else if (fpsInt < 30) {
+                    return Colours.lightRed;
+                } else if (fpsInt < 45) {
+                    return Colours.lightOrange;
+                } else if (fpsInt < 60) {
+                    return Colours.lightYellow;
+                } else {
+                    return Colours.GREEN;
+                }
+            }
+        }
+
+        return colour;
     }
 }

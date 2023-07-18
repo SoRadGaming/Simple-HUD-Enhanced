@@ -16,7 +16,6 @@
   "text.hud.simplehudenhanced.lightlevel": "Light Level",
   "text.hud.simplehudenhanced.block": "Block",
   "text.hud.simplehudenhanced.time": "Time",
-  "text.hud.simplehudenhanced.systemtime": "System Time",
   "text.hud.simplehudenhanced.player": "Player",
   "text.hud.simplehudenhanced.ping": "ms",
   "text.hud.simplehudenhanced.server": "Server Name",
@@ -116,9 +115,13 @@
   "text.autoconfig.simplehudenhanced.option.statusElements.coordinates.toggleOffset": "Offset Status",
   "text.autoconfig.simplehudenhanced.option.statusElements.coordinates.toggleNetherCoordinateConversion.@Tooltip": "Converts your Nether coordinates to Overworld coordinates",
   "text.autoconfig.simplehudenhanced.option.statusElements.coordinates.toggleNetherCoordinateConversion": "Dimension Coordinate Conversion",
-  
-  "text.autoconfig.simplehudenhanced.option.statusElements.toggleFps.@Tooltip": "Show your current FPS in the HUD",
-  "text.autoconfig.simplehudenhanced.option.statusElements.toggleFps": "FPS Status",
+
+  "text.autoconfig.simplehudenhanced.option.statusElements.fps.@Tooltip": "FPS (Click to Expand)",
+  "text.autoconfig.simplehudenhanced.option.statusElements.fps": "FPS",
+  "text.autoconfig.simplehudenhanced.option.statusElements.fps.toggleFPS.@Tooltip": "Show your current FPS in the HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.fps.toggleFPS": "FPS Status",
+  "text.autoconfig.simplehudenhanced.option.statusElements.fps.toggleColourFPS.@Tooltip": "Colour your FPS based on your FPS (Green = Good, Yellow = Okay, Red = Bad)",
+  "text.autoconfig.simplehudenhanced.option.statusElements.fps.toggleColourFPS": "Colour FPS Status",
   
   "text.autoconfig.simplehudenhanced.option.statusElements.playerSpeed.@Tooltip": "Player Speed (Click to Expand)",
   "text.autoconfig.simplehudenhanced.option.statusElements.playerSpeed": "Player Speed",
@@ -138,9 +141,9 @@
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime.toggleGameTime24Hour.@Tooltip": "Converts Time to 24 Hour Format",
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime.toggleGameTime24Hour": "24 Hour Format",
   
-  "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.@Tooltip": "Show your current system time in the HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.@Tooltip": "Show your current system time in the HUD (Bottom Right of Screen)",
   "text.autoconfig.simplehudenhanced.option.statusElements.systemTime": "System Time Status",
-  "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.toggleSystemTime.@Tooltip": "Show your current system time in the HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.toggleSystemTime.@Tooltip": "Show your current system time in the HUD (Bottom Right of Screen)",
   "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.toggleSystemTime": "System Time Status",
   "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.toggleSystemTime24Hour.@Tooltip": "Converts Time to 24 Hour Format",
   "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.toggleSystemTime24Hour": "24 Hour Format",
