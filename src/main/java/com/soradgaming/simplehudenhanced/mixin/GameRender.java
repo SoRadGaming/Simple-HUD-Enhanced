@@ -39,7 +39,7 @@ public class GameRender {
 
     @Inject(method = "render", at = @At("HEAD"))
     private void onDraw(DrawContext context, float esp, CallbackInfo ci) {
-        if (!this.client.options.debugEnabled) {
+        if (!this.client.hasReducedDebugInfo()) {
             // Draw Game info on every GameHud render
             this.hud.drawHud(context);
         }
