@@ -36,21 +36,18 @@ public class Movement extends HUD {
     // Draw the movement status on the screen
     private void draw(DrawContext context, String textKey) {
         final String text = Utilities.translatable(textKey).getString();
+        float Scale = (float) config.movementStatus.textScale / 100;
 
-        int yAxis = (((this.client.getWindow().getScaledHeight() - this.renderer.fontHeight + 2) - 4) * (config.movementStatus.movementStatusLocationY) / 100);
-        int xAxis = (((this.client.getWindow().getScaledWidth() - this.renderer.getWidth(text)) - 4) * (config.movementStatus.movementStatusLocationX) / 100);
-
-        // Add Padding to left of the screen
-        if (xAxis <= 4) {
-            xAxis = 4;
-        }
-
-        // Add Padding to top of the screen
-        if (yAxis <= 4) {
-            yAxis = 4;
-        }
+        // Screen Manager
+        ScreenManager screenManager = new ScreenManager(this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
+        screenManager.setPadding(4);
+        int xAxis = screenManager.calculateXAxis(config.movementStatus.movementStatusLocationX, Scale, this.renderer.getWidth(text));
+        int yAxis = screenManager.calculateYAxis(this.renderer.fontHeight, 1, config.movementStatus.movementStatusLocationY, Scale);
+        screenManager.setScale(context, Scale);
 
         // Draw Info
         context.drawTextWithShadow(this.renderer, text, xAxis, yAxis, config.uiConfig.textColor);
+
+        screenManager.resetScale(context);
     }
 }
