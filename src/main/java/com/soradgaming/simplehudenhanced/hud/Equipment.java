@@ -9,10 +9,14 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.soradgaming.simplehudenhanced.utli.Utilities.getModName;
 
 public class Equipment extends HUD {
     private final MinecraftClient client;
@@ -38,8 +42,8 @@ public class Equipment extends HUD {
         if (this.client.player != null) {
             this.player = this.client.player;
         } else {
-            Exception e = new Exception("Player is null");
-            e.printStackTrace();
+            Logger logger = LogManager.getLogger(getModName());
+            logger.error("Player is null", new Exception("Player is null"));
         }
     }
 
@@ -126,21 +130,19 @@ public class Equipment extends HUD {
             }
         }
 
+
         // Screen Size Calculations
         int configX = config.equipmentStatus.equipmentStatusLocationX;
-        int lineHeight = this.textRenderer.fontHeight + 8;
-        int yAxis = (this.client.getWindow().getScaledHeight() - (lineHeight * equipmentInfo.size())) * (config.equipmentStatus.equipmentStatusLocationY) / 100;
-        int xAxis = ((this.client.getWindow().getScaledWidth() - 8) - (BoxWidth + 20)) * configX / 100;
+        int configY = config.equipmentStatus.equipmentStatusLocationY;
+        float Scale = (float) config.equipmentStatus.textScale / 100;
+        int lineHeight = 16;
 
-        // Add Padding to left of the screen
-        if (xAxis <= 4) {
-            xAxis = 4;
-        }
-
-        // Add Padding to top of the screen
-        if (yAxis <= 4) {
-            yAxis = 4;
-        }
+        // Screen Manager
+        ScreenManager screenManager = new ScreenManager(this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
+        screenManager.setPadding(4);
+        int xAxis = screenManager.calculateXAxis(configX, Scale, (BoxWidth + 16));
+        int yAxis = screenManager.calculateYAxis(lineHeight, equipmentInfo.size(), configY, Scale);
+        screenManager.setScale(matrixStack, Scale);
 
         // Draw All Items on Screen
         for (EquipmentInfoStack index : equipmentInfo) {
@@ -150,13 +152,15 @@ public class Equipment extends HUD {
                 int lineLength = this.textRenderer.getWidth(index.getText());
                 int offset = (BoxWidth - lineLength);
 
-                this.textRenderer.drawWithShadow(this.matrixStack, index.getText(), xAxis + offset + 2, yAxis, index.getColor());
-                this.itemRenderer.renderInGuiWithOverrides(this.matrixStack, item, xAxis + BoxWidth + 6, yAxis - 5);
+                this.textRenderer.drawWithShadow(this.matrixStack, index.getText(), xAxis + offset - 4, yAxis + 4, index.getColor());
+                this.itemRenderer.renderInGuiWithOverrides(this.matrixStack, item, xAxis + BoxWidth, yAxis);
             } else {
-                this.textRenderer.drawWithShadow(this.matrixStack, index.getText(), xAxis + 20, yAxis, index.getColor());
-                this.itemRenderer.renderInGuiWithOverrides(this.matrixStack, item, xAxis, yAxis - 5);
+                this.textRenderer.drawWithShadow(this.matrixStack, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
+                this.itemRenderer.renderInGuiWithOverrides(this.matrixStack, item, xAxis, yAxis);
             }
             yAxis += lineHeight;
         }
+
+        screenManager.resetScale(matrixStack);
     }
 }
