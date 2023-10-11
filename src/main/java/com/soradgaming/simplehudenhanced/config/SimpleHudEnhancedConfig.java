@@ -54,6 +54,10 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.ColorPicker
         public int textColor = Colours.WHITE;
+
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.BoundedDiscrete(min = 50, max = 150)
+        public int textScale = 100;
     }
 
     public static class EffectsStatus {
@@ -100,6 +104,9 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         public boolean showNonTools = true;
         @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.BoundedDiscrete(min = 50, max = 150)
+        public int textScale = 100;
+        @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
         public int equipmentStatusLocationX = 0;
         @ConfigEntry.Gui.Tooltip
@@ -116,6 +123,9 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         public boolean toggleFlyingStatus = true;
         @ConfigEntry.Gui.Tooltip
         public boolean toggleSwimmingStatus = true;
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.BoundedDiscrete(min = 50, max = 150)
+        public int textScale = 100;
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
         public int movementStatusLocationX = 0;
@@ -195,6 +205,9 @@ public class SimpleHudEnhancedConfig implements ConfigData {
     public static class SystemTime {
         @ConfigEntry.Gui.Tooltip
         public boolean toggleSystemTime = true;
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.BoundedDiscrete(min = 50, max = 150)
+        public int textScale = 100;
         @ConfigEntry.Gui.Tooltip
         public boolean toggleSystemTime24Hour = false;
     }
