@@ -61,6 +61,7 @@ public class HUD {
         // Draw HUD
         int Xcords = config.statusElements.Xcords;
         int Ycords = config.statusElements.Ycords;
+        float Scale = (float) config.uiConfig.textScale / 100;
 
         // Get the longest string in the array
         int longestString = 0;
@@ -72,14 +73,14 @@ public class HUD {
             }
         }
 
-        int lineHeight = this.renderer.fontHeight + 2;
-        int yAxis = (((this.client.getWindow().getScaledHeight()) - ((lineHeight + 4) * hudInfo.size())) + (lineHeight + 4)) * (Ycords) / 100;
-        int xAxis = ((this.client.getWindow().getScaledWidth() - 4) - (BoxWidth)) * Xcords / 100;
+        int lineHeight = (this.renderer.fontHeight);
 
-        // Add Padding to left of the screen
-        if (xAxis <= 4) {
-            xAxis = 4;
-        }
+        // Screen Manager
+        ScreenManager screenManager = new ScreenManager(this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
+        screenManager.setPadding(4);
+        int xAxis = screenManager.calculateXAxis(Xcords, Scale, BoxWidth);
+        int yAxis = screenManager.calculateYAxis(lineHeight, hudInfo.size(), Ycords, Scale);
+        screenManager.setScale(context, Scale);
 
         for (String line : hudInfo) {
             int offset = 0;
@@ -90,9 +91,11 @@ public class HUD {
             // Colour Check
             int colour = getColor(line, GameInformation);
             // Render the line
-            context.drawTextWithShadow(this.renderer, line, xAxis + offset, yAxis + 4, colour);
+            context.drawTextWithShadow(this.renderer, line, xAxis + offset, yAxis, colour);
             yAxis += lineHeight;
         }
+
+        screenManager.resetScale(context);
 
         // Draw Movement Status
         if (config.toggleMovementStatus) {
@@ -106,8 +109,18 @@ public class HUD {
             equipment.init();
         }
 
+        // Screen Manager
+        ScreenManager timeScreenManager = new ScreenManager(this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
+        timeScreenManager.setPadding(2);
+        float timeScale = (float) config.statusElements.systemTime.textScale / 100;
+        int xAxisTime = timeScreenManager.calculateXAxis(100, timeScale, this.renderer.getWidth(GameInformation.getSystemTime()));
+        int yAxisTime = timeScreenManager.calculateYAxis(this.renderer.fontHeight, 1, 100, timeScale);
+        timeScreenManager.setScale(context, timeScale);
+
         // Draw System Time on Bottom Right of Screen
-        context.drawTextWithShadow(this.renderer, GameInformation.getSystemTime(), (this.client.getWindow().getScaledWidth() - 2 - this.renderer.getWidth(GameInformation.getSystemTime())), (this.client.getWindow().getScaledHeight()) - (lineHeight), config.uiConfig.textColor);
+        context.drawTextWithShadow(this.renderer, GameInformation.getSystemTime(), xAxisTime, yAxisTime, config.uiConfig.textColor);
+
+        timeScreenManager.resetScale(context);
     }
 
     public int getColor(String line, GameInfo GameInformation) {
