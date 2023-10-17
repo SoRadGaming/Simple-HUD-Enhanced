@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.ActionResult;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -40,20 +41,7 @@ public class HUD {
 
         // Get all the lines to be displayed
         GameInfo GameInformation = new GameInfo(this.client);
-        ArrayList<String> hudInfo = new ArrayList<>();
-
-        // Add all the lines to the array
-        hudInfo.add(GameInformation.getCords() + GameInformation.getDirection() + GameInformation.getOffset());
-        hudInfo.add(GameInformation.getNether());
-        hudInfo.add(GameInformation.getFPS());
-        hudInfo.add(GameInformation.getSpeed());
-        hudInfo.add(GameInformation.getLightLevel());
-        hudInfo.add(GameInformation.getBiome());
-        hudInfo.add(GameInformation.getTime());
-        hudInfo.add(GameInformation.getPlayerName());
-        hudInfo.add(GameInformation.getPing());
-        hudInfo.add(GameInformation.getServer());
-        hudInfo.add(GameInformation.getServerAddress());
+        ArrayList<String> hudInfo = getHudInfo(GameInformation);
 
         //Remove empty lines from the array
         hudInfo.removeIf(String::isEmpty);
@@ -101,12 +89,18 @@ public class HUD {
         if (config.toggleMovementStatus) {
             Movement movement = new Movement(context, config);
             movement.init(GameInformation);
+            // Kill Movement Class (Never Runs Instance Again)
+            movement = null;
         }
 
         // Draw Equipment Status
         if (config.toggleEquipmentStatus) {
             Equipment equipment = new Equipment(context, config);
             equipment.init();
+            // Get Garbage Collector to remove old instances
+            equipment.kill();
+            // Kill Equipment Class (Never Runs Instance Again)
+            equipment = null;
         }
 
         // Screen Manager
@@ -121,6 +115,25 @@ public class HUD {
         context.drawTextWithShadow(this.renderer, GameInformation.getSystemTime(), xAxisTime, yAxisTime, config.uiConfig.textColor);
 
         timeScreenManager.resetScale(context);
+    }
+
+    @NotNull
+    private static ArrayList<String> getHudInfo(GameInfo GameInformation) {
+        ArrayList<String> hudInfo = new ArrayList<>();
+
+        // Add all the lines to the array
+        hudInfo.add(GameInformation.getCords() + GameInformation.getDirection() + GameInformation.getOffset());
+        hudInfo.add(GameInformation.getNether());
+        hudInfo.add(GameInformation.getFPS());
+        hudInfo.add(GameInformation.getSpeed());
+        hudInfo.add(GameInformation.getLightLevel());
+        hudInfo.add(GameInformation.getBiome());
+        hudInfo.add(GameInformation.getTime());
+        hudInfo.add(GameInformation.getPlayerName());
+        hudInfo.add(GameInformation.getPing());
+        hudInfo.add(GameInformation.getServer());
+        hudInfo.add(GameInformation.getServerAddress());
+        return hudInfo;
     }
 
     public int getColor(String line, GameInfo GameInformation) {
