@@ -65,9 +65,28 @@ public class Equipment extends HUD {
             equipmentInfo.removeIf(equipment -> equipment.getItem().getItem().getMaxDamage() == 0);
         }
 
-        if (config.equipmentStatus.showDurability) {
-            // Draw Durability
+        if (config.equipmentStatus.Durability.showDurability) {
             getDurability();
+        }
+
+        // Check Config for Item Slot Disabled
+        if (!config.equipmentStatus.slots.Head) {
+            equipmentInfo.removeIf(equipment -> equipment.getItem().equals(this.player.getInventory().getArmorStack(3)));
+        }
+        if (!config.equipmentStatus.slots.Body) {
+            equipmentInfo.removeIf(equipment -> equipment.getItem().equals(this.player.getInventory().getArmorStack(2)));
+        }
+        if (!config.equipmentStatus.slots.Legs) {
+            equipmentInfo.removeIf(equipment -> equipment.getItem().equals(this.player.getInventory().getArmorStack(1)));
+        }
+        if (!config.equipmentStatus.slots.Boots) {
+            equipmentInfo.removeIf(equipment -> equipment.getItem().equals(this.player.getInventory().getArmorStack(0)));
+        }
+        if (!config.equipmentStatus.slots.OffHand) {
+            equipmentInfo.removeIf(equipment -> equipment.getItem().equals(this.player.getOffHandStack()));
+        }
+        if (!config.equipmentStatus.slots.MainHand) {
+            equipmentInfo.removeIf(equipment -> equipment.getItem().equals(this.player.getMainHandStack()));
         }
 
         // Draw Items
@@ -79,25 +98,41 @@ public class Equipment extends HUD {
         for (EquipmentInfoStack index : equipmentInfo) {
             ItemStack item = index.getItem();
 
+            // Check Config for Item Durability Disabled
+            if (isItemDurabilityDisabled(item)) {
+                index.setText("");
+                continue;
+            }
+
             // Check if item has durability (Tools, Weapons, Armor) or not (Blocks, Food, etc.)
             if (item.getMaxDamage() != 0) {
                 int currentDurability = item.getMaxDamage() - item.getDamage();
 
                 // Draw Durability
-                index.setText(String.format("%s/%s", currentDurability, item.getMaxDamage()));
+                if (!config.equipmentStatus.Durability.showDurabilityAsPercentage)  {
+                    index.setText(String.format("%s/%s", currentDurability, item.getMaxDamage()));
+                } else {
+                    index.setText(String.format("%s%%", (currentDurability * 100) / item.getMaxDamage()));
+                }
 
-                // Default Durability Color
-                if (currentDurability <= (item.getMaxDamage()) / 4) {
-                    index.setColor(Colours.lightRed);
-                } else if (currentDurability <= (item.getMaxDamage() / 2.5)) {
-                    index.setColor(Colours.lightOrange);
-                } else if (currentDurability <= (item.getMaxDamage() / 1.5)) {
-                    index.setColor(Colours.lightYellow);
-                } else if (currentDurability < item.getMaxDamage()) {
-                    index.setColor(Colours.lightGreen);
+                if (config.equipmentStatus.Durability.showColour) {
+                    // Default Durability Color
+                    if (currentDurability <= (item.getMaxDamage()) / 4) {
+                        index.setColor(Colours.lightRed);
+                    } else if (currentDurability <= (item.getMaxDamage() / 2.5)) {
+                        index.setColor(Colours.lightOrange);
+                    } else if (currentDurability <= (item.getMaxDamage() / 1.5)) {
+                        index.setColor(Colours.lightYellow);
+                    } else if (currentDurability < item.getMaxDamage()) {
+                        index.setColor(Colours.lightGreen);
+                    } else {
+                        index.setColor(config.uiConfig.textColor);
+                    }
                 } else {
                     index.setColor(config.uiConfig.textColor);
                 }
+
+
             } else {
                 // Draw Count
                 if (config.equipmentStatus.showCount) {
@@ -112,6 +147,24 @@ public class Equipment extends HUD {
                 }
 
             }
+        }
+    }
+
+    private boolean isItemDurabilityDisabled(ItemStack item) {
+        if (item.equals(this.player.getMainHandStack())) {
+            return !config.equipmentStatus.Durability.slots.MainHand;
+        } else if (item.equals(this.player.getOffHandStack())) {
+            return !config.equipmentStatus.Durability.slots.OffHand;
+        } else if (item.equals(this.player.getInventory().getArmorStack(0))) {
+            return !config.equipmentStatus.Durability.slots.Boots;
+        } else if (item.equals(this.player.getInventory().getArmorStack(1))) {
+            return !config.equipmentStatus.Durability.slots.Legs;
+        } else if (item.equals(this.player.getInventory().getArmorStack(2))) {
+            return !config.equipmentStatus.Durability.slots.Body;
+        } else if (item.equals(this.player.getInventory().getArmorStack(3))) {
+            return !config.equipmentStatus.Durability.slots.Head;
+        } else {
+            return false;
         }
     }
 
@@ -159,5 +212,9 @@ public class Equipment extends HUD {
         }
 
         screenManager.resetScale(context);
+    }
+
+    public void kill() {
+        equipmentInfo.clear();
     }
 }

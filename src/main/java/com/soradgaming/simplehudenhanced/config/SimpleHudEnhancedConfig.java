@@ -100,9 +100,13 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         public boolean showCount = true;
         @ConfigEntry.Gui.Tooltip
-        public boolean showDurability = true;
+        @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
+        public Durability Durability = new Durability();
         @ConfigEntry.Gui.Tooltip
         public boolean showNonTools = true;
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
+        public Slots slots = new Slots();
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 50, max = 150)
         public int textScale = 100;
@@ -112,6 +116,48 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
         public int equipmentStatusLocationY = 60;
+    }
+
+    public static class Durability {
+        @ConfigEntry.Gui.Tooltip
+        public boolean showDurability = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean showDurabilityAsPercentage = false;
+        @ConfigEntry.Gui.Tooltip
+        public boolean showColour = true;
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
+        public DurabilitySlots slots = new DurabilitySlots();
+    }
+
+    public static class DurabilitySlots {
+        @ConfigEntry.Gui.Tooltip
+        public boolean Head = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean Body = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean Legs = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean Boots = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean OffHand = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean MainHand = true;
+    }
+
+    public static class Slots {
+        @ConfigEntry.Gui.Tooltip
+        public boolean Head = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean Body = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean Legs = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean Boots = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean OffHand = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean MainHand = true;
     }
 
     public static class MovementElements {
