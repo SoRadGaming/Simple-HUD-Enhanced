@@ -18,7 +18,7 @@ import java.util.List;
 
 import static com.soradgaming.simplehudenhanced.utli.Utilities.getModName;
 
-public class Equipment extends HUD {
+public class Equipment {
     private final MinecraftClient client;
     private final TextRenderer textRenderer;
     private final ItemRenderer itemRenderer;
@@ -30,8 +30,6 @@ public class Equipment extends HUD {
     private List<EquipmentInfoStack> equipmentInfo;
 
     public Equipment(MatrixStack matrixStack, SimpleHudEnhancedConfig config) {
-        super(MinecraftClient.getInstance());
-
         this.client = MinecraftClient.getInstance();
         this.textRenderer = client.textRenderer;
         this.itemRenderer = client.getItemRenderer();
@@ -215,9 +213,5 @@ public class Equipment extends HUD {
         }
 
         screenManager.resetScale(matrixStack);
-    }
-
-    public void kill() {
-        equipmentInfo.clear();
     }
 }

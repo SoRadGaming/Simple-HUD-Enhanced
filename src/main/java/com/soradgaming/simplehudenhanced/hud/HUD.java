@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 public class HUD {
     // Minecraft client variables
@@ -35,86 +36,35 @@ public class HUD {
     }
 
     // Main HUD function to draw all the elements on the screen
-    public void drawHud(MatrixStack matrixStack) {
+    public void drawAsyncHud(MatrixStack matrixStack) {
         // Check if HUD is enabled
         if (!config.uiConfig.toggleSimpleHUDEnhanced) return;
 
-        // Get all the lines to be displayed
+        // Instance of Class with all the Game Information
         GameInfo GameInformation = new GameInfo(this.client);
-        ArrayList<String> hudInfo = getHudInfo(GameInformation);
-
-        //Remove empty lines from the array
-        hudInfo.removeIf(String::isEmpty);
 
         // Draw HUD
-        int Xcords = config.statusElements.Xcords;
-        int Ycords = config.statusElements.Ycords;
-        float Scale = (float) config.uiConfig.textScale / 100;
+        CompletableFuture<Void> statusElementsFuture = CompletableFuture.runAsync(() -> drawStatusElements(matrixStack, GameInformation), MinecraftClient.getInstance()::executeTask);
 
-        // Get the longest string in the array
-        int longestString = 0;
-        int BoxWidth = 0;
-        for (String s : hudInfo) {
-            if (s.length() > longestString) {
-                longestString = s.length();
-                BoxWidth = this.renderer.getWidth(s);
+        // Draw Equipment Status
+        CompletableFuture<Void> equipmentFuture = CompletableFuture.runAsync(() -> {
+            if (config.toggleEquipmentStatus) {
+                Equipment equipment = new Equipment(matrixStack, config);
+                equipment.init();
             }
-        }
-
-        int lineHeight = (this.renderer.fontHeight);
-
-        // Screen Manager
-        ScreenManager screenManager = new ScreenManager(this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
-        screenManager.setPadding(4);
-        int xAxis = screenManager.calculateXAxis(Xcords, Scale, BoxWidth);
-        int yAxis = screenManager.calculateYAxis(lineHeight, hudInfo.size(), Ycords, Scale);
-        screenManager.setScale(matrixStack, Scale);
-
-        for (String line : hudInfo) {
-            int offset = 0;
-            if (Xcords >= 50) {
-                int lineLength = this.renderer.getWidth(line);
-                offset = (BoxWidth - lineLength);
-            }
-            // Colour Check
-            int colour = getColor(line, GameInformation);
-            // Render the line
-            this.renderer.drawWithShadow(matrixStack, line, xAxis + offset, yAxis, colour);
-            yAxis += lineHeight;
-        }
-
-        screenManager.resetScale(matrixStack);
+        }, MinecraftClient.getInstance()::executeTask);
 
         // Draw Movement Status
         if (config.toggleMovementStatus) {
             Movement movement = new Movement(matrixStack, config);
             movement.init(GameInformation);
-            // Kill Movement Class (Never Runs Instance Again)
-            movement = null;
         }
 
-        // Draw Equipment Status
-        if (config.toggleEquipmentStatus) {
-            Equipment equipment = new Equipment(matrixStack, config);
-            equipment.init();
-            // Get Garbage Collector to remove old instances
-            equipment.kill();
-            // Kill Equipment Class (Never Runs Instance Again)
-            equipment = null;
-        }
+        // Draw Time
+        drawTime(matrixStack, GameInformation.getSystemTime());
 
-        // Screen Manager
-        ScreenManager timeScreenManager = new ScreenManager(this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
-        timeScreenManager.setPadding(2);
-        float timeScale = (float) config.statusElements.systemTime.textScale / 100;
-        int xAxisTime = timeScreenManager.calculateXAxis(100, timeScale, this.renderer.getWidth(GameInformation.getSystemTime()));
-        int yAxisTime = timeScreenManager.calculateYAxis(this.renderer.fontHeight, 1, 100, timeScale);
-        timeScreenManager.setScale(matrixStack, timeScale);
-
-        // Draw System Time on Bottom Right of Screen
-        this.renderer.drawWithShadow(matrixStack, GameInformation.getSystemTime(), xAxisTime, yAxisTime, config.uiConfig.textColor);
-
-        timeScreenManager.resetScale(matrixStack);
+        // Ensure completion of all tasks before moving forward
+        CompletableFuture.allOf(equipmentFuture, statusElementsFuture).join();
     }
 
     @NotNull
@@ -162,5 +112,67 @@ public class HUD {
         }
 
         return colour;
+    }
+
+    private void drawStatusElements(MatrixStack matrixStack, GameInfo gameInformation) {
+        // Get all the lines to be displayed
+        ArrayList<String> hudInfo = getHudInfo(gameInformation);
+
+        //Remove empty lines from the array
+        hudInfo.removeIf(String::isEmpty);
+
+        // Draw HUD
+        int Xcords = config.statusElements.Xcords;
+        int Ycords = config.statusElements.Ycords;
+        float Scale = (float) config.uiConfig.textScale / 100;
+
+        // Get the longest string in the array
+        int longestString = 0;
+        int BoxWidth = 0;
+        for (String s : hudInfo) {
+            if (s.length() > longestString) {
+                longestString = s.length();
+                BoxWidth = this.renderer.getWidth(s);
+            }
+        }
+
+        int lineHeight = (this.renderer.fontHeight);
+
+        // Screen Manager
+        ScreenManager screenManager = new ScreenManager(this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
+        screenManager.setPadding(4);
+        int xAxis = screenManager.calculateXAxis(Xcords, Scale, BoxWidth);
+        int yAxis = screenManager.calculateYAxis(lineHeight, hudInfo.size(), Ycords, Scale);
+        screenManager.setScale(matrixStack, Scale);
+
+        for (String line : hudInfo) {
+            int offset = 0;
+            if (Xcords >= 50) {
+                int lineLength = this.renderer.getWidth(line);
+                offset = (BoxWidth - lineLength);
+            }
+            // Colour Check
+            int colour = getColor(line, gameInformation);
+            // Render the line
+            this.renderer.drawWithShadow(matrixStack, line, xAxis + offset, yAxis, colour);
+            yAxis += lineHeight;
+        }
+
+        screenManager.resetScale(matrixStack);
+    }
+
+    private void drawTime(MatrixStack matrixStack, String systemTime) {
+        // Screen Manager
+        ScreenManager timeScreenManager = new ScreenManager(this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
+        timeScreenManager.setPadding(2);
+        float timeScale = (float) config.statusElements.systemTime.textScale / 100;
+        int xAxisTime = timeScreenManager.calculateXAxis(100, timeScale, this.renderer.getWidth(systemTime));
+        int yAxisTime = timeScreenManager.calculateYAxis(this.renderer.fontHeight, 1, 100, timeScale);
+        timeScreenManager.setScale(matrixStack, timeScale);
+
+        // Draw System Time on Bottom Right of Screen
+        this.renderer.drawWithShadow(matrixStack, systemTime, xAxisTime, yAxisTime, config.uiConfig.textColor);
+
+        timeScreenManager.resetScale(matrixStack);
     }
 }
