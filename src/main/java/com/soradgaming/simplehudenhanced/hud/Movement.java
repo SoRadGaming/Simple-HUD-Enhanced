@@ -6,15 +6,13 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 
-public class Movement extends HUD {
+public class Movement {
     private final MinecraftClient client;
     private final TextRenderer renderer;
     private final SimpleHudEnhancedConfig config;
     private final DrawContext context;
 
     public Movement(DrawContext context, SimpleHudEnhancedConfig config) {
-        super(MinecraftClient.getInstance());
-
         this.client = MinecraftClient.getInstance();
         this.renderer = client.textRenderer;
         this.config = config;
