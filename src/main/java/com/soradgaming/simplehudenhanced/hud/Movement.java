@@ -6,15 +6,13 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class Movement extends HUD {
+public class Movement {
     private final MinecraftClient client;
     private final TextRenderer renderer;
     private final SimpleHudEnhancedConfig config;
     private final MatrixStack matrixStack;
 
     public Movement(MatrixStack matrixStack, SimpleHudEnhancedConfig config) {
-        super(MinecraftClient.getInstance());
-
         this.client = MinecraftClient.getInstance();
         this.renderer = client.textRenderer;
         this.config = config;

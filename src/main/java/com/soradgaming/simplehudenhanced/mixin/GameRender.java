@@ -14,6 +14,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -22,10 +23,12 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Environment(EnvType.CLIENT)
 @Mixin(value = InGameHud.class)
 public class GameRender {
+    @Unique
     private HUD hud;
     @Shadow
     @Final
@@ -39,8 +42,8 @@ public class GameRender {
     @Inject(method = "render", at = @At("HEAD"))
     private void onDraw(MatrixStack matrixStack, float esp, CallbackInfo ci) {
         if (!this.client.options.debugEnabled) {
-            // Draw Game info on every GameHud render
-            this.hud.drawHud(matrixStack);
+            // Call async rendering
+            CompletableFuture.runAsync(() -> this.hud.drawAsyncHud(matrixStack), MinecraftClient.getInstance()::executeTask);
         }
     }
 
