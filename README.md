@@ -26,3 +26,9 @@ originally as a fork of Simple Utilities Mod by [johnvictorfs](https://github.co
 This mod has also used code from :
 [A5b84](https://github.com/SoRadGaming/status-effect-bars)
 
+## Future Additions
+- Config Window with Drag & Resizeable blocks for Hud Configuration
+- Rebuilt Render Graph with Data Cache for over 500x less code execution in testing - (Async temp fix)
+- Text Alignment Selection
+- Text Background & Transparency
+- More Customisability
