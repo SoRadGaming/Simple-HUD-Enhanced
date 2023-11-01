@@ -1,5 +1,6 @@
 package com.soradgaming.simplehudenhanced.hud;
 
+import com.soradgaming.simplehudenhanced.cache.EquipmentCache;
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
 import com.soradgaming.simplehudenhanced.utli.Colours;
 import me.shedaniel.autoconfig.AutoConfig;
@@ -21,6 +22,10 @@ public class HUD {
     //Config
     private SimpleHudEnhancedConfig config;
 
+    // Cache
+    private EquipmentCache cache;
+    private int renders = 0;
+
     public HUD(MinecraftClient client) {
         this.client = client;
 
@@ -35,23 +40,29 @@ public class HUD {
         });
     }
 
+    public void setCache() {
+        // Create Cache
+        this.cache = EquipmentCache.getInstance();
+    }
+
+    public void drawEquipmentCache(DrawContext context) {
+        if (config.toggleEquipmentStatus && config.uiConfig.toggleSimpleHUDEnhanced) {
+            Equipment equipment = new Equipment(context, config, cache);
+            equipment.init();
+        }
+    }
+
     public void drawAsyncHud(DrawContext context) {
         // Check if HUD is enabled
         if (!config.uiConfig.toggleSimpleHUDEnhanced) return;
+
+        renders++;
 
         // Instance of Class with all the Game Information
         GameInfo GameInformation = new GameInfo(this.client);
 
         // Draw HUD
         CompletableFuture<Void> statusElementsFuture = CompletableFuture.runAsync(() -> drawStatusElements(context, GameInformation), MinecraftClient.getInstance()::executeTask);
-
-        // Draw Equipment Status
-        CompletableFuture<Void> equipmentFuture = CompletableFuture.runAsync(() -> {
-            if (config.toggleEquipmentStatus) {
-                Equipment equipment = new Equipment(context, config);
-                equipment.init();
-            }
-        }, MinecraftClient.getInstance()::executeTask);
 
         // Draw Movement Status
         if (config.toggleMovementStatus) {
@@ -63,7 +74,7 @@ public class HUD {
         drawTime(context, GameInformation.getSystemTime());
 
         // Ensure completion of all tasks before moving forward
-        CompletableFuture.allOf(equipmentFuture, statusElementsFuture).join();
+        CompletableFuture.allOf(statusElementsFuture).join();
     }
 
     @NotNull
@@ -156,6 +167,12 @@ public class HUD {
             context.drawTextWithShadow(this.renderer, line, xAxis + offset, yAxis, colour);
             yAxis += lineHeight;
         }
+
+        // Draw Render count
+        context.drawTextWithShadow(this.renderer, "Renders: " + renders, xAxis, yAxis, Colours.RED);
+        yAxis += lineHeight;
+        // Draw Cache Update Count
+        context.drawTextWithShadow(this.renderer, "Cache Updates: " + cache.generator, xAxis, yAxis, Colours.GREEN);
 
         screenManager.resetScale(context);
     }

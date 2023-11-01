@@ -38,6 +38,7 @@ public class GameRender {
     private void onInit(MinecraftClient client, ItemRenderer render, CallbackInfo ci) {
         // Start Mixin
         this.hud = new HUD(client);
+        this.hud.setCache();
     }
 
     @Inject(method = "render", at = @At("HEAD"))
@@ -45,6 +46,9 @@ public class GameRender {
         if (!this.client.hasReducedDebugInfo()) {
             // Call async rendering
             CompletableFuture.runAsync(() -> this.hud.drawAsyncHud(context), MinecraftClient.getInstance()::executeTask);
+
+            // Call Separate as its Cached
+            hud.drawEquipmentCache(context);
         }
     }
 
