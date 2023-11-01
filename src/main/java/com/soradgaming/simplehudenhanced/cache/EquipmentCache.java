@@ -3,7 +3,6 @@ package com.soradgaming.simplehudenhanced.cache;
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
 import com.soradgaming.simplehudenhanced.hud.EquipmentInfoStack;
 import com.soradgaming.simplehudenhanced.utli.Colours;
-import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -16,27 +15,19 @@ import java.util.List;
 public class EquipmentCache {
     private static EquipmentCache instance;
     private List<EquipmentInfoStack> equipmentInfo;
-    private SimpleHudEnhancedConfig config;
+    private final SimpleHudEnhancedConfig config;
 
     public int generator = 0;
 
-    private EquipmentCache() {
-        // Register and Listen for Config Changes
-        this.config = AutoConfig.getConfigHolder(SimpleHudEnhancedConfig.class).getConfig();
-
-        AutoConfig.getConfigHolder(SimpleHudEnhancedConfig.class).registerSaveListener((manager, data) -> {
-            // Update local config when new settings are saved
-            this.config = data;
-            return ActionResult.SUCCESS;
-        });
-
+    private EquipmentCache(SimpleHudEnhancedConfig config) {
+        this.config = config;
         // Register Events
         registerEvent();
     }
 
-    public static EquipmentCache getInstance() {
+    public static EquipmentCache getInstance(SimpleHudEnhancedConfig config) {
         if(instance == null) {
-            instance = new EquipmentCache();
+            instance = new EquipmentCache(config);
         }
 
         return instance;
@@ -44,7 +35,7 @@ public class EquipmentCache {
 
     private void registerEvent() {
         UpdateCacheEvent.EVENT.register((cache) -> {
-            if(cache == Cache.EQUIPMENT) {
+            if (cache == Cache.EQUIPMENT) {
                 // Run Code on Event
                 generator++;
                 setCacheValid(false);
@@ -190,11 +181,11 @@ public class EquipmentCache {
 
     private boolean isCacheValid = false;
 
-    public boolean isCacheValid() {
+    private boolean isCacheValid() {
         return isCacheValid;
     }
 
-    private void setCacheValid(boolean cacheValid) {
+    public void setCacheValid(boolean cacheValid) {
         isCacheValid = cacheValid;
     }
 }

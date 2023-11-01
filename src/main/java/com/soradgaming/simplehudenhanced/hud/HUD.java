@@ -35,6 +35,8 @@ public class HUD {
 
         AutoConfig.getConfigHolder(SimpleHudEnhancedConfig.class).registerSaveListener((manager, data) -> {
             // Update local config when new settings are saved
+            cache.generator++;
+            cache.setCacheValid(false);
             this.config = data;
             return ActionResult.SUCCESS;
         });
@@ -42,7 +44,7 @@ public class HUD {
 
     public void setCache() {
         // Create Cache
-        this.cache = EquipmentCache.getInstance();
+        this.cache = EquipmentCache.getInstance(this.config);
     }
 
     public void drawEquipmentCache(DrawContext context) {
