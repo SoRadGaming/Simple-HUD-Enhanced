@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 public class HUD {
     // Minecraft client variables
@@ -35,19 +34,17 @@ public class HUD {
 
         AutoConfig.getConfigHolder(SimpleHudEnhancedConfig.class).registerSaveListener((manager, data) -> {
             // Update local config when new settings are saved
-            cache.generator++;
+            cache.cacheUpdates++;
             cache.setCacheValid(false);
             this.config = data;
             return ActionResult.SUCCESS;
         });
-    }
 
-    public void setCache() {
         // Create Cache
         this.cache = EquipmentCache.getInstance(this.config);
     }
 
-    public void drawEquipmentCache(DrawContext context) {
+    public void drawEquipment(DrawContext context) {
         if (config.toggleEquipmentStatus && config.uiConfig.toggleSimpleHUDEnhanced) {
             Equipment equipment = new Equipment(context, config, cache);
             equipment.init();
@@ -63,20 +60,17 @@ public class HUD {
         // Instance of Class with all the Game Information
         GameInfo GameInformation = new GameInfo(this.client);
 
+        // Draw Time
+        drawTime(context, GameInformation.getSystemTime());
+
         // Draw HUD
-        CompletableFuture<Void> statusElementsFuture = CompletableFuture.runAsync(() -> drawStatusElements(context, GameInformation), MinecraftClient.getInstance()::executeTask);
+        drawStatusElements(context, GameInformation);
 
         // Draw Movement Status
         if (config.toggleMovementStatus) {
             Movement movement = new Movement(context, config);
             movement.init(GameInformation);
         }
-
-        // Draw Time
-        drawTime(context, GameInformation.getSystemTime());
-
-        // Ensure completion of all tasks before moving forward
-        CompletableFuture.allOf(statusElementsFuture).join();
     }
 
     @NotNull
@@ -174,7 +168,7 @@ public class HUD {
         context.drawTextWithShadow(this.renderer, "Renders: " + renders, xAxis, yAxis, Colours.RED);
         yAxis += lineHeight;
         // Draw Cache Update Count
-        context.drawTextWithShadow(this.renderer, "Cache Updates: " + cache.generator, xAxis, yAxis, Colours.GREEN);
+        context.drawTextWithShadow(this.renderer, "Cache Updates: " + cache.cacheUpdates, xAxis, yAxis, Colours.GREEN);
 
         screenManager.resetScale(context);
     }

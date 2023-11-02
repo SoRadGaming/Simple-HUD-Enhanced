@@ -17,7 +17,7 @@ public class EquipmentCache {
     private List<EquipmentInfoStack> equipmentInfo;
     private final SimpleHudEnhancedConfig config;
 
-    public int generator = 0;
+    public int cacheUpdates = 0;
 
     private EquipmentCache(SimpleHudEnhancedConfig config) {
         this.config = config;
@@ -37,7 +37,7 @@ public class EquipmentCache {
         UpdateCacheEvent.EVENT.register((cache) -> {
             if (cache == Cache.EQUIPMENT) {
                 // Run Code on Event
-                generator++;
+                cacheUpdates++;
                 setCacheValid(false);
                 return ActionResult.SUCCESS;
             }

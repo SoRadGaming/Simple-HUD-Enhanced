@@ -1,10 +1,12 @@
 package com.soradgaming.simplehudenhanced.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.soradgaming.simplehudenhanced.debugStatus.DebugStatus;
 import com.soradgaming.simplehudenhanced.hud.HUD;
 import com.soradgaming.simplehudenhanced.hud.StatusEffectBarRenderer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -12,6 +14,7 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.texture.StatusEffectSpriteManager;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,7 +27,6 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @Environment(EnvType.CLIENT)
 @Mixin(value = InGameHud.class)
@@ -34,21 +36,20 @@ public class GameRender {
     @Shadow
     @Final
     private MinecraftClient client;
+
     @Inject(method = "<init>(Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/render/item/ItemRenderer;)V", at = @At(value = "RETURN"))
     private void onInit(MinecraftClient client, ItemRenderer render, CallbackInfo ci) {
         // Start Mixin
         this.hud = new HUD(client);
-        this.hud.setCache();
     }
 
     @Inject(method = "render", at = @At("HEAD"))
     private void onDraw(DrawContext context, float esp, CallbackInfo ci) {
-        if (!this.client.hasReducedDebugInfo()) {
-            // Call async rendering
-            CompletableFuture.runAsync(() -> this.hud.drawAsyncHud(context), MinecraftClient.getInstance()::executeTask);
-
+        if (!(DebugStatus.getDebugStatus() && !this.client.options.hudHidden)) {
+            // Call Hud Render
+            this.hud.drawAsyncHud(context);
             // Call Separate as its Cached
-            hud.drawEquipmentCache(context);
+            this.hud.drawEquipment(context);
         }
     }
 
@@ -65,4 +66,11 @@ public class GameRender {
         StatusEffectBarRenderer.render(context, effect, x, y, 24, 24);
         RenderSystem.enableBlend(); // disabled by DrawableHelper#fill
     }
+
+    // Debug Enabled
+    @Inject(method = "clear", at = @At("HEAD"))
+    private void onClear(CallbackInfo ci) {
+        DebugStatus.setDebugStatus(false);
+    }
 }
+
