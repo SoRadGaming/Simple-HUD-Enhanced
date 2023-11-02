@@ -1,5 +1,6 @@
 package com.soradgaming.simplehudenhanced.hud;
 
+import com.soradgaming.simplehudenhanced.cache.EquipmentCache;
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
 import com.soradgaming.simplehudenhanced.utli.Colours;
 import me.shedaniel.autoconfig.AutoConfig;
@@ -11,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 public class HUD {
     // Minecraft client variables
@@ -20,6 +20,10 @@ public class HUD {
 
     //Config
     private SimpleHudEnhancedConfig config;
+
+    // Cache
+    private EquipmentCache cache;
+    private int renders = 0;
 
     public HUD(MinecraftClient client) {
         this.client = client;
@@ -30,40 +34,43 @@ public class HUD {
 
         AutoConfig.getConfigHolder(SimpleHudEnhancedConfig.class).registerSaveListener((manager, data) -> {
             // Update local config when new settings are saved
+            cache.cacheUpdates++;
+            cache.setCacheValid(false);
             this.config = data;
             return ActionResult.SUCCESS;
         });
+
+        // Create Cache
+        this.cache = EquipmentCache.getInstance(this.config);
+    }
+
+    public void drawEquipment(DrawContext context) {
+        if (config.toggleEquipmentStatus && config.uiConfig.toggleSimpleHUDEnhanced) {
+            Equipment equipment = new Equipment(context, config, cache);
+            equipment.init();
+        }
     }
 
     public void drawAsyncHud(DrawContext context) {
         // Check if HUD is enabled
         if (!config.uiConfig.toggleSimpleHUDEnhanced) return;
 
+        renders++;
+
         // Instance of Class with all the Game Information
         GameInfo GameInformation = new GameInfo(this.client);
 
-        // Draw HUD
-        CompletableFuture<Void> statusElementsFuture = CompletableFuture.runAsync(() -> drawStatusElements(context, GameInformation), MinecraftClient.getInstance()::executeTask);
+        // Draw Time
+        drawTime(context, GameInformation.getSystemTime());
 
-        // Draw Equipment Status
-        CompletableFuture<Void> equipmentFuture = CompletableFuture.runAsync(() -> {
-            if (config.toggleEquipmentStatus) {
-                Equipment equipment = new Equipment(context, config);
-                equipment.init();
-            }
-        }, MinecraftClient.getInstance()::executeTask);
+        // Draw HUD
+        drawStatusElements(context, GameInformation);
 
         // Draw Movement Status
         if (config.toggleMovementStatus) {
             Movement movement = new Movement(context, config);
             movement.init(GameInformation);
         }
-
-        // Draw Time
-        drawTime(context, GameInformation.getSystemTime());
-
-        // Ensure completion of all tasks before moving forward
-        CompletableFuture.allOf(equipmentFuture, statusElementsFuture).join();
     }
 
     @NotNull
@@ -156,6 +163,12 @@ public class HUD {
             context.drawTextWithShadow(this.renderer, line, xAxis + offset, yAxis, colour);
             yAxis += lineHeight;
         }
+
+        // Draw Render count
+        context.drawTextWithShadow(this.renderer, "Renders: " + renders, xAxis, yAxis, Colours.RED);
+        yAxis += lineHeight;
+        // Draw Cache Update Count
+        context.drawTextWithShadow(this.renderer, "Cache Updates: " + cache.cacheUpdates, xAxis, yAxis, Colours.GREEN);
 
         screenManager.resetScale(context);
     }
