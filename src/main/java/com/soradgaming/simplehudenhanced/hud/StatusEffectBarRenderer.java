@@ -1,17 +1,16 @@
 package com.soradgaming.simplehudenhanced.hud;
 
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
-import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.util.math.MathHelper;
 
 public class StatusEffectBarRenderer {
     private static SimpleHudEnhancedConfig config;
-    public static void render(DrawContext drawContext, StatusEffectInstance effect, int x, int y, int width, int height) {
-        config = AutoConfig.getConfigHolder(SimpleHudEnhancedConfig.class).getConfig();
-
+    public static void render(DrawContext drawContext, StatusEffectInstance effect, int x, int y, int width, int height, SimpleHudEnhancedConfig config) {
         if (!config.toggleEffectsStatus) return;
+
+        StatusEffectBarRenderer.config = config;
 
         float progress = (float) effect.getDuration() / ((StatusEffectInstanceDuck) effect).statusEffectBars_getMaxDuration();
         float progress1 = calculateProgress(progress, 0.25f);

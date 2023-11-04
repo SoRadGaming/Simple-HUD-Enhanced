@@ -1,8 +1,8 @@
 package com.soradgaming.simplehudenhanced.hud;
 
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
+import com.soradgaming.simplehudenhanced.utli.TpsTracker;
 import com.soradgaming.simplehudenhanced.utli.Utilities;
-import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.math.Direction;
@@ -14,9 +14,9 @@ public class GameInfo {
     private ClientPlayerEntity player;
     private final SimpleHudEnhancedConfig config;
 
-    public GameInfo(MinecraftClient client) {
+    public GameInfo(MinecraftClient client, SimpleHudEnhancedConfig config) {
         this.client = client;
-        this.config = AutoConfig.getConfigHolder(SimpleHudEnhancedConfig.class).getConfig();
+        this.config = config;
 
         if (this.client.player != null) {
             this.player = this.client.player;
@@ -194,6 +194,13 @@ public class GameInfo {
         } catch (NullPointerException e) {
             return "";
         }
+    }
+
+    public String getTPS() {
+        if (!config.statusElements.toggleTPS) {
+            return "";
+        }
+        return String.format(Utilities.translatable("text.hud.simplehudenhanced.tps").getString() + ": %.2f", TpsTracker.INSTANCE.getTickRate());
     }
 
     public String getServer() {

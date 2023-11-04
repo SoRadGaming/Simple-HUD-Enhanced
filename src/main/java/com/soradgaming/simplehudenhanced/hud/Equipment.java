@@ -1,5 +1,6 @@
 package com.soradgaming.simplehudenhanced.hud;
 
+import com.soradgaming.simplehudenhanced.config.EquipmentOrientation;
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
 import com.soradgaming.simplehudenhanced.utli.Colours;
 import net.minecraft.block.Blocks;
@@ -107,10 +108,12 @@ public class Equipment {
                 int currentDurability = item.getMaxDamage() - item.getDamage();
 
                 // Draw Durability
-                if (!config.equipmentStatus.Durability.showDurabilityAsPercentage)  {
+                if (config.equipmentStatus.Durability.showDurabilityAsPercentage)  {
+                    index.setText(String.format("%s%%", (currentDurability * 100) / item.getMaxDamage()));
+                } else if (config.equipmentStatus.Durability.showTotalCount) {
                     index.setText(String.format("%s/%s", currentDurability, item.getMaxDamage()));
                 } else {
-                    index.setText(String.format("%s%%", (currentDurability * 100) / item.getMaxDamage()));
+                    index.setText(String.format("%s", currentDurability));
                 }
 
                 if (config.equipmentStatus.Durability.showColour) {
@@ -190,23 +193,38 @@ public class Equipment {
         screenManager.setPadding(4);
         int xAxis = screenManager.calculateXAxis(configX, Scale, (BoxWidth + 16));
         int yAxis = screenManager.calculateYAxis(lineHeight, equipmentInfo.size(), configY, Scale);
+        if (config.equipmentStatus.equipmentOrientation == EquipmentOrientation.Horizontal) {
+            int total = 0;
+            for (EquipmentInfoStack index : equipmentInfo) {
+                int lineLength = this.renderer.getWidth(index.getText());
+                total += lineLength;
+            }
+            xAxis = screenManager.calculateXAxis(configX, Scale, total + (24 * equipmentInfo.size()) - 4);
+            yAxis = screenManager.calculateYAxis(lineHeight, 1, configY, Scale);
+        }
         screenManager.setScale(context, Scale);
 
         // Draw All Items on Screen
         for (EquipmentInfoStack index : equipmentInfo) {
             ItemStack item = index.getItem();
 
-            if (configX >= 50) {
-                int lineLength = this.renderer.getWidth(index.getText());
-                int offset = (BoxWidth - lineLength);
-
-                this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + offset - 4, yAxis + 4, index.getColor());
-                this.context.drawItem(item, xAxis + BoxWidth, yAxis);
+            if (config.equipmentStatus.equipmentOrientation == EquipmentOrientation.Vertical) {
+                if (xAxis >= 50) {
+                    int lineLength = this.renderer.getWidth(index.getText());
+                    int offset = (BoxWidth - lineLength);
+                    this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + offset - 4, yAxis + 4, index.getColor());
+                    this.context.drawItem(item, xAxis + BoxWidth, yAxis);
+                } else {
+                    this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
+                    this.context.drawItem(item, xAxis, yAxis);
+                }
+                yAxis += lineHeight;
             } else {
                 this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
                 this.context.drawItem(item, xAxis, yAxis);
+                int lineLength = this.renderer.getWidth(index.getText());
+                xAxis += lineLength + 16 + 4 + 4;
             }
-            yAxis += lineHeight;
         }
 
         screenManager.resetScale(context);
