@@ -24,7 +24,7 @@ public class SimpleHudEnhancedConfig implements ConfigData {
     @ConfigEntry.Category("Effects Status")
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     @ConfigEntry.Gui.Tooltip(count = 4)
-    public ColorModeSelector colorMode = ColorModeSelector.EFFECT_COLOR;
+    public ColorModeSelector colorMode = ColorModeSelector.Effect;
     @ConfigEntry.Category("Effects Status")
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
@@ -58,6 +58,9 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 50, max = 150)
         public int textScale = 100;
+        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+        @ConfigEntry.Gui.Tooltip
+        public TextAlignment textAlignment = TextAlignment.Left;
     }
 
     public static class EffectsStatus {
@@ -77,7 +80,7 @@ public class SimpleHudEnhancedConfig implements ConfigData {
     public int getColor(StatusEffectInstance effect) {
         // Function for combining two colors (used for background color)
         ToIntBiFunction<Integer, Integer> convert = Integer::sum;
-        if (colorMode == ColorModeSelector.CUSTOM) {
+        if (colorMode == ColorModeSelector.Custom) {
             switch (effect.getEffectType().getType()) {
                 case BENEFICIAL -> {
                     return effectsStatus.beneficialForegroundColor;
@@ -89,7 +92,7 @@ public class SimpleHudEnhancedConfig implements ConfigData {
                     return effectsStatus.neutralForegroundColor;
                 }
             }
-        } else if (colorMode == ColorModeSelector.CATEGORY_COLOR) {
+        } else if (colorMode == ColorModeSelector.Category) {
             return convert.applyAsInt(effect.getEffectType().getType().getFormatting().getColorValue(), 0xff000000);
         }
         // If mode == ColorModeSelector.EFFECT_COLOR or mode == null (default)
@@ -110,6 +113,9 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 50, max = 150)
         public int textScale = 100;
+        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+        @ConfigEntry.Gui.Tooltip
+        public EquipmentOrientation equipmentOrientation = EquipmentOrientation.Vertical;
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
         public int equipmentStatusLocationX = 0;
@@ -121,6 +127,8 @@ public class SimpleHudEnhancedConfig implements ConfigData {
     public static class Durability {
         @ConfigEntry.Gui.Tooltip
         public boolean showDurability = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean showTotalCount = false;
         @ConfigEntry.Gui.Tooltip
         public boolean showDurabilityAsPercentage = false;
         @ConfigEntry.Gui.Tooltip
@@ -210,6 +218,8 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         public boolean togglePlayerName = false;
         @ConfigEntry.Gui.Tooltip
         public boolean togglePing = false;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleTPS = false;
         @ConfigEntry.Gui.Tooltip
         public boolean toggleServerName = false;
         @ConfigEntry.Gui.Tooltip
