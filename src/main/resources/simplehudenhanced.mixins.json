@@ -4,11 +4,13 @@
   "package": "com.soradgaming.simplehudenhanced.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "StatusEffectInstanceMixin"
+    "StatusEffectInstanceMixin",
+    "TpsMixin$ClientConnectionMixin"
   ],
   "client": [
     "GameRender",
-    "StatusEffectInstanceMixin"
+    "StatusEffectInstanceMixin",
+    "TpsMixin$ClientPlayNetworkHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

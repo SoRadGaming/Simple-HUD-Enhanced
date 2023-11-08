@@ -1,12 +1,11 @@
 package com.soradgaming.simplehudenhanced.hud;
 
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
+import com.soradgaming.simplehudenhanced.config.TextAlignment;
 import com.soradgaming.simplehudenhanced.utli.Colours;
-import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.ActionResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -19,29 +18,20 @@ public class HUD {
     private final TextRenderer renderer;
 
     //Config
-    private SimpleHudEnhancedConfig config;
+    private final SimpleHudEnhancedConfig config;
 
-    public HUD(MinecraftClient client) {
+    public HUD(MinecraftClient client, SimpleHudEnhancedConfig config) {
         this.client = client;
-
         this.renderer = client.textRenderer;
-
-        this.config = AutoConfig.getConfigHolder(SimpleHudEnhancedConfig.class).getConfig();
-
-        AutoConfig.getConfigHolder(SimpleHudEnhancedConfig.class).registerSaveListener((manager, data) -> {
-            // Update local config when new settings are saved
-            this.config = data;
-            return ActionResult.SUCCESS;
-        });
+        this.config = config;
     }
 
-    // Main HUD function to draw all the elements on the screen
     public void drawAsyncHud(MatrixStack matrixStack) {
         // Check if HUD is enabled
         if (!config.uiConfig.toggleSimpleHUDEnhanced) return;
 
         // Instance of Class with all the Game Information
-        GameInfo GameInformation = new GameInfo(this.client);
+        GameInfo GameInformation = new GameInfo(this.client, config);
 
         // Draw HUD
         CompletableFuture<Void> statusElementsFuture = CompletableFuture.runAsync(() -> drawStatusElements(matrixStack, GameInformation), MinecraftClient.getInstance()::executeTask);
@@ -81,6 +71,7 @@ public class HUD {
         hudInfo.add(GameInformation.getTime());
         hudInfo.add(GameInformation.getPlayerName());
         hudInfo.add(GameInformation.getPing());
+        hudInfo.add(GameInformation.getTPS());
         hudInfo.add(GameInformation.getServer());
         hudInfo.add(GameInformation.getServerAddress());
         return hudInfo;
@@ -147,9 +138,12 @@ public class HUD {
 
         for (String line : hudInfo) {
             int offset = 0;
-            if (Xcords >= 50) {
+            if (config.uiConfig.textAlignment == TextAlignment.Right) {
                 int lineLength = this.renderer.getWidth(line);
                 offset = (BoxWidth - lineLength);
+            } else if (config.uiConfig.textAlignment == TextAlignment.Center) {
+                int lineLength = this.renderer.getWidth(line);
+                offset = (BoxWidth - lineLength) / 2;
             }
             // Colour Check
             int colour = getColor(line, gameInformation);

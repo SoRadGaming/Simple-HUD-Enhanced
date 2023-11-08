@@ -44,7 +44,8 @@ processResources {
         expand "version": project.version,
                 "minecraft_version": project.minecraft_version,
                 "loader_version": project.loader_version,
-                "modmenu_version": project.modmenu_version
+                "modmenu_version": project.modmenu_version,
+                "fabric_version": project.fabric_version
     }
 }
 
