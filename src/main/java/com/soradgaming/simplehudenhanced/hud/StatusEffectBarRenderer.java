@@ -9,18 +9,16 @@ import net.minecraft.util.math.MathHelper;
 
 public class StatusEffectBarRenderer {
     private static SimpleHudEnhancedConfig config;
-    public static void render(MatrixStack matrixStack, StatusEffectInstance effect, int x, int y, int width, int height) {
-        config = AutoConfig.getConfigHolder(SimpleHudEnhancedConfig.class).getConfig();
-
+    public static void render(MatrixStack matrixStack, StatusEffectInstance effect, int x, int y, int width, int height, SimpleHudEnhancedConfig config) {
         if (!config.toggleEffectsStatus) return;
+
+        StatusEffectBarRenderer.config = config;
 
         float progress = (float) effect.getDuration() / ((StatusEffectInstanceDuck) effect).statusEffectBars_getMaxDuration();
         float progress1 = calculateProgress(progress, 0.25f);
         float progress2 = calculateProgress(progress, 0.5f);
         float progress3 = calculateProgress(progress, 0.75f);
         float progress4 = calculateProgress(progress, 1f);
-
-
 
         drawVerticalBar(x, y, 2, 3, height - 3, progress4, matrixStack, effect);
         drawHorizontalBar(x, y, width - 3, 3,2, progress3, matrixStack, effect);
