@@ -23,8 +23,11 @@ tailored to individual preferences though the [Mod Menu mod](https://www.cursefo
 This mod has been built from the ground up to be modular and faster to update, 
 originally as a fork of Simple Utilities Mod by [johnvictorfs](https://github.com/johnvictorfs/simple-utilities-mod).
 
-This mod has also used code from :
-[A5b84](https://github.com/SoRadGaming/status-effect-bars)
+This mod has also been built with the help of the following mods:
+- For Status Effect Rings:
+[A5b84](https://github.com/A5b84/status-effect-bars)
+- For TPS Tracking Client Side:
+[mooziii](https://github.com/mooziii/tpshud-fabric)
 
 ## Future Additions
 - Config Window with Drag & Resizeable blocks for Hud Configuration

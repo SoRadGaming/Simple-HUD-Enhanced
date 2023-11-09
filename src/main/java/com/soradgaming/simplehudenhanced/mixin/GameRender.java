@@ -1,8 +1,11 @@
 package com.soradgaming.simplehudenhanced.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
+import com.soradgaming.simplehudenhanced.debugStatus.DebugStatus;
 import com.soradgaming.simplehudenhanced.hud.HUD;
 import com.soradgaming.simplehudenhanced.hud.StatusEffectBarRenderer;
+import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -12,6 +15,7 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.texture.StatusEffectSpriteManager;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.util.ActionResult;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,18 +35,28 @@ import java.util.concurrent.CompletableFuture;
 public class GameRender {
     @Unique
     private HUD hud;
+    @Unique
+    private SimpleHudEnhancedConfig config;
     @Shadow
     @Final
     private MinecraftClient client;
     @Inject(method = "<init>(Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/render/item/ItemRenderer;)V", at = @At(value = "RETURN"))
     private void onInit(MinecraftClient client, ItemRenderer render, CallbackInfo ci) {
+        // Get Config
+        this.config = AutoConfig.getConfigHolder(SimpleHudEnhancedConfig.class).getConfig();
+        // Register Save Listener
+        AutoConfig.getConfigHolder(SimpleHudEnhancedConfig.class).registerSaveListener((manager, data) -> {
+            // Update local config when new settings are saved
+            this.config = data;
+            return ActionResult.SUCCESS;
+        });
         // Start Mixin
-        this.hud = new HUD(client);
+        this.hud = new HUD(client, config);
     }
 
     @Inject(method = "render", at = @At("HEAD"))
     private void onDraw(DrawContext context, float esp, CallbackInfo ci) {
-        if (!this.client.hasReducedDebugInfo()) {
+        if (!(DebugStatus.getDebugStatus() && !this.client.options.hudHidden)) {
             // Call async rendering
             CompletableFuture.runAsync(() -> this.hud.drawAsyncHud(context), MinecraftClient.getInstance()::executeTask);
         }
@@ -58,7 +72,13 @@ public class GameRender {
             int othersColumn, StatusEffectSpriteManager spriteManager,
             List<Runnable> spriteRunnable, Iterator<StatusEffectInstance> it,
             StatusEffectInstance effect, StatusEffect type, int x, int y) {
-        StatusEffectBarRenderer.render(context, effect, x, y, 24, 24);
+        StatusEffectBarRenderer.render(context, effect, x, y, 24, 24, this.config);
         RenderSystem.enableBlend(); // disabled by DrawableHelper#fill
+    }
+
+    // Debug Enabled
+    @Inject(method = "clear", at = @At("HEAD"))
+    private void onClear(CallbackInfo ci) {
+        DebugStatus.setDebugStatus(false);
     }
 }
