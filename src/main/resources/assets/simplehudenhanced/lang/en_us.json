@@ -72,6 +72,8 @@
     "text.autoconfig.simplehudenhanced.option.equipmentStatus.Durability.showDurabilityAsPercentage": "Durability as Percentage",
     "text.autoconfig.simplehudenhanced.option.equipmentStatus.Durability.showColour.@Tooltip": "Colour your Armour and Items Durability based on their Durability (Green = Good, Yellow = Okay, Red = Bad)",
     "text.autoconfig.simplehudenhanced.option.equipmentStatus.Durability.showColour": "Colour",
+    "text.autoconfig.simplehudenhanced.option.equipmentStatus.Durability.showDurabilityAsBar.@Tooltip": "Show your Armour and Items Durability as a Bar in the HUD",
+    "text.autoconfig.simplehudenhanced.option.equipmentStatus.Durability.showDurabilityAsBar": "Durability as Bar",
 
   "text.autoconfig.simplehudenhanced.option.equipmentStatus.Durability.slots.@Tooltip": "Slots to show Durability (Click to Expand)",
   "text.autoconfig.simplehudenhanced.option.equipmentStatus.Durability.slots": "Slots",

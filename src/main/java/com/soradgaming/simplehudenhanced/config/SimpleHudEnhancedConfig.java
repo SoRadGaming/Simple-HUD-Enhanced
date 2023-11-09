@@ -134,6 +134,8 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         public boolean showColour = true;
         @ConfigEntry.Gui.Tooltip
+        public boolean showDurabilityAsBar = true;
+        @ConfigEntry.Gui.Tooltip
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
         public DurabilitySlots slots = new DurabilitySlots();
     }
