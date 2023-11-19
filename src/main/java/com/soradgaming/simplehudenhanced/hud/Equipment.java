@@ -3,18 +3,17 @@ package com.soradgaming.simplehudenhanced.hud;
 import com.soradgaming.simplehudenhanced.config.EquipmentOrientation;
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
 import com.soradgaming.simplehudenhanced.utli.Colours;
+import com.soradgaming.simplehudenhanced.utli.TrinketAccessor;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.soradgaming.simplehudenhanced.utli.Utilities.getModName;
@@ -22,7 +21,6 @@ import static com.soradgaming.simplehudenhanced.utli.Utilities.getModName;
 public class Equipment {
     private final MinecraftClient client;
     private final TextRenderer textRenderer;
-    private final ItemRenderer itemRenderer;
     private ClientPlayerEntity player;
     private final SimpleHudEnhancedConfig config;
     private final MatrixStack matrixStack;
@@ -33,7 +31,6 @@ public class Equipment {
     public Equipment(MatrixStack matrixStack, SimpleHudEnhancedConfig config) {
         this.client = MinecraftClient.getInstance();
         this.textRenderer = client.textRenderer;
-        this.itemRenderer = client.getItemRenderer();
         this.config = config;
         this.matrixStack = matrixStack;
 
@@ -47,20 +44,15 @@ public class Equipment {
     }
 
     public void init() {
-        // Get Armour and Hand Item from Inventory and Offhand
-        equipmentInfo = new ArrayList<>(
-                Arrays.asList(
-                        new EquipmentInfoStack(this.player.getInventory().getArmorStack(3)),
-                        new EquipmentInfoStack(this.player.getInventory().getArmorStack(2)),
-                        new EquipmentInfoStack(this.player.getInventory().getArmorStack(1)),
-                        new EquipmentInfoStack(this.player.getInventory().getArmorStack(0)),
-                        new EquipmentInfoStack(this.player.getOffHandStack()),
-                        new EquipmentInfoStack(this.player.getMainHandStack())
-                )
-        );
+        // Trinkets or Normal
+        TrinketAccessor trinketData = new TrinketAccessor(this.player, config);
+        equipmentInfo = trinketData.getEquipmentInfo();
 
         // Remove Air Blocks from the list
         equipmentInfo.removeIf(equipment -> equipment.getItem().getItem().equals(Blocks.AIR.asItem()));
+
+        // Remove Items with 0 count
+        equipmentInfo.removeIf(equipment -> equipment.getItem().getCount() == 0);
 
         // Check showNonTools
         if (!config.equipmentStatus.showNonTools) {
@@ -111,7 +103,9 @@ public class Equipment {
                 int currentDurability = item.getMaxDamage() - item.getDamage();
 
                 // Draw Durability
-                if (config.equipmentStatus.Durability.showDurabilityAsPercentage)  {
+                if (config.equipmentStatus.Durability.showDurabilityAsBar) {
+                    index.setText("");
+                } else if (config.equipmentStatus.Durability.showDurabilityAsPercentage)  {
                     index.setText(String.format("%s%%", (currentDurability * 100) / item.getMaxDamage()));
                 } else if (config.equipmentStatus.Durability.showTotalCount) {
                     index.setText(String.format("%s/%s", currentDurability, item.getMaxDamage()));
@@ -119,7 +113,7 @@ public class Equipment {
                     index.setText(String.format("%s", currentDurability));
                 }
 
-                if (config.equipmentStatus.Durability.showColour) {
+                if (config.equipmentStatus.Durability.showColour || config.equipmentStatus.Durability.showDurabilityAsBar) {
                     // Default Durability Color
                     if (currentDurability <= (item.getMaxDamage()) / 4) {
                         index.setColor(Colours.lightRed);
@@ -147,6 +141,11 @@ public class Equipment {
                         index.setText((item.getCount() + " (" + this.player.getInventory().count(item.getItem()) + ")"));
                     }
                 } else {
+                    index.setText("");
+                }
+
+                // Check for 1
+                if (this.player.getInventory().count(item.getItem()) == 1) {
                     index.setText("");
                 }
 
@@ -190,6 +189,9 @@ public class Equipment {
         int configY = config.equipmentStatus.equipmentStatusLocationY;
         float Scale = (float) config.equipmentStatus.textScale / 100;
         int lineHeight = 16;
+        if (config.equipmentStatus.Durability.showDurabilityAsBar) {
+            lineHeight = 18;
+        }
 
         // Screen Manager
         ScreenManager screenManager = new ScreenManager(this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
@@ -215,15 +217,15 @@ public class Equipment {
                 if (xAxis >= 50) {
                     int lineLength = this.textRenderer.getWidth(index.getText());
                     int offset = (BoxWidth - lineLength);
-                    this.textRenderer.drawWithShadow(this.matrixStack, index.getText(), xAxis + offset - 4, yAxis + 4, index.getColor());
+                    drawDurabilityBar(xAxis + offset - 4, yAxis + 4, index, item);
                     screenManager.renderInGuiWithOverrides(this.matrixStack, item, xAxis + BoxWidth, yAxis);
                 } else {
-                    this.textRenderer.drawWithShadow(this.matrixStack, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
+                    drawDurabilityBar(xAxis, yAxis, index, item);
                     screenManager.renderInGuiWithOverrides(this.matrixStack, item, xAxis, yAxis);
                 }
                 yAxis += lineHeight;
             } else {
-                this.textRenderer.drawWithShadow(this.matrixStack, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
+                drawDurabilityBar(xAxis, yAxis, index, item);
                 screenManager.renderInGuiWithOverrides(this.matrixStack, item, xAxis, yAxis);
                 int lineLength = this.textRenderer.getWidth(index.getText());
                 xAxis += lineLength + 16 + 4 + 4;
@@ -231,5 +233,31 @@ public class Equipment {
         }
 
         screenManager.resetScale(matrixStack);
+    }
+
+    private void drawDurabilityBar(int xAxis, int yAxis, EquipmentInfoStack index, ItemStack item) {
+        if (config.equipmentStatus.Durability.showDurabilityAsBar && item.getMaxDamage() != 0) {
+            // Check for 100% durability
+            if (item.getDamage() == 0) {
+                return;
+            }
+
+            // Calculate durability ratio
+            float durabilityRatio = (float) item.getDamage() / item.getMaxDamage();
+
+            // Calculate the length of the durability bar
+            int barLength = (int) (durabilityRatio * 16);
+
+            // Draw the durability bar
+            DrawableHelper.fill(matrixStack, xAxis + barLength, yAxis + 16, xAxis + 16, yAxis + 17, 0x80000000);// 0x80000000
+            DrawableHelper.fill(matrixStack, xAxis, yAxis + 16, xAxis + 16 - barLength, yAxis + 17, index.getColor()); // 0xFF00FF00
+        } else {
+            // Runs here if is an ITEM (double check, but I don't care)
+            if (config.equipmentStatus.Durability.showDurabilityAsBar) {
+                this.textRenderer.drawWithShadow(matrixStack, index.getText(), xAxis + 16 + 4, yAxis + 6, index.getColor());
+            } else {
+                this.textRenderer.drawWithShadow(matrixStack, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
+            }
+        }
     }
 }
