@@ -7,13 +7,17 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-    maven { url "https://maven.shedaniel.me/" }
+    // This is required for the Fabric Maven
     maven {
         name = "TerraformersMC"
-        url = "https://maven.terraformersmc.com/releases/"
-        content {
-            includeGroup "com.terraformersmc"
-        }
+        url = "https://maven.terraformersmc.com/"
+    }
+    // This is required for the Cloth Config dependency
+    maven { url "https://maven.shedaniel.me/" }
+    // This is required for the Trinkets dependency
+    maven {
+        name = "Ladysnake Libs"
+        url = 'https://maven.ladysnake.org/releases'
     }
 }
 
@@ -32,6 +36,10 @@ dependencies {
 
     // Mod Menu
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+    // Trinkets
+    modImplementation "dev.emi:trinkets:${project.trinkets_version}"
+    implementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_api_version}"
 }
 
 processResources {
@@ -46,7 +54,9 @@ processResources {
                 "minecraft_version_next": project.minecraft_version_next,
                 "loader_version": project.loader_version,
                 "modmenu_version": project.modmenu_version,
-                "fabric_version": project.fabric_version
+                "fabric_version": project.fabric_version,
+                "trinkets_version": project.trinkets_version,
+                "cardinal_components_api_version": project.cardinal_components_api_version
     }
 }
 

@@ -3,6 +3,7 @@ package com.soradgaming.simplehudenhanced.hud;
 import com.soradgaming.simplehudenhanced.config.EquipmentOrientation;
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
 import com.soradgaming.simplehudenhanced.utli.Colours;
+import com.soradgaming.simplehudenhanced.utli.TrinketAccessor;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -12,8 +13,6 @@ import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.soradgaming.simplehudenhanced.utli.Utilities.getModName;
@@ -44,20 +43,15 @@ public class Equipment {
     }
 
     public void init() {
-        // Get Armour and Hand Item from Inventory and Offhand
-        equipmentInfo = new ArrayList<>(
-                Arrays.asList(
-                        new EquipmentInfoStack(this.player.getInventory().getArmorStack(3)),
-                        new EquipmentInfoStack(this.player.getInventory().getArmorStack(2)),
-                        new EquipmentInfoStack(this.player.getInventory().getArmorStack(1)),
-                        new EquipmentInfoStack(this.player.getInventory().getArmorStack(0)),
-                        new EquipmentInfoStack(this.player.getOffHandStack()),
-                        new EquipmentInfoStack(this.player.getMainHandStack())
-                )
-        );
+        // Trinkets or Normal
+        TrinketAccessor trinketData = new TrinketAccessor(this.player, config);
+        equipmentInfo = trinketData.getEquipmentInfo();
 
         // Remove Air Blocks from the list
         equipmentInfo.removeIf(equipment -> equipment.getItem().getItem().equals(Blocks.AIR.asItem()));
+
+        // Remove Items with 0 count
+        equipmentInfo.removeIf(equipment -> equipment.getItem().getCount() == 0);
 
         // Check showNonTools
         if (!config.equipmentStatus.showNonTools) {
@@ -108,7 +102,9 @@ public class Equipment {
                 int currentDurability = item.getMaxDamage() - item.getDamage();
 
                 // Draw Durability
-                if (config.equipmentStatus.Durability.showDurabilityAsPercentage)  {
+                if (config.equipmentStatus.Durability.showDurabilityAsBar) {
+                    index.setText("");
+                } else if (config.equipmentStatus.Durability.showDurabilityAsPercentage)  {
                     index.setText(String.format("%s%%", (currentDurability * 100) / item.getMaxDamage()));
                 } else if (config.equipmentStatus.Durability.showTotalCount) {
                     index.setText(String.format("%s/%s", currentDurability, item.getMaxDamage()));
@@ -116,7 +112,7 @@ public class Equipment {
                     index.setText(String.format("%s", currentDurability));
                 }
 
-                if (config.equipmentStatus.Durability.showColour) {
+                if (config.equipmentStatus.Durability.showColour || config.equipmentStatus.Durability.showDurabilityAsBar) {
                     // Default Durability Color
                     if (currentDurability <= (item.getMaxDamage()) / 4) {
                         index.setColor(Colours.lightRed);
@@ -144,6 +140,11 @@ public class Equipment {
                         index.setText((item.getCount() + " (" + this.player.getInventory().count(item.getItem()) + ")"));
                     }
                 } else {
+                    index.setText("");
+                }
+
+                // Check for 1
+                if (this.player.getInventory().count(item.getItem()) == 1) {
                     index.setText("");
                 }
 
@@ -187,6 +188,9 @@ public class Equipment {
         int configY = config.equipmentStatus.equipmentStatusLocationY;
         float Scale = (float) config.equipmentStatus.textScale / 100;
         int lineHeight = 16;
+        if (config.equipmentStatus.Durability.showDurabilityAsBar) {
+            lineHeight = 18;
+        }
 
         // Screen Manager
         ScreenManager screenManager = new ScreenManager(this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
@@ -212,15 +216,15 @@ public class Equipment {
                 if (xAxis >= 50) {
                     int lineLength = this.renderer.getWidth(index.getText());
                     int offset = (BoxWidth - lineLength);
-                    this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + offset - 4, yAxis + 4, index.getColor());
+                    drawDurabilityBar(xAxis + offset - 4, yAxis + 4, index, item);
                     this.context.drawItem(item, xAxis + BoxWidth, yAxis);
                 } else {
-                    this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
+                    drawDurabilityBar(xAxis, yAxis, index, item);
                     this.context.drawItem(item, xAxis, yAxis);
                 }
                 yAxis += lineHeight;
             } else {
-                this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
+                drawDurabilityBar(xAxis, yAxis, index, item);
                 this.context.drawItem(item, xAxis, yAxis);
                 int lineLength = this.renderer.getWidth(index.getText());
                 xAxis += lineLength + 16 + 4 + 4;
@@ -228,5 +232,31 @@ public class Equipment {
         }
 
         screenManager.resetScale(context);
+    }
+
+    private void drawDurabilityBar(int xAxis, int yAxis, EquipmentInfoStack index, ItemStack item) {
+        if (config.equipmentStatus.Durability.showDurabilityAsBar && item.getMaxDamage() != 0) {
+            // Check for 100% durability
+            if (item.getDamage() == 0) {
+                return;
+            }
+
+            // Calculate durability ratio
+            float durabilityRatio = (float) item.getDamage() / item.getMaxDamage();
+
+            // Calculate the length of the durability bar
+            int barLength = (int) (durabilityRatio * 16);
+
+            // Draw the durability bar
+            this.context.fill(xAxis + barLength, yAxis + 16, xAxis + 16, yAxis + 17, 0x80000000);// 0x80000000
+            this.context.fill(xAxis, yAxis + 16, xAxis + 16 - barLength, yAxis + 17, index.getColor()); // 0xFF00FF00
+        } else {
+            // Runs here if is an ITEM (double check, but I don't care)
+            if (config.equipmentStatus.Durability.showDurabilityAsBar) {
+                this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + 16 + 4, yAxis + 6, index.getColor());
+            } else {
+                this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
+            }
+        }
     }
 }
