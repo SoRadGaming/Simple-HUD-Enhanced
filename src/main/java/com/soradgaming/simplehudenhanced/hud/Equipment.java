@@ -213,18 +213,36 @@ public class Equipment {
             ItemStack item = index.getItem();
 
             if (config.equipmentStatus.equipmentOrientation == EquipmentOrientation.Vertical) {
-                if (xAxis >= 50) {
+                if (configX >= 50) {
                     int lineLength = this.renderer.getWidth(index.getText());
                     int offset = (BoxWidth - lineLength);
-                    drawDurabilityBar(xAxis + offset - 4, yAxis + 4, index, item);
+                    if (!drawDurabilityBar(xAxis + BoxWidth, yAxis, index, item)) {
+                        if (config.equipmentStatus.Durability.showDurabilityAsBar) {
+                            this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + offset - 4, yAxis + 6, index.getColor());
+                        } else {
+                            this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + offset - 4, yAxis + 4, index.getColor());
+                        }
+                    }
                     this.context.drawItem(item, xAxis + BoxWidth, yAxis);
                 } else {
-                    drawDurabilityBar(xAxis, yAxis, index, item);
+                    if (!drawDurabilityBar(xAxis, yAxis, index, item)) {
+                        if (config.equipmentStatus.Durability.showDurabilityAsBar) {
+                            this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + 16 + 4, yAxis + 6, index.getColor());
+                        } else {
+                            this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
+                        }
+                    }
                     this.context.drawItem(item, xAxis, yAxis);
                 }
                 yAxis += lineHeight;
             } else {
-                drawDurabilityBar(xAxis, yAxis, index, item);
+                if (!drawDurabilityBar(xAxis, yAxis, index, item)) {
+                    if (config.equipmentStatus.Durability.showDurabilityAsBar) {
+                        this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + 16 + 4, yAxis + 6, index.getColor());
+                    } else {
+                        this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
+                    }
+                }
                 this.context.drawItem(item, xAxis, yAxis);
                 int lineLength = this.renderer.getWidth(index.getText());
                 xAxis += lineLength + 16 + 4 + 4;
@@ -234,11 +252,11 @@ public class Equipment {
         screenManager.resetScale(context);
     }
 
-    private void drawDurabilityBar(int xAxis, int yAxis, EquipmentInfoStack index, ItemStack item) {
+    private boolean drawDurabilityBar(int xAxis, int yAxis, EquipmentInfoStack index, ItemStack item) {
         if (config.equipmentStatus.Durability.showDurabilityAsBar && item.getMaxDamage() != 0) {
             // Check for 100% durability
             if (item.getDamage() == 0) {
-                return;
+                return true;
             }
 
             // Calculate durability ratio
@@ -250,13 +268,8 @@ public class Equipment {
             // Draw the durability bar
             this.context.fill(xAxis + barLength, yAxis + 16, xAxis + 16, yAxis + 17, 0x80000000);// 0x80000000
             this.context.fill(xAxis, yAxis + 16, xAxis + 16 - barLength, yAxis + 17, index.getColor()); // 0xFF00FF00
-        } else {
-            // Runs here if is an ITEM (double check, but I don't care)
-            if (config.equipmentStatus.Durability.showDurabilityAsBar) {
-                this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + 16 + 4, yAxis + 6, index.getColor());
-            } else {
-                this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
-            }
+            return true;
         }
+        return false;
     }
 }
