@@ -5,6 +5,7 @@ import com.soradgaming.simplehudenhanced.config.TextAlignment;
 import com.soradgaming.simplehudenhanced.utli.Colours;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -148,6 +149,10 @@ public class HUD {
             // Colour Check
             int colour = getColor(line, gameInformation);
             // Render the line
+            if (config.uiConfig.textBackground) {
+                // Draw Background
+                DrawableHelper.fill(matrixStack, xAxis - 1, yAxis - 1, xAxis + this.renderer.getWidth(line), yAxis + lineHeight - 1, 0x80000000);
+            }
             this.renderer.drawWithShadow(matrixStack, line, xAxis + offset, yAxis, colour);
             yAxis += lineHeight;
         }
@@ -163,6 +168,11 @@ public class HUD {
         int xAxisTime = timeScreenManager.calculateXAxis(100, timeScale, this.renderer.getWidth(systemTime));
         int yAxisTime = timeScreenManager.calculateYAxis(this.renderer.fontHeight, 1, 100, timeScale);
         timeScreenManager.setScale(matrixStack, timeScale);
+
+        if (config.statusElements.systemTime.textBackground) {
+            // Draw Background
+            DrawableHelper.fill(matrixStack, xAxisTime - 1, yAxisTime - 1, xAxisTime + this.renderer.getWidth(systemTime), yAxisTime + this.renderer.fontHeight - 1, 0x80000000);
+        }
 
         // Draw System Time on Bottom Right of Screen
         this.renderer.drawWithShadow(matrixStack, systemTime, xAxisTime, yAxisTime, config.uiConfig.textColor);

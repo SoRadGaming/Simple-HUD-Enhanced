@@ -54,7 +54,8 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.ColorPicker
         public int textColor = Colours.WHITE;
-
+        @ConfigEntry.Gui.Tooltip
+        public boolean textBackground = false;
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 50, max = 150)
         public int textScale = 100;
@@ -134,7 +135,7 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         public boolean showColour = true;
         @ConfigEntry.Gui.Tooltip
-        public boolean showDurabilityAsBar = false;
+        public boolean showDurabilityAsBar = true;
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
         public DurabilitySlots slots = new DurabilitySlots();
@@ -266,6 +267,8 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 50, max = 150)
         public int textScale = 100;
+        @ConfigEntry.Gui.Tooltip
+        public boolean textBackground = false;
         @ConfigEntry.Gui.Tooltip
         public boolean toggleSystemTime24Hour = false;
     }

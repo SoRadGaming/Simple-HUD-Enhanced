@@ -2,9 +2,7 @@ package com.soradgaming.simplehudenhanced.hud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.DiffuseLighting;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
@@ -68,6 +66,19 @@ public class ScreenManager {
     public void resetScale(MatrixStack matrix) {
         // Change Matrix Stack back to normal
         matrix.pop();
+    }
+
+    private float lastZ = 0;
+
+    public void zSet(MatrixStack matrix, float z) {
+        // Change Matrix Stack to draw on the screen
+        lastZ = z;
+        matrix.translate(0.0D, 0.0D, z);
+    }
+
+    public void zRevert(MatrixStack matrix) {
+        // Change Matrix Stack back to normal
+        matrix.translate(0.0D, 0.0D, -lastZ);
     }
 
     // Custom Icon Scaling (Bruh this is just Minecraft 1.19.4 Code)
@@ -138,4 +149,3 @@ public class ScreenManager {
         RenderSystem.applyModelViewMatrix();
     }
 }
-
