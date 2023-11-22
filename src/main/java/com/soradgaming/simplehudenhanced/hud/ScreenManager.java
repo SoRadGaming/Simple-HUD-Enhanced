@@ -2,9 +2,7 @@ package com.soradgaming.simplehudenhanced.hud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.DiffuseLighting;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
@@ -70,6 +68,19 @@ public class ScreenManager {
         matrix.pop();
     }
 
+    private float lastZ = 0;
+
+    public void zSet(MatrixStack matrix, float z) {
+        // Change Matrix Stack to draw on the screen
+        lastZ = z;
+        matrix.translate(0.0D, 0.0D, z);
+    }
+
+    public void zRevert(MatrixStack matrix) {
+        // Change Matrix Stack back to normal
+        matrix.translate(0.0D, 0.0D, -lastZ);
+    }
+
     // Custom Icon Scaling (Bruh this is just Minecraft 1.19.4 Code)
     public void renderInGuiWithOverrides(MatrixStack matrices, ItemStack stack, int x, int y) {
         this.innerRenderInGui(matrices, MinecraftClient.getInstance().player, MinecraftClient.getInstance().world, stack, x, y, 0);
@@ -88,22 +99,22 @@ public class ScreenManager {
             try {
                 this.renderGuiItemModel(matrices, stack, x, y, bakedModel);
             } catch (Throwable var11) {
-            CrashReport crashReport = CrashReport.create(var11, "Rendering item");
-            CrashReportSection crashReportSection = crashReport.addElement("Item being rendered");
-            crashReportSection.add("Item Type", () -> {
-                return String.valueOf(stack.getItem());
-            });
-            crashReportSection.add("Item Damage", () -> {
-                return String.valueOf(stack.getDamage());
-            });
-            crashReportSection.add("Item NBT", () -> {
-                return String.valueOf(stack.getTag());
-            });
-            crashReportSection.add("Item Foil", () -> {
-                return String.valueOf(stack.hasGlint());
-            });
-            throw new CrashException(crashReport);
-        }
+                CrashReport crashReport = CrashReport.create(var11, "Rendering item");
+                CrashReportSection crashReportSection = crashReport.addElement("Item being rendered");
+                crashReportSection.add("Item Type", () -> {
+                    return String.valueOf(stack.getItem());
+                });
+                crashReportSection.add("Item Damage", () -> {
+                    return String.valueOf(stack.getDamage());
+                });
+                crashReportSection.add("Item NBT", () -> {
+                    return String.valueOf(stack.getTag());
+                });
+                crashReportSection.add("Item Foil", () -> {
+                    return String.valueOf(stack.hasGlint());
+                });
+                throw new CrashException(crashReport);
+            }
 
 
             matrices.pop();
@@ -138,4 +149,3 @@ public class ScreenManager {
         RenderSystem.applyModelViewMatrix();
     }
 }
-
