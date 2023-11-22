@@ -42,6 +42,8 @@
   "text.autoconfig.simplehudenhanced.option.uiConfig.toggleSimpleHUDEnhanced": "Show HUD",
   "text.autoconfig.simplehudenhanced.option.uiConfig.textColor.@Tooltip": "The colour of the text in the HUD",
   "text.autoconfig.simplehudenhanced.option.uiConfig.textColor": "Text Colour",
+  "text.autoconfig.simplehudenhanced.option.uiConfig.textBackground.@Tooltip": "Adds a Background to the Text in the HUD",
+  "text.autoconfig.simplehudenhanced.option.uiConfig.textBackground": "Text Background",
   "text.autoconfig.simplehudenhanced.option.uiConfig.textScale.@Tooltip": "The Scale of the Text in the HUD",
   "text.autoconfig.simplehudenhanced.option.uiConfig.textScale": "Text Scale",
   "text.autoconfig.simplehudenhanced.option.uiConfig.textAlignment.@Tooltip": "The Alignment of the Text in the HUD",
@@ -196,6 +198,8 @@
   "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.toggleSystemTime": "System Time Status",
   "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.textScale.@Tooltip": "The Scale of the Text in the HUD",
   "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.textScale": "Text Scale",
+  "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.textBackground.@Tooltip": "Adds a Background to the Text in the HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.textBackground": "Text Background",
   "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.toggleSystemTime24Hour.@Tooltip": "Converts Time to 24 Hour Format",
   "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.toggleSystemTime24Hour": "24 Hour Format",
   

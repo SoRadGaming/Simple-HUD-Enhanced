@@ -54,4 +54,17 @@ public class ScreenManager {
         // Change Matrix Stack back to normal
         matrix.pop();
     }
+
+    private float lastZ = 0;
+
+    public void zSet(MatrixStack matrix, float z) {
+        // Change Matrix Stack to draw on the screen
+        lastZ = z;
+        matrix.translate(0.0D, 0.0D, z);
+    }
+
+    public void zRevert(MatrixStack matrix) {
+        // Change Matrix Stack back to normal
+        matrix.translate(0.0D, 0.0D, -lastZ);
+    }
 }

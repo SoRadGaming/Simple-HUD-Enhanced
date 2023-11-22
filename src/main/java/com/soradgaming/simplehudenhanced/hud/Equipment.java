@@ -2,7 +2,6 @@ package com.soradgaming.simplehudenhanced.hud;
 
 import com.soradgaming.simplehudenhanced.config.EquipmentOrientation;
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
-import com.soradgaming.simplehudenhanced.utli.Colours;
 import com.soradgaming.simplehudenhanced.utli.TrinketAccessor;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
@@ -106,9 +105,7 @@ public class Equipment {
                 int currentDurability = item.getMaxDamage() - item.getDamage();
 
                 // Draw Durability
-                if (config.equipmentStatus.Durability.showDurabilityAsBar) {
-                    index.setText("");
-                } else if (config.equipmentStatus.Durability.showDurabilityAsPercentage)  {
+                if (config.equipmentStatus.Durability.showDurabilityAsPercentage)  {
                     index.setText(String.format("%s%%", (currentDurability * 100) / item.getMaxDamage()));
                 } else if (config.equipmentStatus.Durability.showTotalCount) {
                     index.setText(String.format("%s/%s", currentDurability, item.getMaxDamage()));
@@ -116,27 +113,15 @@ public class Equipment {
                     index.setText(String.format("%s", currentDurability));
                 }
 
-                if (config.equipmentStatus.Durability.showColour || config.equipmentStatus.Durability.showDurabilityAsBar) {
-                    // Default Durability Color
-                    if (currentDurability <= (item.getMaxDamage()) / 4) {
-                        index.setColor(Colours.lightRed);
-                    } else if (currentDurability <= (item.getMaxDamage() / 2.5)) {
-                        index.setColor(Colours.lightOrange);
-                    } else if (currentDurability <= (item.getMaxDamage() / 1.5)) {
-                        index.setColor(Colours.lightYellow);
-                    } else if (currentDurability < item.getMaxDamage()) {
-                        index.setColor(Colours.lightGreen);
-                    } else {
-                        index.setColor(config.uiConfig.textColor);
-                    }
+                if (config.equipmentStatus.Durability.showColour && item.getDamage() != 0) {
+                    index.setColor(item.getItemBarColor());
                 } else {
                     index.setColor(config.uiConfig.textColor);
                 }
 
-
             } else {
                 // Draw Count
-                if (config.equipmentStatus.showCount) {
+                if (config.equipmentStatus.showCount && item.getCount() > 1) {
                     // Check if player is holding all the item
                     if (this.player.getInventory().count(item.getItem()) == item.getCount()) {
                         index.setText(String.valueOf(item.getCount()));
@@ -146,12 +131,6 @@ public class Equipment {
                 } else {
                     index.setText("");
                 }
-
-                // Check for 1
-                if (this.player.getInventory().count(item.getItem()) == 1) {
-                    index.setText("");
-                }
-
             }
         }
     }
@@ -192,9 +171,6 @@ public class Equipment {
         int configY = config.equipmentStatus.equipmentStatusLocationY;
         float Scale = (float) config.equipmentStatus.textScale / 100;
         int lineHeight = 16;
-        if (config.equipmentStatus.Durability.showDurabilityAsBar) {
-            lineHeight = 18;
-        }
 
         // Screen Manager
         ScreenManager screenManager = new ScreenManager(this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
@@ -216,64 +192,44 @@ public class Equipment {
         for (EquipmentInfoStack index : equipmentInfo) {
             ItemStack item = index.getItem();
 
-            if (config.equipmentStatus.equipmentOrientation == EquipmentOrientation.Vertical) {
-                if (configX >= 50) {
-                    int lineLength = this.textRenderer.getWidth(index.getText());
-                    int offset = (BoxWidth - lineLength);
-                    if (!drawDurabilityBar(xAxis + BoxWidth, yAxis, index, item)) {
-                        if (config.equipmentStatus.Durability.showDurabilityAsBar) {
-                            this.textRenderer.drawWithShadow(matrixStack, index.getText(), xAxis + offset - 4, yAxis + 6, index.getColor());
-                        } else {
-                            this.textRenderer.drawWithShadow(matrixStack, index.getText(), xAxis + offset - 4, yAxis + 4, index.getColor());
-                        }
-                    }
-                    this.itemRenderer.renderInGuiWithOverrides(this.matrixStack, item, xAxis + BoxWidth, yAxis);
-                } else {
-                    if (!drawDurabilityBar(xAxis, yAxis, index, item)) {
-                        if (config.equipmentStatus.Durability.showDurabilityAsBar) {
-                            this.textRenderer.drawWithShadow(matrixStack, index.getText(), xAxis + 16 + 4, yAxis + 6, index.getColor());
-                        } else {
-                            this.textRenderer.drawWithShadow(matrixStack, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
-                        }
-                    }
-                    this.itemRenderer.renderInGuiWithOverrides(this.matrixStack, item, xAxis, yAxis);
-                }
-                yAxis += lineHeight;
+            if (configX >= 50) {
+                int lineLength = this.textRenderer.getWidth(index.getText());
+                int offset = (BoxWidth - lineLength);
+                this.textRenderer.drawWithShadow(matrixStack, index.getText(), xAxis + offset - 4, yAxis + 4, index.getColor());
+                this.itemRenderer.renderInGuiWithOverrides(matrixStack, item, xAxis + BoxWidth, yAxis);
+                drawDurabilityBar(screenManager, xAxis + BoxWidth, yAxis, item);
             } else {
-                if (!drawDurabilityBar(xAxis, yAxis, index, item)) {
-                    if (config.equipmentStatus.Durability.showDurabilityAsBar) {
-                        this.textRenderer.drawWithShadow(matrixStack, index.getText(), xAxis + 16 + 4, yAxis + 6, index.getColor());
-                    } else {
-                        this.textRenderer.drawWithShadow(matrixStack, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
-                    }
-                }
-                this.itemRenderer.renderInGuiWithOverrides(this.matrixStack, item, xAxis, yAxis);
+                this.textRenderer.drawWithShadow(matrixStack, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
+                this.itemRenderer.renderInGuiWithOverrides(matrixStack, item, xAxis, yAxis);
+                drawDurabilityBar(screenManager, xAxis, yAxis, item);
+            }
+            if (config.equipmentStatus.equipmentOrientation == EquipmentOrientation.Horizontal) {
                 int lineLength = this.textRenderer.getWidth(index.getText());
                 xAxis += lineLength + 16 + 4 + 4;
+            } else {
+                yAxis += lineHeight;
             }
+
         }
 
         screenManager.resetScale(matrixStack);
     }
 
-    private boolean drawDurabilityBar(int xAxis, int yAxis, EquipmentInfoStack index, ItemStack item) {
+    private void drawDurabilityBar(ScreenManager screenManager, int xAxis, int yAxis, ItemStack item) {
         if (config.equipmentStatus.Durability.showDurabilityAsBar && item.getMaxDamage() != 0) {
             // Check for 100% durability
             if (item.getDamage() == 0) {
-                return true;
+                return;
             }
 
-            // Calculate durability ratio
-            float durabilityRatio = (float) item.getDamage() / item.getMaxDamage();
-
-            // Calculate the length of the durability bar
-            int barLength = (int) (durabilityRatio * 16);
-
-            // Draw the durability bar
-            DrawableHelper.fill(matrixStack, xAxis + barLength, yAxis + 16, xAxis + 16, yAxis + 17, 0x80000000);// 0x80000000
-            DrawableHelper.fill(matrixStack, xAxis, yAxis + 16, xAxis + 16 - barLength, yAxis + 17, index.getColor()); // 0xFF00FF00
-            return true;
+            screenManager.zSet(matrixStack, 200.0F);
+            int i = item.getItemBarStep();
+            int j = item.getItemBarColor();
+            int k = xAxis + 2;
+            int l = yAxis + 13;
+            DrawableHelper.fill(matrixStack, k, l, k + 13, l + 2, -16777216);
+            DrawableHelper.fill(matrixStack, k, l, k + i, l + 1, j | -16777216);
+            screenManager.zRevert(matrixStack);
         }
-        return false;
     }
 }
