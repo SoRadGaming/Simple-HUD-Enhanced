@@ -148,6 +148,10 @@ public class HUD {
             // Colour Check
             int colour = getColor(line, gameInformation);
             // Render the line
+            if (config.uiConfig.textBackground) {
+                // Draw Background
+                context.fill(xAxis - 1, yAxis - 1, xAxis + this.renderer.getWidth(line), yAxis + lineHeight - 1, 0x80000000);
+            }
             context.drawTextWithShadow(this.renderer, line, xAxis + offset, yAxis, colour);
             yAxis += lineHeight;
         }
@@ -163,6 +167,11 @@ public class HUD {
         int xAxisTime = timeScreenManager.calculateXAxis(100, timeScale, this.renderer.getWidth(systemTime));
         int yAxisTime = timeScreenManager.calculateYAxis(this.renderer.fontHeight, 1, 100, timeScale);
         timeScreenManager.setScale(context, timeScale);
+
+        if (config.statusElements.systemTime.textBackground) {
+            // Draw Background
+            context.fill(xAxisTime - 1, yAxisTime - 1, xAxisTime + this.renderer.getWidth(systemTime), yAxisTime + this.renderer.fontHeight - 1, 0x80000000);
+        }
 
         // Draw System Time on Bottom Right of Screen
         context.drawTextWithShadow(this.renderer, systemTime, xAxisTime, yAxisTime, config.uiConfig.textColor);
