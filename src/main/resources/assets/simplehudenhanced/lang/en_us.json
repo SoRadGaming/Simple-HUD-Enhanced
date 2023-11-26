@@ -59,6 +59,8 @@
     "text.autoconfig.simplehudenhanced.option.equipmentStatus.textScale": "Text Scale",
     "text.autoconfig.simplehudenhanced.option.equipmentStatus.equipmentOrientation.@Tooltip": "The Orientation of the Equipment in the HUD",
     "text.autoconfig.simplehudenhanced.option.equipmentStatus.equipmentOrientation": "Equipment Orientation",
+    "text.autoconfig.simplehudenhanced.option.equipmentStatus.equipmentAlignment.@Tooltip": "The Side of the Screen the Equipment Text is Displayed",
+    "text.autoconfig.simplehudenhanced.option.equipmentStatus.equipmentAlignment": "Equipment Alignment",
     "text.autoconfig.simplehudenhanced.option.equipmentStatus.equipmentStatusLocationX.@Tooltip": "The X position of the HUD (0 is the left side of the screen)",
     "text.autoconfig.simplehudenhanced.option.equipmentStatus.equipmentStatusLocationX": "X Coordinates of HUD Element",
     "text.autoconfig.simplehudenhanced.option.equipmentStatus.equipmentStatusLocationY.@Tooltip": "The Y position of the HUD (0 is the top of the screen)",

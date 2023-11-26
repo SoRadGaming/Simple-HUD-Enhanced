@@ -1,5 +1,6 @@
 package com.soradgaming.simplehudenhanced.hud;
 
+import com.soradgaming.simplehudenhanced.config.EquipmentAlignment;
 import com.soradgaming.simplehudenhanced.config.EquipmentOrientation;
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
 import com.soradgaming.simplehudenhanced.utli.TrinketAccessor;
@@ -188,7 +189,7 @@ public class Equipment {
         for (EquipmentInfoStack index : equipmentInfo) {
             ItemStack item = index.getItem();
 
-            if (configX >= 50) {
+            if (config.equipmentStatus.equipmentAlignment == EquipmentAlignment.Right) {
                 int lineLength = this.renderer.getWidth(index.getText());
                 int offset = (BoxWidth - lineLength);
                 this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + offset - 4, yAxis + 4, index.getColor());

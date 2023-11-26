@@ -117,6 +117,9 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
         @ConfigEntry.Gui.Tooltip
         public EquipmentOrientation equipmentOrientation = EquipmentOrientation.Vertical;
+        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+        @ConfigEntry.Gui.Tooltip
+        public EquipmentAlignment equipmentAlignment = EquipmentAlignment.Left;
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
         public int equipmentStatusLocationX = 0;
