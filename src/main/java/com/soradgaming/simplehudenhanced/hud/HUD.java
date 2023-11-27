@@ -13,6 +13,8 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class HUD {
+    private static HUD instance;  // Singleton instance
+
     // Minecraft client variables
     private final MinecraftClient client;
     private final TextRenderer renderer;
@@ -20,10 +22,30 @@ public class HUD {
     //Config
     private final SimpleHudEnhancedConfig config;
 
-    public HUD(MinecraftClient client, SimpleHudEnhancedConfig config) {
+    // Sprint Timer Variables
+    public boolean sprintTimerRunning = false;  // Variable to store if the timer is running
+
+    private HUD(MinecraftClient client, SimpleHudEnhancedConfig config) {
         this.client = client;
         this.renderer = client.textRenderer;
         this.config = config;
+    }
+
+    // Initialization method (called once)
+    public static void initialize(MinecraftClient client, SimpleHudEnhancedConfig config) {
+        if (instance == null) {
+            instance = new HUD(client, config);
+        } else {
+            throw new IllegalStateException("HUD has already been initialized.");
+        }
+    }
+
+    // Singleton instance getter
+    public static HUD getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("HUD has not been initialized yet.");
+        }
+        return instance;
     }
 
     public void drawAsyncHud(DrawContext context) {
@@ -48,6 +70,9 @@ public class HUD {
         if (config.toggleMovementStatus) {
             Movement movement = new Movement(context, config);
             movement.init(GameInformation);
+            if (sprintTimerRunning) {
+                movement.drawPaperDoll(context);
+            }
         }
 
         // Draw Time
@@ -55,6 +80,10 @@ public class HUD {
 
         // Ensure completion of all tasks before moving forward
         CompletableFuture.allOf(equipmentFuture, statusElementsFuture).join();
+    }
+
+    private void drawMovement() {
+
     }
 
     @NotNull

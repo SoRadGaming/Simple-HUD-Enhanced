@@ -186,27 +186,32 @@ public class Equipment {
         screenManager.setScale(context, Scale);
 
         // Draw All Items on Screen
+        boolean isHorizontal = config.equipmentStatus.equipmentOrientation == EquipmentOrientation.Horizontal;
+        boolean isOnRight = configX >= 50;
+        boolean isRightAligned = config.equipmentStatus.equipmentAlignment == EquipmentAlignment.Right || (config.equipmentStatus.equipmentAlignment == EquipmentAlignment.Auto && isOnRight);
+        // Loop all items
         for (EquipmentInfoStack index : equipmentInfo) {
             ItemStack item = index.getItem();
 
-            if (config.equipmentStatus.equipmentAlignment == EquipmentAlignment.Right) {
+            if (isRightAligned) {
                 int lineLength = this.renderer.getWidth(index.getText());
                 int offset = (BoxWidth - lineLength);
-                this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + offset - 4, yAxis + 4, index.getColor());
-                this.context.drawItem(item, xAxis + BoxWidth, yAxis);
-                drawDurabilityBar(xAxis + BoxWidth, yAxis, item);
+                this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + offset + (isHorizontal? (-offset) : (isOnRight ? -4 : 0)), yAxis + 4, index.getColor());
+                int x = xAxis + BoxWidth + 4 + (isHorizontal ? (-BoxWidth + lineLength) : (isOnRight ? -4 : 0));
+                this.context.drawItem(item, x, yAxis);
+                drawDurabilityBar(x, yAxis, item);
             } else {
-                this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
-                this.context.drawItem(item, xAxis, yAxis);
-                drawDurabilityBar(xAxis, yAxis, item);
+                this.context.drawTextWithShadow(this.renderer, index.getText(), xAxis + 16 + 4 + (isOnRight ? (isHorizontal? 0 : -4) : 0), yAxis + 4, index.getColor());
+                int x = xAxis + (isOnRight ? (isHorizontal ? 0 : -4) : 0);
+                this.context.drawItem(item, x, yAxis);
+                drawDurabilityBar(x, yAxis, item);
             }
-            if (config.equipmentStatus.equipmentOrientation == EquipmentOrientation.Horizontal) {
+            if (isHorizontal) {
                 int lineLength = this.renderer.getWidth(index.getText());
-                xAxis += lineLength + 16 + 4 + 4;
+                xAxis += lineLength + 4 + 16 + 4;
             } else {
                 yAxis += lineHeight;
             }
-
         }
 
         screenManager.resetScale(context);
