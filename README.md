@@ -1,4 +1,3 @@
-# Simple HUD Enhanced
 ## Mod Pages
 [CurseForge](https://www.curseforge.com/minecraft/mc-mods/simple-hud-enhanced)
 
@@ -29,9 +28,5 @@ This mod has also been built with the help of the following mods:
 - For TPS Tracking Client Side:
 [mooziii](https://github.com/mooziii/tpshud-fabric)
 
-## Future Additions
-- Config Window with Drag & Resizeable blocks for Hud Configuration
-- Rebuilt Render Graph with Data Cache for over 500x less code execution in testing - (Async temp fix)
-- Text Alignment Selection
-- Text Background & Transparency
-- More Customisability
+## Roadmap
+![Simple Hud Enhanced drawio(2)](https://github.com/SoRadGaming/Simple-HUD-Enhanced/assets/47128515/340eb79a-ba45-4e3c-b961-c4446a35c6f8)
