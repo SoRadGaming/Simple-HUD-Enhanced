@@ -69,7 +69,9 @@ public class HUD {
         // Draw Movement Status
         if (config.toggleMovementStatus) {
             Movement movement = new Movement(context, config);
-            movement.init(GameInformation);
+            if (config.movementStatus.toggleMovementStatus) {
+                movement.init(GameInformation);
+            }
             if (sprintTimerRunning) {
                 movement.drawPaperDoll(context);
             }

@@ -37,7 +37,12 @@ public class SimpleHudEnhancedConfig implements ConfigData {
     @ConfigEntry.Category("Movement Status")
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
-    public MovementElements movementStatus = new MovementElements();
+    public MovementTextElements movementStatus = new MovementTextElements();
+
+    @ConfigEntry.Category("Movement Status")
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+    public PaperDoll paperDoll = new PaperDoll();
 
     @ConfigEntry.Category("Equipment Status")
     @ConfigEntry.Gui.Tooltip
@@ -176,7 +181,9 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         public boolean MainHand = true;
     }
 
-    public static class MovementElements {
+    public static class MovementTextElements {
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleMovementStatus = true;
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
         public MovementTypes movementTypes = new MovementTypes();
@@ -189,10 +196,6 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
         public int movementStatusLocationY = 90;
-
-        @ConfigEntry.Gui.Tooltip
-        @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
-        public PaperDoll paperDoll = new PaperDoll();
     }
 
     public static class MovementTypes {

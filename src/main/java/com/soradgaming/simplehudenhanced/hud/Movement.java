@@ -58,7 +58,7 @@ public class Movement {
 
     // Draw the Paper Doll
     public void drawPaperDoll(DrawContext context) {
-        if (!config.movementStatus.paperDoll.togglePaperDoll) {
+        if (!config.paperDoll.togglePaperDoll) {
             return;
         }
 
@@ -70,13 +70,13 @@ public class Movement {
 
         // Config
         ScreenManager screenManager = new ScreenManager(this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
-        float scale = (float) config.movementStatus.paperDoll.textScale / 100;
+        float scale = (float) config.paperDoll.textScale / 100;
         float size = 20 * scale;
 
         screenManager.setPadding((int) (26 * scale));
-        int xAxis = screenManager.calculateXAxis(this.config.movementStatus.paperDoll.paperDollLocationX, 1, 0);
+        int xAxis = screenManager.calculateXAxis(this.config.paperDoll.paperDollLocationX, 1, 0);
         screenManager.setPadding((int) (26 * scale));
-        int yAxis = screenManager.calculateYAxis(0, 1, this.config.movementStatus.paperDoll.paperDollLocationY, 1);
+        int yAxis = screenManager.calculateYAxis(0, 1, this.config.paperDoll.paperDollLocationY, 1);
 
         // Draw the Paper Doll
         drawEntity(context, xAxis, yAxis, size, entity);
@@ -134,7 +134,7 @@ public class Movement {
 
     private void applyEntityRotations(LivingEntity entity) {
         // TODO Config
-        if (this.config.movementStatus.paperDoll.paperDollLocationY >= 50) {
+        if (this.config.paperDoll.paperDollLocationY >= 50) {
             entity.setPitch(-7.5F);
             entity.prevPitch = -7.5F;
         } else {
@@ -143,7 +143,7 @@ public class Movement {
         }
 
         float defaultRotationYaw = 180.0F;
-        if (this.config.movementStatus.paperDoll.paperDollLocationX >= 50) {
+        if (this.config.paperDoll.paperDollLocationX >= 50) {
             defaultRotationYaw += 20.0F;
         } else {
             defaultRotationYaw -= 20.0F;
