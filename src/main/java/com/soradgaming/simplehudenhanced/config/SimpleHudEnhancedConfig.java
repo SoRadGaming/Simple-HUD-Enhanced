@@ -37,7 +37,12 @@ public class SimpleHudEnhancedConfig implements ConfigData {
     @ConfigEntry.Category("Movement Status")
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
-    public MovementElements movementStatus = new MovementElements();
+    public MovementTextElements movementStatus = new MovementTextElements();
+
+    @ConfigEntry.Category("Movement Status")
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+    public PaperDoll paperDoll = new PaperDoll();
 
     @ConfigEntry.Category("Equipment Status")
     @ConfigEntry.Gui.Tooltip
@@ -47,6 +52,8 @@ public class SimpleHudEnhancedConfig implements ConfigData {
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
     public EquipmentStatus equipmentStatus = new EquipmentStatus();
+
+    //Scoreboard
 
     public static class UIConfig {
         @ConfigEntry.Gui.Tooltip
@@ -117,6 +124,9 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
         @ConfigEntry.Gui.Tooltip
         public EquipmentOrientation equipmentOrientation = EquipmentOrientation.Vertical;
+        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+        @ConfigEntry.Gui.Tooltip
+        public EquipmentAlignment equipmentAlignment = EquipmentAlignment.Auto;
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
         public int equipmentStatusLocationX = 0;
@@ -171,15 +181,12 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         public boolean MainHand = true;
     }
 
-    public static class MovementElements {
+    public static class MovementTextElements {
         @ConfigEntry.Gui.Tooltip
-        public boolean toggleSprintStatus = true;
+        public boolean toggleMovementStatus = true;
         @ConfigEntry.Gui.Tooltip
-        public boolean toggleSneakStatus = true;
-        @ConfigEntry.Gui.Tooltip
-        public boolean toggleFlyingStatus = true;
-        @ConfigEntry.Gui.Tooltip
-        public boolean toggleSwimmingStatus = true;
+        @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
+        public MovementTypes movementTypes = new MovementTypes();
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 50, max = 150)
         public int textScale = 100;
@@ -189,6 +196,31 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
         public int movementStatusLocationY = 90;
+    }
+
+    public static class MovementTypes {
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleSprintStatus = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleSneakStatus = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleFlyingStatus = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleSwimmingStatus = true;
+    }
+
+    public static class PaperDoll {
+        @ConfigEntry.Gui.Tooltip
+        public boolean togglePaperDoll = true;
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.BoundedDiscrete(min = 50, max = 150)
+        public int textScale = 100;
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
+        public int paperDollLocationX = 100;
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
+        public int paperDollLocationY = 0;
     }
 
     public static class StatusElements {
