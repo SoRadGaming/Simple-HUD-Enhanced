@@ -84,10 +84,6 @@ public class HUD {
         CompletableFuture.allOf(equipmentFuture, statusElementsFuture).join();
     }
 
-    private void drawMovement() {
-
-    }
-
     @NotNull
     private static ArrayList<String> getHudInfo(GameInfo GameInformation) {
         ArrayList<String> hudInfo = new ArrayList<>();
