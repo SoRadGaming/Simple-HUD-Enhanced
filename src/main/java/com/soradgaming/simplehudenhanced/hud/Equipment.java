@@ -1,5 +1,6 @@
 package com.soradgaming.simplehudenhanced.hud;
 
+import com.soradgaming.simplehudenhanced.config.EquipmentAlignment;
 import com.soradgaming.simplehudenhanced.config.EquipmentOrientation;
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
 import com.soradgaming.simplehudenhanced.utli.TrinketAccessor;
@@ -186,27 +187,32 @@ public class Equipment {
         screenManager.setScale(matrixStack, Scale);
 
         // Draw All Items on Screen
+        boolean isHorizontal = config.equipmentStatus.equipmentOrientation == EquipmentOrientation.Horizontal;
+        boolean isOnRight = configX >= 50;
+        boolean isRightAligned = config.equipmentStatus.equipmentAlignment == EquipmentAlignment.Right || (config.equipmentStatus.equipmentAlignment == EquipmentAlignment.Auto && isOnRight);
+        // Loop all items
         for (EquipmentInfoStack index : equipmentInfo) {
             ItemStack item = index.getItem();
 
-            if (configX >= 50) {
+            if (isRightAligned) {
                 int lineLength = this.textRenderer.getWidth(index.getText());
                 int offset = (BoxWidth - lineLength);
-                this.textRenderer.drawWithShadow(matrixStack, index.getText(), xAxis + offset - 4, yAxis + 4, index.getColor());
-                screenManager.renderInGuiWithOverrides(matrixStack, item, xAxis + BoxWidth, yAxis);
-                drawDurabilityBar(screenManager, xAxis + BoxWidth, yAxis, item);
+                this.textRenderer.drawWithShadow(matrixStack, index.getText(), xAxis + offset + (isHorizontal? (-offset) : (isOnRight ? -4 : 0)), yAxis + 4, index.getColor());
+                int x = xAxis + BoxWidth + 4 + (isHorizontal ? (-BoxWidth + lineLength) : (isOnRight ? -4 : 0));
+                screenManager.renderInGuiWithOverrides(matrixStack, item, x, yAxis);
+                drawDurabilityBar(screenManager, x, yAxis, item);
             } else {
-                this.textRenderer.drawWithShadow(matrixStack, index.getText(), xAxis + 16 + 4, yAxis + 4, index.getColor());
-                screenManager.renderInGuiWithOverrides(matrixStack, item, xAxis, yAxis);
-                drawDurabilityBar(screenManager, xAxis, yAxis, item);
+                this.textRenderer.drawWithShadow(matrixStack, index.getText(), xAxis + 16 + 4 + (isOnRight ? (isHorizontal? 0 : -4) : 0), yAxis + 4, index.getColor());
+                int x = xAxis + (isOnRight ? (isHorizontal ? 0 : -4) : 0);
+                screenManager.renderInGuiWithOverrides(matrixStack, item, x, yAxis);
+                drawDurabilityBar(screenManager, x, yAxis, item);
             }
-            if (config.equipmentStatus.equipmentOrientation == EquipmentOrientation.Horizontal) {
+            if (isHorizontal) {
                 int lineLength = this.textRenderer.getWidth(index.getText());
-                xAxis += lineLength + 16 + 4 + 4;
+                xAxis += lineLength + 4 + 16 + 4;
             } else {
                 yAxis += lineHeight;
             }
-
         }
 
         screenManager.resetScale(matrixStack);
