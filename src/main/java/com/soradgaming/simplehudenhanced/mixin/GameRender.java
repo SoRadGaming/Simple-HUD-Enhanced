@@ -51,7 +51,9 @@ public class GameRender {
             return ActionResult.SUCCESS;
         });
         // Start Mixin
-        this.hud = new HUD(client, config);
+        //this.hud = new HUD(client, config);
+        HUD.initialize(client, config);
+        this.hud = HUD.getInstance();
     }
 
     @Inject(method = "render", at = @At("HEAD"))
