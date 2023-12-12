@@ -53,7 +53,33 @@ public class SimpleHudEnhancedConfig implements ConfigData {
     @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
     public EquipmentStatus equipmentStatus = new EquipmentStatus();
 
-    //Scoreboard
+    @ConfigEntry.Category("Scoreboard")
+    @ConfigEntry.Gui.Tooltip
+    public boolean toggleScoreboard = false;
+
+    @ConfigEntry.Category("Scoreboard")
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+    public ScoreboardConfig scoreboardConfig = new ScoreboardConfig();
+
+    public static class ScoreboardConfig {
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleScoreboardEnhancements = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleScoreboardBackground = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleScoreboardShadow = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleScoreboardTitle = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleScoreboardObjective = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleScoreboardScores = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleScoreboardFooter = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleScoreboardHeader = true;
+    }
 
     public static class UIConfig {
         @ConfigEntry.Gui.Tooltip

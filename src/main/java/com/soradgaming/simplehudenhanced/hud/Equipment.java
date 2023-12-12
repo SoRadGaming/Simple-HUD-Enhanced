@@ -118,12 +118,20 @@ public class Equipment {
 
             } else {
                 // Draw Count
-                if (config.equipmentStatus.showCount && item.getCount() > 1) {
-                    // Check if player is holding all the item
-                    if (this.player.getInventory().count(item.getItem()) == item.getCount()) {
-                        index.setText(String.valueOf(item.getCount()));
+                if (config.equipmentStatus.showCount) {
+                    // Store the counts
+                    int count = item.getCount();
+                    int total = this.player.getInventory().count(item.getItem());
+
+                    if (count > 1 || total > 1) {
+                        // Check if player is holding all the item
+                        if (total == count) {
+                            index.setText(String.valueOf(count));
+                        } else {
+                            index.setText((count + " (" + total + ")"));
+                        }
                     } else {
-                        index.setText((item.getCount() + " (" + this.player.getInventory().count(item.getItem()) + ")"));
+                        index.setText("");
                     }
                 } else {
                     index.setText("");

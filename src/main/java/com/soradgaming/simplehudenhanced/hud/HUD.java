@@ -29,6 +29,9 @@ public class HUD {
         this.client = client;
         this.renderer = client.textRenderer;
         this.config = config;
+
+        // Initialize the Scoreboard class
+        Scoreboard.initialize(config);
     }
 
     // Initialization method (called once)

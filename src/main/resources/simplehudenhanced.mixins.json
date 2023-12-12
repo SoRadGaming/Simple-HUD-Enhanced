@@ -11,6 +11,7 @@
     "GameRender",
     "KeyboardMixin",
     "MovementMixin",
+    "ScoreboardMixin",
     "StatusEffectInstanceMixin",
     "TpsMixin$ClientPlayNetworkHandlerMixin"
   ],
