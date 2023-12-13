@@ -3,6 +3,7 @@ package com.soradgaming.simplehudenhanced.hud;
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
 import com.soradgaming.simplehudenhanced.config.TextAlignment;
 import com.soradgaming.simplehudenhanced.utli.Colours;
+import com.soradgaming.simplehudenhanced.utli.Utilities;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Logger;
 
 public class HUD {
     private static HUD instance;  // Singleton instance
@@ -36,15 +38,19 @@ public class HUD {
     public static void initialize(MinecraftClient client, SimpleHudEnhancedConfig config) {
         if (instance == null) {
             instance = new HUD(client, config);
+            Logger.getLogger(Utilities.getModName()).warning("New HUD instance created.");
         } else {
-            throw new IllegalStateException("HUD has already been initialized.");
+            Logger.getLogger(Utilities.getModName()).warning("HUD has already been initialized.");
+            instance = new HUD(client, config);
+            Logger.getLogger(Utilities.getModName()).warning("New HUD instance created. (Override)");
         }
     }
 
     // Singleton instance getter
     public static HUD getInstance() {
         if (instance == null) {
-            throw new IllegalStateException("HUD has not been initialized yet.");
+            Logger.getLogger(Utilities.getModName()).warning("HUD has not been initialized yet.");
+            return null;
         }
         return instance;
     }
