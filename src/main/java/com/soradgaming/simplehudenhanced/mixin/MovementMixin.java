@@ -21,7 +21,7 @@ public class MovementMixin {
     private void onHandleInputEvents(CallbackInfo info) {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
 
-        if (player != null) {
+        if (player != null && HUD.getInstance() != null) {
             if (player.isSneaking() || player.isFallFlying() || player.isSprinting() || player.isSwimming()) {
                 // Start or extend the timer when any valid input is given
                 sprintTimerStart = System.currentTimeMillis();
