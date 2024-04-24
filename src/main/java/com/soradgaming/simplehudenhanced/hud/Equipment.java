@@ -55,7 +55,7 @@ public class Equipment {
 
         // Check showNonTools
         if (!config.equipmentStatus.showNonTools) {
-            equipmentInfo.removeIf(equipment -> equipment.getItem().getItem().getMaxDamage() == 0);
+            equipmentInfo.removeIf(equipment -> equipment.getItem().getMaxDamage() == 0);
         }
 
         if (config.equipmentStatus.Durability.showDurability) {

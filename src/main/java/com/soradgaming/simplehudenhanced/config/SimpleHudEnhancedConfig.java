@@ -89,7 +89,7 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         // Function for combining two colors (used for background color)
         ToIntBiFunction<Integer, Integer> convert = Integer::sum;
         if (colorMode == ColorModeSelector.Custom) {
-            switch (effect.getEffectType().getCategory()) {
+            switch (effect.getEffectType().value().getCategory()) {
                 case BENEFICIAL -> {
                     return effectsStatus.beneficialForegroundColor;
                 }
@@ -101,10 +101,10 @@ public class SimpleHudEnhancedConfig implements ConfigData {
                 }
             }
         } else if (colorMode == ColorModeSelector.Category) {
-            return convert.applyAsInt(effect.getEffectType().getCategory().getFormatting().getColorValue(), 0xff000000);
+            return convert.applyAsInt(effect.getEffectType().value().getCategory().getFormatting().getColorValue(), 0xff000000);
         }
         // If mode == ColorModeSelector.EFFECT_COLOR or mode == null (default)
-        return convert.applyAsInt(effect.getEffectType().getColor(), 0xff000000);
+        return convert.applyAsInt(effect.getEffectType().value().getColor(), 0xff000000);
     }
 
     public static class EquipmentStatus {

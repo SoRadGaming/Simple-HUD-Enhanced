@@ -9,7 +9,6 @@
   ],
   "client": [
     "GameRender",
-    "KeyboardMixin",
     "MovementMixin",
     "StatusEffectInstanceMixin",
     "TpsMixin$ClientPlayNetworkHandlerMixin"
