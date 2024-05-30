@@ -10,6 +10,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.texture.StatusEffectSpriteManager;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -54,7 +55,7 @@ public class GameRender {
     }
 
     @Inject(method = "render", at = @At("HEAD"))
-    private void onDraw(DrawContext context, float esp, CallbackInfo ci) {
+    private void onDraw(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         if (!this.client.inGameHud.getDebugHud().shouldShowDebugHud()) {
             // Call async rendering
             CompletableFuture.runAsync(() -> this.hud.drawAsyncHud(context), MinecraftClient.getInstance()::executeTask);
@@ -65,7 +66,7 @@ public class GameRender {
     @Inject(method = "renderStatusEffectOverlay",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/StatusEffectSpriteManager;getSprite(Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/client/texture/Sprite;", ordinal = 0),
             locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    private void onRenderStatusEffectOverlay(DrawContext context, float tickDelta, CallbackInfo ci, Collection collection, int i, int j, StatusEffectSpriteManager statusEffectSpriteManager, List list, Iterator var8, StatusEffectInstance statusEffectInstance, RegistryEntry registryEntry, int k, int l, float f) {
+    private void onRenderStatusEffectOverlay(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci, Collection collection, int i, int j, StatusEffectSpriteManager statusEffectSpriteManager, List list, Iterator var8, StatusEffectInstance statusEffectInstance, RegistryEntry registryEntry, int k, int l, float f) {
         StatusEffectBarRenderer.render(context, statusEffectInstance, k, l, 24, 24, this.config);
         RenderSystem.enableBlend(); // disabled by DrawableHelper#fill
     }

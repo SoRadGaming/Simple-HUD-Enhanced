@@ -67,6 +67,20 @@ public class GameInfo {
         return "";
     }
 
+    public String getChunkCords() {
+        if (!config.statusElements.coordinates.toggleCoordinates || !config.statusElements.coordinates.toggleChunkCoordinates) {
+            return "";
+        }
+        return(Utilities.translatable("text.hud.simplehudenhanced.chunk").getString() + ": " + String.format("%d, %d, %d", this.player.getBlockPos().getX() >> 4, this.player.getBlockPos().getY() >> 4, this.player.getBlockPos().getZ() >> 4));
+    }
+
+    public String getSubChunkCords() {
+        if (!config.statusElements.coordinates.toggleCoordinates || !config.statusElements.coordinates.toggleSubChunkCoordinates) {
+            return "";
+        }
+        return(Utilities.translatable("text.hud.simplehudenhanced.subchunk").getString() + ": " + String.format("%d, %d, %d", this.player.getBlockPos().getX() & 0xF, this.player.getBlockPos().getY() & 0xF, this.player.getBlockPos().getZ() & 0xF));
+    }
+
     public String getOffset() {
         if (!config.statusElements.coordinates.toggleCoordinates || !config.statusElements.coordinates.toggleOffset) {
             return "";
@@ -176,6 +190,15 @@ public class GameInfo {
         }
 
         return(time.format(formatter).toUpperCase());
+    }
+
+    public String getDay() {
+        if (!config.statusElements.gameTime.toggleGameDayCounter) {
+            return "";
+        }
+        long time = this.player.getWorld().getTimeOfDay();
+        long day = (time / 24000);
+        return String.format(Utilities.translatable("text.hud.simplehudenhanced.day").getString() + ": %d", day);
     }
 
     public String getPlayerName() {

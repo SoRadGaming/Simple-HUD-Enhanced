@@ -117,8 +117,8 @@ public class Equipment {
                 }
 
             } else {
-                // Draw Count
-                if (config.equipmentStatus.showCount && item.getCount() > 1) {
+                // Draw Count - Update to Check if player is holding 1 or more of the item (including inventory)
+                if (config.equipmentStatus.showCount && this.player.getInventory().count(item.getItem()) > 1) {
                     // Check if player is holding all the item
                     if (this.player.getInventory().count(item.getItem()) == item.getCount()) {
                         index.setText(String.valueOf(item.getCount()));

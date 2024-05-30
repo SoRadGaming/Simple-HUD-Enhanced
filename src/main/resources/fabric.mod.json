@@ -41,6 +41,6 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": ">=${fabric_version}",
-    "minecraft": ">=${minecraft_version} <=${minecraft_version_next}"
+    "minecraft": "${minecraft_support_version_key}"
   }
 }
