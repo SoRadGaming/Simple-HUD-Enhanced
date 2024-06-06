@@ -98,11 +98,14 @@ public class HUD {
         // Add all the lines to the array
         hudInfo.add(GameInformation.getCords() + GameInformation.getDirection() + GameInformation.getOffset());
         hudInfo.add(GameInformation.getNether());
+        hudInfo.add(GameInformation.getChunkCords());
+        hudInfo.add(GameInformation.getSubChunkCords());
         hudInfo.add(GameInformation.getFPS());
         hudInfo.add(GameInformation.getSpeed());
         hudInfo.add(GameInformation.getLightLevel());
         hudInfo.add(GameInformation.getBiome());
         hudInfo.add(GameInformation.getTime());
+        hudInfo.add(GameInformation.getDay());
         hudInfo.add(GameInformation.getPlayerName());
         hudInfo.add(GameInformation.getPing());
         hudInfo.add(GameInformation.getTPS());
