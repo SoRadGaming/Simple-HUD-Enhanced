@@ -183,7 +183,7 @@ public class SimpleHudEnhancedConfig implements ConfigData {
 
     public static class MovementTextElements {
         @ConfigEntry.Gui.Tooltip
-        public boolean toggleMovementStatus = true;
+        public boolean toggleMovementStatus = false;
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
         public MovementTypes movementTypes = new MovementTypes();
@@ -277,6 +277,10 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         public boolean toggleOffset = true;
         @ConfigEntry.Gui.Tooltip
         public boolean toggleNetherCoordinateConversion = false;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleChunkCoordinates = false;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleSubChunkCoordinates = false;
     }
 
     public static class FPS {
@@ -291,6 +295,8 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         public boolean toggleGameTime = true;
         @ConfigEntry.Gui.Tooltip
         public boolean toggleGameTime24Hour = false;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleGameDayCounter = false;
     }
 
     public static class SystemTime {
