@@ -68,5 +68,34 @@ public class ScreenManager {
         // Change Matrix Stack back to normal
         context.getMatrices().translate(0.0D, 0.0D, -lastZ);
     }
+
+    // xAxis & yAxis Setters and Getters
+    private int SxAxis;
+    private int SyAxis;
+    private float sScale;
+
+    public int getXAxis() {
+        return SxAxis;
+    }
+
+    public int getYAxis() {
+        return SyAxis;
+    }
+
+    public float getScale() {
+        return sScale;
+    }
+
+    public void saveXAxis(int xAxis) {
+        this.SxAxis = xAxis;
+    }
+
+    public void saveYAxis(int yAxis) {
+        this.SyAxis = yAxis;
+    }
+
+    public void saveScale(float scale) {
+        this.sScale = scale;
+    }
 }
 
