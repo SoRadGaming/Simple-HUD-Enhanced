@@ -203,7 +203,7 @@
   "text.autoconfig.simplehudenhanced.option.statusElements.playerSpeed": "Player Speed",
   "text.autoconfig.simplehudenhanced.option.statusElements.playerSpeed.togglePlayerSpeed.@Tooltip": "Show your current player speed in the HUD",
   "text.autoconfig.simplehudenhanced.option.statusElements.playerSpeed.togglePlayerSpeed": "Player Speed",
-  "text.autoconfig.simplehudenhanced.option.statusElements.playerSpeed.togglePlayerVerticalSpeed.@Tooltip": "Incudes your Vertical Velocity",
+  "text.autoconfig.simplehudenhanced.option.statusElements.playerSpeed.togglePlayerVerticalSpeed.@Tooltip": "Includes your Vertical Velocity",
   "text.autoconfig.simplehudenhanced.option.statusElements.playerSpeed.togglePlayerVerticalSpeed": "Vertical Velocity",
  
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleLightLevel.@Tooltip": "Show your current light level in the HUD",
