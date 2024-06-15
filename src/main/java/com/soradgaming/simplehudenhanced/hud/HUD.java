@@ -1,5 +1,6 @@
 package com.soradgaming.simplehudenhanced.hud;
 
+import com.soradgaming.simplehudenhanced.cache.EquipmentCache;
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
 import com.soradgaming.simplehudenhanced.config.TextAlignment;
 import com.soradgaming.simplehudenhanced.utli.Colours;
@@ -24,6 +25,9 @@ public class HUD {
     //Config
     private final SimpleHudEnhancedConfig config;
 
+    // Cache
+    private EquipmentCache equipmentCache;
+
     // Sprint Timer Variables
     public boolean sprintTimerRunning = false;  // Variable to store if the timer is running
 
@@ -36,13 +40,14 @@ public class HUD {
     // Initialization method (called once)
     public static void initialize(MinecraftClient client, SimpleHudEnhancedConfig config) {
         if (instance == null) {
-            instance = new HUD(client, config);
             Logger.getLogger(Utilities.getModName()).warning("New HUD instance created.");
         } else {
             Logger.getLogger(Utilities.getModName()).warning("HUD has already been initialized.");
-            instance = new HUD(client, config);
             Logger.getLogger(Utilities.getModName()).warning("New HUD instance created. (Override)");
         }
+        instance = new HUD(client, config);
+        // Create Cache
+        instance.equipmentCache = EquipmentCache.getInstance(config);
     }
 
     // Singleton instance getter
@@ -67,7 +72,7 @@ public class HUD {
         // Draw Equipment Status
         CompletableFuture<Void> equipmentFuture = CompletableFuture.runAsync(() -> {
             if (config.toggleEquipmentStatus) {
-                Equipment equipment = new Equipment(context, config);
+                Equipment equipment = new Equipment(context, config, equipmentCache);
                 equipment.init();
             }
         }, MinecraftClient.getInstance()::executeTask);
@@ -186,7 +191,7 @@ public class HUD {
             // Render the line
             if (config.uiConfig.textBackground) {
                 // Draw Background
-                context.fill(xAxis - 1, yAxis - 1, xAxis + this.renderer.getWidth(line), yAxis + lineHeight - 1, 0x80000000);
+                context.fill(xAxis + offset - 1, yAxis - 1, xAxis + offset + this.renderer.getWidth(line), yAxis + lineHeight - 1, 0x80000000);
             }
             context.drawTextWithShadow(this.renderer, line, xAxis + offset, yAxis, colour);
             yAxis += lineHeight;
