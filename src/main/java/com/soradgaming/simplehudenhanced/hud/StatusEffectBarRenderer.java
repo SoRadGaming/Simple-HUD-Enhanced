@@ -1,7 +1,7 @@
 package com.soradgaming.simplehudenhanced.hud;
 
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
-import me.shedaniel.autoconfig.AutoConfig;
+import com.soradgaming.simplehudenhanced.utli.StatusEffectsTracker;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -14,7 +14,7 @@ public class StatusEffectBarRenderer {
 
         StatusEffectBarRenderer.config = config;
 
-        float progress = (float) effect.getDuration() / ((StatusEffectInstanceDuck) effect).statusEffectBars_getMaxDuration();
+        float progress = (float) effect.getDuration() / StatusEffectsTracker.getInstance().getMaxDuration(effect);
         float progress1 = calculateProgress(progress, 0.25f);
         float progress2 = calculateProgress(progress, 0.5f);
         float progress3 = calculateProgress(progress, 0.75f);
@@ -38,7 +38,7 @@ public class StatusEffectBarRenderer {
 
     private static void drawVerticalBar(int x, int y, int startX, int startY, int endY, float progress, MatrixStack matrixStack, StatusEffectInstance effect) {
         int middleX = startX + 1;
-        int middleY = Math.round(MathHelper.lerp(progress, startY, endY));
+        int middleY = MathHelper.lerp(progress, startY, endY);
         int endX = startX;
 
         startX += x;
@@ -55,7 +55,7 @@ public class StatusEffectBarRenderer {
     private static void drawHorizontalBar(int x, int y, int startX, int endX, int startY,float progress, MatrixStack matrixStack, StatusEffectInstance effect) {
         int middleY = startY + 1;
         int endY = startY;
-        int middleX = Math.round(MathHelper.lerp(progress, startX, endX));
+        int middleX = MathHelper.lerp(progress, startX, endX);
 
         startX += x;
         middleX += x;

@@ -4,13 +4,13 @@
   "package": "com.soradgaming.simplehudenhanced.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "StatusEffectInstanceMixin",
+    "CacheListener$PlayerInventoryMixins",
+    "LivingEntityMixin",
     "TpsMixin$ClientConnectionMixin"
   ],
   "client": [
     "GameRender",
     "MovementMixin",
-    "StatusEffectInstanceMixin",
     "TpsMixin$ClientPlayNetworkHandlerMixin"
   ],
   "injectors": {
