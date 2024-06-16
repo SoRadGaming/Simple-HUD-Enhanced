@@ -1,7 +1,7 @@
 package com.soradgaming.simplehudenhanced.hud;
 
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
-import me.shedaniel.autoconfig.AutoConfig;
+import com.soradgaming.simplehudenhanced.utli.StatusEffectsTracker;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -14,7 +14,7 @@ public class StatusEffectBarRenderer {
 
         StatusEffectBarRenderer.config = config;
 
-        float progress = (float) effect.getDuration() / ((StatusEffectInstanceDuck) effect).statusEffectBars_getMaxDuration();
+        float progress = (float) effect.getDuration() / StatusEffectsTracker.getInstance().getMaxDuration(effect);
         float progress1 = calculateProgress(progress, 0.25f);
         float progress2 = calculateProgress(progress, 0.5f);
         float progress3 = calculateProgress(progress, 0.75f);

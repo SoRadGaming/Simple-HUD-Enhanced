@@ -148,4 +148,34 @@ public class ScreenManager {
         matrixStack.pop();
         RenderSystem.applyModelViewMatrix();
     }
+
+    // xAxis & yAxis Setters and Getters
+    private int SxAxis;
+    private int SyAxis;
+    private float sScale;
+
+    public int getXAxis() {
+        return SxAxis;
+    }
+
+    public int getYAxis() {
+        return SyAxis;
+    }
+
+    public float getScale() {
+        return sScale;
+    }
+
+    public void saveXAxis(int xAxis) {
+        this.SxAxis = xAxis;
+    }
+
+    public void saveYAxis(int yAxis) {
+        this.SyAxis = yAxis;
+    }
+
+    public void saveScale(float scale) {
+        this.sScale = scale;
+    }
 }
+
