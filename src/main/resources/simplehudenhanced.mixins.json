@@ -10,8 +10,10 @@
     "TpsMixin$ClientConnectionMixin"
   ],
   "client": [
+    "ConfigButton",
     "GameRender",
     "MovementMixin",
+    "ScreenInvoker",
     "TpsMixin$ClientPlayNetworkHandlerMixin"
   ],
   "injectors": {
