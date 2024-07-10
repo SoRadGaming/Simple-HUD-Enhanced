@@ -220,4 +220,8 @@ public class HUD {
 
         timeScreenManager.resetScale(matrixStack);
     }
+
+    public EquipmentCache getEquipmentCache() {
+        return equipmentCache;
+    }
 }
