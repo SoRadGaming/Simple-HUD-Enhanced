@@ -47,6 +47,11 @@ public class GameRender {
         AutoConfig.getConfigHolder(SimpleHudEnhancedConfig.class).registerSaveListener((manager, data) -> {
             // Update local config when new settings are saved
             this.config = data;
+
+            // Invalidate Cache
+            HUD hud = HUD.getInstance();
+            if (hud != null) hud.getEquipmentCache().setCacheValid(false);
+
             return ActionResult.SUCCESS;
         });
         // Start Mixin
