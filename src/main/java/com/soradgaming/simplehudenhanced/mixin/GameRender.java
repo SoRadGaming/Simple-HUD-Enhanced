@@ -2,7 +2,6 @@ package com.soradgaming.simplehudenhanced.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
-import com.soradgaming.simplehudenhanced.debugStatus.DebugStatus;
 import com.soradgaming.simplehudenhanced.hud.HUD;
 import com.soradgaming.simplehudenhanced.hud.StatusEffectBarRenderer;
 import me.shedaniel.autoconfig.AutoConfig;
@@ -48,6 +47,11 @@ public class GameRender {
         AutoConfig.getConfigHolder(SimpleHudEnhancedConfig.class).registerSaveListener((manager, data) -> {
             // Update local config when new settings are saved
             this.config = data;
+
+            // Invalidate Cache
+            HUD hud = HUD.getInstance();
+            if (hud != null) hud.getEquipmentCache().setCacheValid(false);
+
             return ActionResult.SUCCESS;
         });
         // Start Mixin
@@ -57,7 +61,7 @@ public class GameRender {
 
     @Inject(method = "render", at = @At("HEAD"))
     private void onDraw(DrawContext context, float esp, CallbackInfo ci) {
-        if (!(DebugStatus.getDebugStatus() && !this.client.options.hudHidden)) {
+        if (!this.client.inGameHud.getDebugHud().shouldShowDebugHud()) {
             // Call async rendering
             CompletableFuture.runAsync(() -> this.hud.drawAsyncHud(context), MinecraftClient.getInstance()::executeTask);
         }
@@ -75,11 +79,5 @@ public class GameRender {
             StatusEffectInstance effect, StatusEffect type, int x, int y) {
         StatusEffectBarRenderer.render(context, effect, x, y, 24, 24, this.config);
         RenderSystem.enableBlend(); // disabled by DrawableHelper#fill
-    }
-
-    // Debug Enabled
-    @Inject(method = "clear", at = @At("HEAD"))
-    private void onClear(CallbackInfo ci) {
-        DebugStatus.setDebugStatus(false);
     }
 }

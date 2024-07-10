@@ -219,4 +219,8 @@ public class HUD {
 
         timeScreenManager.resetScale(context);
     }
+
+    public EquipmentCache getEquipmentCache() {
+        return equipmentCache;
+    }
 }
