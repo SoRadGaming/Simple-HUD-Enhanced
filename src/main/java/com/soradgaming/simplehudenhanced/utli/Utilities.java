@@ -5,6 +5,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 
@@ -32,7 +33,7 @@ public class Utilities {
 
     // Get Players Biome
     public static String getBiome(ClientWorld world, ClientPlayerEntity player) {
-        Optional<RegistryKey<Biome>> biome = world.getBiome(player.getBlockPos()).getKey();
+        Optional<RegistryKey<Biome>> biome = world.getRegistryManager().get(Registry.BIOME_KEY).getKey(world.getBiome(player.getBlockPos()));
 
         if (biome.isPresent()) {
             String biomeName = Utilities.translatable("biome." + biome.get().getValue().getNamespace() + "." + biome.get().getValue().getPath()).getString();
