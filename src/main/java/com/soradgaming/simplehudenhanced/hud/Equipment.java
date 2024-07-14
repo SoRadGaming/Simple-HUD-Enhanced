@@ -64,12 +64,12 @@ public class Equipment {
                 int offset = (BoxWidth - lineLength);
                 this.textRenderer.drawWithShadow(matrixStack, index.getText(), xAxis + offset + (isHorizontal? (-offset) : (isOnRight ? -4 : 0)), yAxis + 4, index.getColor());
                 int x = xAxis + BoxWidth + 4 + (isHorizontal ? (-BoxWidth + lineLength) : (isOnRight ? -4 : 0));
-                this.itemRenderer.renderInGuiWithOverrides(matrixStack, item, x, yAxis);
+                screenManager.renderInGuiWithOverrides(matrixStack, item, x, yAxis);
                 drawDurabilityBar(screenManager, x, yAxis, item);
             } else {
                 this.textRenderer.drawWithShadow(matrixStack, index.getText(), xAxis + 16 + 4 + (isOnRight ? (isHorizontal? 0 : -4) : 0), yAxis + 4, index.getColor());
                 int x = xAxis + (isOnRight ? (isHorizontal ? 0 : -4) : 0);
-                this.itemRenderer.renderInGuiWithOverrides(matrixStack, item, x, yAxis);
+                screenManager.renderInGuiWithOverrides(matrixStack, item, x, yAxis);
                 drawDurabilityBar(screenManager, x, yAxis, item);
             }
             if (isHorizontal) {

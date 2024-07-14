@@ -1,6 +1,18 @@
 package com.soradgaming.simplehudenhanced.hud;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.*;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.crash.CrashException;
+import net.minecraft.util.crash.CrashReport;
+import net.minecraft.util.crash.CrashReportSection;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class ScreenManager {
     private final int screenWidth;
@@ -66,6 +78,74 @@ public class ScreenManager {
     public void zRevert(MatrixStack matrix) {
         // Change Matrix Stack back to normal
         matrix.translate(0.0D, 0.0D, -lastZ);
+    }
+
+    // Custom Icon Scaling (Bruh this is just Minecraft 1.19.4 Code)
+    public void renderInGuiWithOverrides(MatrixStack matrices, ItemStack stack, int x, int y) {
+        this.innerRenderInGui(matrices, MinecraftClient.getInstance().player, MinecraftClient.getInstance().world, stack, x, y, 0);
+    }
+
+    private void innerRenderInGui(MatrixStack matrices, @Nullable LivingEntity entity, @Nullable World world, ItemStack stack, int x, int y, int seed) {
+        this.innerRenderInGui(matrices, entity, world, stack, x, y, seed, 0);
+    }
+
+    private void innerRenderInGui(MatrixStack matrices, @Nullable LivingEntity entity, @Nullable World world, ItemStack stack, int x, int y, int seed, int depth) {
+        if (!stack.isEmpty()) {
+            BakedModel bakedModel =  MinecraftClient.getInstance().getItemRenderer().getModel(stack, world, entity, seed);
+            matrices.push();
+            matrices.translate(0.0F, 0.0F, (float)(50 + (bakedModel.hasDepth() ? depth : 0)));
+
+            try {
+                this.renderGuiItemModel(matrices, stack, x, y, bakedModel);
+            } catch (Throwable var11) {
+                CrashReport crashReport = CrashReport.create(var11, "Rendering item");
+                CrashReportSection crashReportSection = crashReport.addElement("Item being rendered");
+                crashReportSection.add("Item Type", () -> {
+                    return String.valueOf(stack.getItem());
+                });
+                crashReportSection.add("Item Damage", () -> {
+                    return String.valueOf(stack.getDamage());
+                });
+                crashReportSection.add("Item NBT", () -> {
+                    return String.valueOf(stack.getNbt());
+                });
+                crashReportSection.add("Item Foil", () -> {
+                    return String.valueOf(stack.hasGlint());
+                });
+                throw new CrashException(crashReport);
+            }
+
+
+            matrices.pop();
+        }
+    }
+
+    protected void renderGuiItemModel(MatrixStack matrices, ItemStack stack, int x, int y, BakedModel model) {
+        matrices.push();
+        matrices.translate((float)x, (float)y, 100.0F);
+        matrices.translate(8.0F, 8.0F, 0.0F);
+        matrices.scale(1.0F, -1.0F, 1.0F);
+        matrices.scale(16.0F, 16.0F, 16.0F);
+        VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
+        boolean bl = !model.isSideLit();
+        if (bl) {
+            DiffuseLighting.disableGuiDepthLighting();
+        }
+
+        MatrixStack matrixStack = RenderSystem.getModelViewStack();
+        matrixStack.push();
+        matrixStack.peek().getPositionMatrix().mul(matrices.peek().getPositionMatrix());
+        RenderSystem.applyModelViewMatrix();
+        MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.GUI, false, new MatrixStack(), immediate, 15728880, OverlayTexture.DEFAULT_UV, model);
+        immediate.draw();
+        RenderSystem.enableDepthTest();
+        if (bl) {
+            DiffuseLighting.enableGuiDepthLighting();
+        }
+
+        matrices.pop();
+        matrixStack.pop();
+        RenderSystem.applyModelViewMatrix();
     }
 
     // xAxis & yAxis Setters and Getters

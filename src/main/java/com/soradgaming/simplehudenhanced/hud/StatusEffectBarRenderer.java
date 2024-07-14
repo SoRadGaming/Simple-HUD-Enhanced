@@ -38,7 +38,7 @@ public class StatusEffectBarRenderer {
 
     private static void drawVerticalBar(int x, int y, int startX, int startY, int endY, float progress, MatrixStack matrixStack, StatusEffectInstance effect) {
         int middleX = startX + 1;
-        int middleY = MathHelper.lerp(progress, startY, endY);
+        int middleY = Math.round(MathHelper.lerp(progress, startY, endY));
         int endX = startX;
 
         startX += x;
@@ -55,7 +55,7 @@ public class StatusEffectBarRenderer {
     private static void drawHorizontalBar(int x, int y, int startX, int endX, int startY,float progress, MatrixStack matrixStack, StatusEffectInstance effect) {
         int middleY = startY + 1;
         int endY = startY;
-        int middleX = MathHelper.lerp(progress, startX, endX);
+        int middleX = Math.round(MathHelper.lerp(progress, startX, endX));
 
         startX += x;
         middleX += x;
