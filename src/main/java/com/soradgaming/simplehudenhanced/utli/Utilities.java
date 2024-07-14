@@ -3,8 +3,8 @@ package com.soradgaming.simplehudenhanced.utli;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.text.Text;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 
 import java.util.Optional;
@@ -43,6 +43,6 @@ public class Utilities {
 
     //Get Player FPS
     public static String getFPS(MinecraftClient client) {
-        return String.format("%d fps", client.getCurrentFps());
+        return String.format("%s fps", client.fpsDebugString.split(" ")[0]);
     }
 }

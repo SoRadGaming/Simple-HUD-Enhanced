@@ -12,7 +12,8 @@ import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
-import org.joml.Quaternionf;
+import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3f;
 
 public class Movement {
     private final MinecraftClient client;
@@ -89,9 +90,10 @@ public class Movement {
         matrixStack.push();
         matrixStack.translate(xAxis, yAxis, 250.0);
         matrixStack.scale(size, size, -size);
-        Quaternionf quaternionZ = new Quaternionf().rotateZ(180.0F * 0.017453292F);
-        Quaternionf quaternionX = new Quaternionf().rotateX(15.0F * 0.017453292F);
-        quaternionZ.mul(quaternionX);
+
+        Quaternion quaternionZ = Vec3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
+        Quaternion quaternionX = Vec3f.POSITIVE_X.getDegreesQuaternion(20.0F);
+        quaternionZ.hamiltonProduct(quaternionX);
         matrixStack.multiply(quaternionZ);
 
         // Setup Environment

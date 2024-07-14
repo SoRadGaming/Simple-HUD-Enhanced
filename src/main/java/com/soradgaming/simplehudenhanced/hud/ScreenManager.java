@@ -134,7 +134,7 @@ public class ScreenManager {
 
         MatrixStack matrixStack = RenderSystem.getModelViewStack();
         matrixStack.push();
-        matrixStack.peek().getPositionMatrix().mul(matrices.peek().getPositionMatrix());
+        matrixStack.peek().getPositionMatrix().multiply(matrices.peek().getPositionMatrix());
         RenderSystem.applyModelViewMatrix();
         MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.GUI, false, new MatrixStack(), immediate, 15728880, OverlayTexture.DEFAULT_UV, model);
         immediate.draw();
