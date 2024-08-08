@@ -116,6 +116,9 @@ public class HUD {
         hudInfo.add(GameInformation.getTPS());
         hudInfo.add(GameInformation.getServer());
         hudInfo.add(GameInformation.getServerAddress());
+        hudInfo.add(GameInformation.getChunkCount());
+        hudInfo.add(GameInformation.getEntityCount());
+        hudInfo.add(GameInformation.getParticleCount());
         return hudInfo;
     }
 
