@@ -10,7 +10,7 @@
   "text.direction.simplehudenhanced.south": "Юг",
   "text.direction.simplehudenhanced.west": "Запад",
 
-  "text.hud.simplehudenhanced.biome": "Биом %s",
+  "text.hud.simplehudenhanced.biome": "Биом",
   "text.hud.simplehudenhanced.nether": "Нижний мир",
   "text.hud.simplehudenhanced.overworld": "Верхний мир",
   "text.hud.simplehudenhanced.lightlevel": "Уровень освещённости",
@@ -208,8 +208,12 @@
 
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleLightLevel.@Tooltip": "Отображать текущий уровень освещённости в HUD",
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleLightLevel": "Отображение уровня освещённости",
-  "text.autoconfig.simplehudenhanced.option.statusElements.toggleBiome.@Tooltip": "Отображать текущий биом в HUD",
-  "text.autoconfig.simplehudenhanced.option.statusElements.toggleBiome": "Отображение текущего биома",
+  "text.autoconfig.simplehudenhanced.option.statusElements.Biome.@Tooltip": "Показать текущий биом на HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.Biome": "Информация о биоме",
+  "text.autoconfig.simplehudenhanced.option.statusElements.Biome.toggleBiome.@Tooltip": "Включить биом на HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.Biome.toggleBiome": "Статус информации о биоме",
+  "text.autoconfig.simplehudenhanced.option.statusElements.Biome.toggleBiomeLabel.@Tooltip": "Поместите метку Биом: перед названием биома",
+  "text.autoconfig.simplehudenhanced.option.statusElements.Biome.toggleBiomeLabel": "Метка биома",
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime.@Tooltip": "Отображать внутриигровое время в HUD",
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime": "Отображение внутриигрового времени",
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime.toggleGameTime.@Tooltip": "Отображать внутриигровое время в HUD",
@@ -239,5 +243,22 @@
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerName.@Tooltip": "Отображать текущее название сервера в HUD",
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerName": "Название сервера",
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerAddress.@Tooltip": "Отображать текущий адрес сервера в HUD",
-  "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerAddress": "Адрес сервера"
+  "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerAddress": "Адрес сервера",
+
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.@Tooltip": "Счетчики (Нажмите для расширения)",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters": "Счетчики",
+
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.@Tooltip": "Настройки чанков (Нажмите для расширения)",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount": "Счетчик чанков",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleChunkCount.@Tooltip": "Показать количество чанков в HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleChunkCount": "Счетчик чанков",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleTotal.@Tooltip": "Показать общее количество чанков в HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleTotal": "Общее количество чанков",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleLoaded.@Tooltip": "Показать количество загруженных чанков в HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleLoaded": "Загруженные чанки",
+
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.toggleEntityCount.@Tooltip": "Показать количество сущностей в HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.toggleEntityCount": "Счетчик сущностей",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.toggleParticleCount.@Tooltip": "Показать количество частиц в HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.toggleParticleCount": "Счетчик частиц"
 }
