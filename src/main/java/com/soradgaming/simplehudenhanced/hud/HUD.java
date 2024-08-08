@@ -115,6 +115,9 @@ public class HUD {
         hudInfo.add(GameInformation.getTPS());
         hudInfo.add(GameInformation.getServer());
         hudInfo.add(GameInformation.getServerAddress());
+        hudInfo.add(GameInformation.getChunkCount());
+        hudInfo.add(GameInformation.getEntityCount());
+        hudInfo.add(GameInformation.getParticleCount());
         return hudInfo;
     }
 
@@ -168,7 +171,7 @@ public class HUD {
             }
         }
 
-        int lineHeight = (this.renderer.fontHeight);
+        int lineHeight = (this.renderer.fontHeight); // TODO - Make this configurable
 
         // Screen Manager
         ScreenManager screenManager = new ScreenManager(this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
