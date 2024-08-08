@@ -2,6 +2,7 @@ package com.soradgaming.simplehudenhanced.mixin;
 
 import com.soradgaming.simplehudenhanced.cache.Cache;
 import com.soradgaming.simplehudenhanced.cache.UpdateCacheEvent;
+import net.minecraft.client.util.Window;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -17,7 +18,7 @@ public class CacheListener {
     @Mixin(PlayerInventory.class)
     public static class PlayerInventoryMixins {
         // Called on all inventory updates
-        @Inject(method = "markDirty", at = @At("HEAD"), cancellable = true)
+        @Inject(method = "markDirty", at = @At("HEAD"))
         private void onSlotsUpdate(CallbackInfo ci) {
             ActionResult result = UpdateCacheEvent.EVENT.invoker().updateCache(Cache.EQUIPMENT);
 
@@ -36,6 +37,17 @@ public class CacheListener {
                 cir.cancel();
             }
         }
+
+        // Called on HotBar Scroll
+        @Inject(method = "scrollInHotbar", at = @At("HEAD"))
+        private void onScrollHotbar(double scrollAmount, CallbackInfo ci) {
+            // Call event to update the equipment cache
+            ActionResult result = UpdateCacheEvent.EVENT.invoker().updateCache(Cache.EQUIPMENT);
+
+            if (result == ActionResult.FAIL) {
+                ci.cancel();
+            }
+        }
     }
 
     @Mixin(PlayerEntity.class)
@@ -50,5 +62,31 @@ public class CacheListener {
                 cir.cancel();
             }
         }
+    }
+
+    @Mixin(Window.class)
+    public static class WindowMixins {
+        // Called on window resize
+        @Inject(method = "onWindowSizeChanged", at = @At("HEAD"))
+        private void onWindowResize(CallbackInfo ci) {
+            // Call event to update the equipment cache
+            ActionResult result = UpdateCacheEvent.EVENT.invoker().updateCache(Cache.EQUIPMENT);
+
+            if (result == ActionResult.FAIL) {
+                ci.cancel();
+            }
+        }
+
+        // Called on Scale change
+        @Inject(method = "setScaleFactor", at = @At("HEAD"))
+        private void onScaleChange(double scaleFactor, CallbackInfo ci) {
+            // Call event to update the equipment cache
+            ActionResult result = UpdateCacheEvent.EVENT.invoker().updateCache(Cache.EQUIPMENT);
+
+            if (result == ActionResult.FAIL) {
+                ci.cancel();
+            }
+        }
+
     }
 }
