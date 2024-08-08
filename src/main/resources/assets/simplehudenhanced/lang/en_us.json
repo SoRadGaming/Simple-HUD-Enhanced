@@ -208,8 +208,12 @@
  
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleLightLevel.@Tooltip": "Show your current light level in the HUD",
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleLightLevel": "Light Level",
-  "text.autoconfig.simplehudenhanced.option.statusElements.toggleBiome.@Tooltip": "Show your current biome in the HUD",
-  "text.autoconfig.simplehudenhanced.option.statusElements.toggleBiome": "Biome Info Status",
+  "text.autoconfig.simplehudenhanced.option.statusElements.Biome.@Tooltip": "Show your current biome in the HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.Biome": "Biome Info",
+    "text.autoconfig.simplehudenhanced.option.statusElements.Biome.toggleBiome.@Tooltip": "Enable biome in the HUD",
+    "text.autoconfig.simplehudenhanced.option.statusElements.Biome.toggleBiome": "Biome Info Status",
+    "text.autoconfig.simplehudenhanced.option.statusElements.Biome.toggleBiomeLabel.@Tooltip": "Place the Label Biome: in front of the Biome Name",
+    "text.autoconfig.simplehudenhanced.option.statusElements.Biome.toggleBiomeLabel": "Biome Label",
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime.@Tooltip": "Show your current world time in the HUD",
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime": "In-Game Time Status",
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime.toggleGameTime.@Tooltip": "Show your current world time in the HUD",
@@ -239,5 +243,22 @@
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerName.@Tooltip": "Show your current server name in the HUD",
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerName": "Server Name",
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerAddress.@Tooltip": "Show your current server address in the HUD",
-  "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerAddress": "Server Address"
+  "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerAddress": "Server Address",
+
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.@Tooltip": "Counters (Click to Expand)",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters": "Counters",
+
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.@Tooltip": "Chunk Settings (Click to Expand)",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount": "Chunk Counter",
+    "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleChunkCount.@Tooltip": "Show the number of chunks in the HUD",
+    "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleChunkCount": "Chunk Counter",
+    "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleTotal.@Tooltip": "Show the total number of chunks in the HUD",
+    "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleTotal": "Total Chunks",
+    "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleLoaded.@Tooltip": "Show the number of loaded chunks in the HUD",
+    "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleLoaded": "Loaded Chunks",
+
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.toggleEntityCount.@Tooltip": "Show the number of entities in the HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.toggleEntityCount": "Entity Count",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.toggleParticleCount.@Tooltip": "Show the number of particles in the HUD",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.toggleParticleCount": "Particle Count"
 }

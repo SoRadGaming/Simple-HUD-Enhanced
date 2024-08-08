@@ -30,12 +30,16 @@ public class Utilities {
     }
 
     // Get Players Biome
-    public static String getBiome(ClientWorld world, ClientPlayerEntity player) {
-        Optional<RegistryKey<Biome>> biome = player.world.getBiome(player.getBlockPos()).getKey();
+    public static String getBiome(ClientWorld world, ClientPlayerEntity player, boolean toggleBiomeLabel) {
+        Optional<RegistryKey<Biome>> biome = world.getBiome(player.getBlockPos()).getKey();
 
         if (biome.isPresent()) {
             String biomeName = Text.translatable("biome." + biome.get().getValue().getNamespace() + "." + biome.get().getValue().getPath()).getString();
-            return String.format("%s " + Text.translatable("text.hud.simplehudenhanced.biome").getString() , Utilities.capitalise(biomeName));
+            if (toggleBiomeLabel) {
+                return String.format(Text.translatable("text.hud.simplehudenhanced.biome").getString() + ": %s", Utilities.capitalise(biomeName));
+            } else {
+                return String.format("%s " + Text.translatable("text.hud.simplehudenhanced.biome").getString() , Utilities.capitalise(biomeName));
+            }
         }
 
         return "";
