@@ -34,13 +34,13 @@ public class GameInfo {
     }
 
     public String getBiome() {
-        if (!config.statusElements.toggleBiome) {
+        if (!config.statusElements.Biome.toggleBiome) {
             return "";
         }
 
         if (this.client.world == null) {return "";}
 
-        return Utilities.getBiome(this.client.world, this.player);
+        return Utilities.getBiome(this.client.world, this.player, config.statusElements.Biome.toggleBiomeLabel);
     }
 
     public String getDirection() {
@@ -114,6 +114,48 @@ public class GameInfo {
             return "";
         }
         return Utilities.getFPS(this.client);
+    }
+
+    // Chunk
+    public String getChunkCount() {
+        if (!config.statusElements.counters.chunkCount.toggleChunkCount) {
+            return "";
+        }
+
+        if (this.client.world == null) {
+            return "";
+        }
+
+        if (config.statusElements.counters.chunkCount.toggleTotal && config.statusElements.counters.chunkCount.toggleLoaded) {
+            return String.format("C: %s", this.client.world.getChunkManager().getDebugString());
+        } else {
+            if (config.statusElements.counters.chunkCount.toggleLoaded) {
+                return String.format("C: %s", this.client.world.getChunkManager().getLoadedChunkCount());
+            } else if (config.statusElements.counters.chunkCount.toggleTotal) {
+                return String.format("C: %s", this.client.world.getChunkManager().getDebugString().split(",")[0]); // TODO test
+            }
+        }
+
+        return "";
+    }
+
+    // Entity
+    public String getEntityCount() {
+        if (!config.statusElements.counters.toggleEntityCount) {
+            return "";
+        }
+        if (this.client.world != null) {
+            return String.format("E: %d", this.client.world.getRegularEntityCount());
+        }
+        return "";
+    }
+
+    // Particles
+    public String getParticleCount() {
+        if (!config.statusElements.counters.toggleParticleCount) {
+            return "";
+        }
+        return String.format("P: %s", this.client.particleManager.getDebugString());
     }
 
     public String getSpeed() {

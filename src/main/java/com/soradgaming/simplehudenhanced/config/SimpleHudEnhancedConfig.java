@@ -242,7 +242,8 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         public boolean toggleLightLevel = false;
         @ConfigEntry.Gui.Tooltip
-        public boolean toggleBiome = true;
+        @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+        public Biome Biome = new Biome();
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
         public GameTime gameTime = new GameTime();
@@ -259,6 +260,36 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         public boolean toggleServerName = false;
         @ConfigEntry.Gui.Tooltip
         public boolean toggleServerAddress = false;
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
+        public Counters counters = new Counters();
+    }
+
+    public static class Biome {
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleBiome = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleBiomeLabel = false;
+    }
+
+    public static class Counters {
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+        public ChunkCounter chunkCount = new ChunkCounter();
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+        public boolean toggleEntityCount = false;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleParticleCount = false;
+    }
+
+    public static class ChunkCounter {
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleChunkCount = false;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleTotal = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean toggleLoaded = true;
     }
 
     public static class PlayerSpeed {

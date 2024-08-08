@@ -31,12 +31,16 @@ public class Utilities {
     }
 
     // Get Players Biome
-    public static String getBiome(ClientWorld world, ClientPlayerEntity player) {
+    public static String getBiome(ClientWorld world, ClientPlayerEntity player, boolean toggleBiomeLabel) {
         Optional<RegistryKey<Biome>> biome = world.getBiome(player.getBlockPos()).getKey();
 
         if (biome.isPresent()) {
             String biomeName = Utilities.translatable("biome." + biome.get().getValue().getNamespace() + "." + biome.get().getValue().getPath()).getString();
-            return String.format("%s " + Utilities.translatable("text.hud.simplehudenhanced.biome").getString(), Utilities.capitalise(biomeName));
+            if (toggleBiomeLabel) {
+                return String.format(Utilities.translatable("text.hud.simplehudenhanced.biome").getString() + ": %s", Utilities.capitalise(biomeName));
+            } else {
+                return String.format("%s " + Utilities.translatable("text.hud.simplehudenhanced.biome").getString() , Utilities.capitalise(biomeName));
+            }
         }
 
         return "";

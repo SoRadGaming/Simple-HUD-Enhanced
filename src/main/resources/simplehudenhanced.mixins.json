@@ -9,6 +9,7 @@
     "TpsMixin$ClientConnectionMixin"
   ],
   "client": [
+    "CacheListener$WindowMixins",
     "ConfigButton",
     "GameRender",
     "MovementMixin",
