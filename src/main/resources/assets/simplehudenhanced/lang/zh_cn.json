@@ -132,10 +132,10 @@
   "text.autoconfig.simplehudenhanced.option.effectsStatus.harmfulForegroundColor": "有害条颜色",
   "text.autoconfig.simplehudenhanced.option.effectsStatus.neutralForegroundColor.@Tooltip": "中性效果条的颜色",
   "text.autoconfig.simplehudenhanced.option.effectsStatus.neutralForegroundColor": "中性条颜色",
-  
+
   "text.autoconfig.simplehudenhanced.option.movementStatus.@Tooltip": "移动元素（点击展开）",
   "text.autoconfig.simplehudenhanced.option.movementStatus": "移动元素",
-  
+
   "text.autoconfig.simplehudenhanced.option.toggleMovementStatus.@Tooltip": "在HUD中显示你的移动状态",
   "text.autoconfig.simplehudenhanced.option.toggleMovementStatus": "移动状态",
   "text.autoconfig.simplehudenhanced.option.movementStatus.toggleMovementStatus.@Tooltip": "在HUD中显示文本移动状态",
@@ -168,15 +168,15 @@
   "text.autoconfig.simplehudenhanced.option.paperDoll.paperDollLocationX": "HUD元素的X坐标",
   "text.autoconfig.simplehudenhanced.option.paperDoll.paperDollLocationY.@Tooltip": "HUD的Y位置（0为屏幕顶部）",
   "text.autoconfig.simplehudenhanced.option.paperDoll.paperDollLocationY": "HUD元素的Y坐标",
-  
+
   "text.autoconfig.simplehudenhanced.option.statusElements.@Tooltip": "HUD元素（点击展开）",
   "text.autoconfig.simplehudenhanced.option.statusElements": "HUD元素",
-  
+
   "text.autoconfig.simplehudenhanced.option.statusElements.Xcords.@Tooltip": "HUD的X位置（0为屏幕左侧）",
   "text.autoconfig.simplehudenhanced.option.statusElements.Xcords": "HUD元素的X坐标",
   "text.autoconfig.simplehudenhanced.option.statusElements.Ycords.@Tooltip": "HUD的Y位置（0为屏幕顶部）",
   "text.autoconfig.simplehudenhanced.option.statusElements.Ycords": "HUD元素的Y坐标",
-  
+
   "text.autoconfig.simplehudenhanced.option.statusElements.coordinates.@Tooltip": "玩家坐标（点击展开）",
   "text.autoconfig.simplehudenhanced.option.statusElements.coordinates": "玩家坐标",
   "text.autoconfig.simplehudenhanced.option.statusElements.coordinates.toggleCoordinates.@Tooltip": "显示坐标",
@@ -198,18 +198,22 @@
   "text.autoconfig.simplehudenhanced.option.statusElements.fps.toggleFPS": "FPS状态",
   "text.autoconfig.simplehudenhanced.option.statusElements.fps.toggleColourFPS.@Tooltip": "根据FPS着色（绿色=良好，黄色=一般，红色=不佳）",
   "text.autoconfig.simplehudenhanced.option.statusElements.fps.toggleColourFPS": "着色FPS状态",
-  
+
   "text.autoconfig.simplehudenhanced.option.statusElements.playerSpeed.@Tooltip": "玩家速度（点击展开）",
   "text.autoconfig.simplehudenhanced.option.statusElements.playerSpeed": "玩家速度",
   "text.autoconfig.simplehudenhanced.option.statusElements.playerSpeed.togglePlayerSpeed.@Tooltip": "在HUD中显示当前玩家速度",
   "text.autoconfig.simplehudenhanced.option.statusElements.playerSpeed.togglePlayerSpeed": "玩家速度",
   "text.autoconfig.simplehudenhanced.option.statusElements.playerSpeed.togglePlayerVerticalSpeed.@Tooltip": "包括您的垂直速度",
   "text.autoconfig.simplehudenhanced.option.statusElements.playerSpeed.togglePlayerVerticalSpeed": "垂直速度",
- 
+
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleLightLevel.@Tooltip": "在HUD中显示当前光照水平",
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleLightLevel": "光照水平",
-  "text.autoconfig.simplehudenhanced.option.statusElements.toggleBiome.@Tooltip": "在HUD中显示当前生物群系",
-  "text.autoconfig.simplehudenhanced.option.statusElements.toggleBiome": "生物群系信息状态",
+  "text.autoconfig.simplehudenhanced.option.statusElements.Biome.@Tooltip": "在HUD中显示你当前的生物群系",
+  "text.autoconfig.simplehudenhanced.option.statusElements.Biome": "生物群系信息",
+  "text.autoconfig.simplehudenhanced.option.statusElements.Biome.toggleBiome.@Tooltip": "在HUD中启用生物群系",
+  "text.autoconfig.simplehudenhanced.option.statusElements.Biome.toggleBiome": "生物群系信息状态",
+  "text.autoconfig.simplehudenhanced.option.statusElements.Biome.toggleBiomeLabel.@Tooltip": "在生物群系名称前放置标签 Biome:",
+  "text.autoconfig.simplehudenhanced.option.statusElements.Biome.toggleBiomeLabel": "生物群系标签",
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime.@Tooltip": "在HUD中显示当前游戏时间",
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime": "游戏时间状态",
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime.toggleGameTime.@Tooltip": "在HUD中显示当前游戏时间",
@@ -218,7 +222,7 @@
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime.toggleGameTime24Hour": "24小时制",
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime.toggleGameDayCounter.@Tooltip": "在HUD中显示当前世界天数",
   "text.autoconfig.simplehudenhanced.option.statusElements.gameTime.toggleGameDayCounter": "天数计数器",
-  
+
   "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.@Tooltip": "在HUD中显示当前系统时间（屏幕右下角）",
   "text.autoconfig.simplehudenhanced.option.statusElements.systemTime": "系统时间状态",
   "text.autoconfig.simplehudenhanced.option.statusElements.systemTime.toggleSystemTime.@Tooltip": "在HUD中显示当前系统时间（屏幕右下角）",
@@ -239,5 +243,22 @@
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerName.@Tooltip": "在HUD中显示当前服务器名称",
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerName": "服务器名称",
   "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerAddress.@Tooltip": "在HUD中显示当前服务器地址",
-  "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerAddress": "服务器地址"
+  "text.autoconfig.simplehudenhanced.option.statusElements.toggleServerAddress": "服务器地址",
+
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.@Tooltip": "计数器（点击展开）",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters": "计数器",
+
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.@Tooltip": "区块设置（点击展开）",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount": "区块计数器",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleChunkCount.@Tooltip": "在HUD中显示区块数量",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleChunkCount": "区块计数器",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleTotal.@Tooltip": "在HUD中显示区块总数",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleTotal": "总区块数",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleLoaded.@Tooltip": "在HUD中显示加载的区块数量",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.chunkCount.toggleLoaded": "已加载区块",
+
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.toggleEntityCount.@Tooltip": "在HUD中显示实体数量",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.toggleEntityCount": "实体计数",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.toggleParticleCount.@Tooltip": "在HUD中显示粒子数量",
+  "text.autoconfig.simplehudenhanced.option.statusElements.counters.toggleParticleCount": "粒子计数"
 }
