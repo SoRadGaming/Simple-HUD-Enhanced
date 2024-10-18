@@ -2,7 +2,6 @@ package com.soradgaming.simplehudenhanced.mixin;
 
 import com.soradgaming.simplehudenhanced.cache.Cache;
 import com.soradgaming.simplehudenhanced.cache.UpdateCacheEvent;
-import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.Window;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -48,9 +47,9 @@ public class CacheListener {
             }
         }
 
-        // Called on HotBar Scroll
-        @Inject(method = "scrollInHotbar", at = @At("HEAD"))
-        private void onScrollHotbar(double scrollAmount, CallbackInfo ci) {
+        // Called on HotBar slot change
+        @Inject(method = "setSelectedSlot", at = @At("HEAD"))
+        private void onSetSelectedSlot(int index, CallbackInfo ci) {
             // Call event to update the equipment cache
             ActionResult result = UpdateCacheEvent.EVENT.invoker().updateCache(Cache.EQUIPMENT);
 

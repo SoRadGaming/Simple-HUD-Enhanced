@@ -115,7 +115,7 @@ public class Movement {
         float xOffset = 0;
         float yOffset = (entity.getHeight() + (1.0F - getCurrentHeightOffset(entity))) * -0.5F;
 
-        entityRenderDispatcher.render(entity, xOffset, yOffset, 0.0, 0.0F, 1.0F, this.context.getMatrices(), context.getVertexConsumers(), 15728880);
+        context.draw((vertexConsumers) -> entityRenderDispatcher.render(entity, xOffset, yOffset, 0.0, 0.0F, this.context.getMatrices(), vertexConsumers, 15728880));
         context.draw();
 
         // Restore Rotation
@@ -160,10 +160,10 @@ public class Movement {
     private static float getCurrentHeightOffset(LivingEntity player) {
         // Crouching check after Elytra since you can do both at the same time
         float height = player.getEyeHeight(EntityPose.STANDING);
-        if (player.isFallFlying()) {
+        if (player.isGliding()) {
             float ticksElytraFlying = player.fallDistance + (float) 1.0;
             float flyingAnimation = MathHelper.clamp(ticksElytraFlying * 0.09F, 0.0F, 1.0F);
-            float flyingHeight = player.getEyeHeight(EntityPose.FALL_FLYING) / height;
+            float flyingHeight = player.getEyeHeight(EntityPose.GLIDING) / height;
             return MathHelper.lerp(flyingAnimation, 1.0F, flyingHeight);
         } else if (player.isSwimming()) {
             float swimmingAnimation = player.isInSwimmingPose() ? 1.0F : player.handSwingProgress;

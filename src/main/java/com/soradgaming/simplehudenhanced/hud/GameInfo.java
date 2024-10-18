@@ -297,7 +297,7 @@ public class GameInfo {
 
     public boolean isPlayerFlying() {
         // Done this way to ensure null safety
-        return this.player.isFallFlying();
+        return this.player.isGliding();
     }
 
     public boolean isPlayerSwimming() {

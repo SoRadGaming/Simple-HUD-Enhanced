@@ -3,6 +3,7 @@ package com.soradgaming.simplehudenhanced.utli;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -39,6 +40,15 @@ public class LegacyTexturedButtonWidget extends TexturedButtonWidget {
             v += this.hoveredVOffset;
         }
 
-        context.drawTexture(this.texture, this.getX(), this.getY(), this.u, v, this.width, this.height, this.textureWidth, this.textureHeight);
+        context.drawTexture(RenderLayer::getGuiTextured, this.texture,
+                this.getX(),
+                this.getY(),
+                this.u,
+                v,
+                this.width,
+                this.height,
+                this.textureWidth,
+                this.textureHeight
+        );
     }
 }
