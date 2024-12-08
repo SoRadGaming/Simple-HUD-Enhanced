@@ -52,6 +52,9 @@ public class GameRender {
             HUD hud = HUD.getInstance();
             if (hud != null) hud.getEquipmentCache().setCacheValid(false);
 
+            // Update Sprint Timer
+            if (hud != null) hud.sprintTimer = data.paperDoll.paperDollTimeOut;
+
             return ActionResult.SUCCESS;
         });
         // Start Mixin

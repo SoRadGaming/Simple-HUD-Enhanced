@@ -30,6 +30,7 @@ public class HUD {
 
     // Sprint Timer Variables
     public boolean sprintTimerRunning = false;  // Variable to store if the timer is running
+    public long sprintTimer = 3000;  // X seconds in milliseconds (default 3 seconds)
 
     private HUD(MinecraftClient client, SimpleHudEnhancedConfig config) {
         this.client = client;
@@ -48,6 +49,8 @@ public class HUD {
         instance = new HUD(client, config);
         // Create Cache
         instance.equipmentCache = EquipmentCache.getInstance(config);
+        // Set Sprint Timer
+        instance.sprintTimer = config.paperDoll.paperDollTimeOut;
     }
 
     // Singleton instance getter
@@ -83,7 +86,7 @@ public class HUD {
             if (config.movementStatus.toggleMovementStatus) {
                 movement.init(GameInformation);
             }
-            if (sprintTimerRunning) {
+            if (sprintTimerRunning || !config.paperDoll.togglePaperDollTimer) {
                 movement.drawPaperDoll(context);
             }
         }
@@ -171,7 +174,7 @@ public class HUD {
             }
         }
 
-        int lineHeight = (this.renderer.fontHeight);
+        int lineHeight = (this.renderer.fontHeight); // TODO - Make this configurable
 
         // Screen Manager
         ScreenManager screenManager = new ScreenManager(this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());

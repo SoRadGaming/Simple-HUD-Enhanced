@@ -7,11 +7,14 @@ public class SimpleHudEnhanced implements ModInitializer {
     public static boolean isModMenuInstalled() {
         return FabricLoader.getInstance().isModLoaded("modmenu");
     }
+    public static boolean isTrinketsInstalled() {
+        return FabricLoader.getInstance().isModLoaded("trinkets");
+    }
 
     @Override
     public void onInitialize() {
         // Check if Trinket mod is installed
-        if (FabricLoader.getInstance().isModLoaded("trinkets")) {
+        if (isTrinketsInstalled()) {
             System.out.println("Trinket mod is installed! Adding compatibility features...");
             System.out.println("Disabling Render Cache for Trinket mod compatibility...");
         } else {
