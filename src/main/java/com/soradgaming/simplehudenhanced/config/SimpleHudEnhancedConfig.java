@@ -213,6 +213,10 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         public boolean togglePaperDoll = true;
         @ConfigEntry.Gui.Tooltip
+        public boolean togglePaperDollTimer = true;
+        @ConfigEntry.Gui.Tooltip
+        public long paperDollTimeOut = 3000; // X seconds in milliseconds
+        @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 50, max = 150)
         public int textScale = 100;
         @ConfigEntry.Gui.Tooltip
