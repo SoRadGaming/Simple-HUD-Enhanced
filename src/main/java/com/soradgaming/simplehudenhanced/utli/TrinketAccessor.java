@@ -5,7 +5,6 @@ import com.soradgaming.simplehudenhanced.hud.EquipmentInfoStack;
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
@@ -14,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import static com.soradgaming.simplehudenhanced.SimpleHudEnhanced.isTrinketsInstalled;
 
 public class TrinketAccessor {
     private final PlayerEntity player;
@@ -32,7 +33,7 @@ public class TrinketAccessor {
 
     public void setEquipmentInfo() {
         // Check if Trinket mod is installed
-        if (isTrinketInstalled()) {
+        if (isTrinketsInstalled()) {
             Optional<TrinketComponent> trinketComponentOptional = TrinketsApi.getTrinketComponent(this.player);
 
             if (trinketComponentOptional.isPresent()) {
@@ -73,10 +74,6 @@ public class TrinketAccessor {
                     )
             );
         }
-    }
-
-    private boolean isTrinketInstalled() {
-        return FabricLoader.getInstance().isModLoaded("trinkets");
     }
 
     private void addTrinketData(List<Pair<SlotReference, ItemStack>> trinketData, String selectedGroup) {
