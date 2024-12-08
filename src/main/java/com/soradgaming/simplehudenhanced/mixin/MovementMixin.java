@@ -14,8 +14,6 @@ import net.minecraft.client.network.ClientPlayerEntity;
 public class MovementMixin {
     @Unique
     private long sprintTimerStart = 0L;  // Variable to store the timer start time
-    @Unique
-    private static final long SPRINT_TIMER_DURATION = 2000;  // X seconds in milliseconds
 
     @Inject(method = "handleInputEvents", at = @At("TAIL"))
     private void onHandleInputEvents(CallbackInfo info) {
@@ -29,7 +27,7 @@ public class MovementMixin {
             }
 
             // Check if X seconds have passed since the timer started
-            if (System.currentTimeMillis() - sprintTimerStart >= SPRINT_TIMER_DURATION) {
+            if (System.currentTimeMillis() - sprintTimerStart >= HUD.getInstance().sprintTimer) {
                 HUD.getInstance().sprintTimerRunning = false;
             }
         }

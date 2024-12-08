@@ -2,7 +2,6 @@ package com.soradgaming.simplehudenhanced.mixin;
 
 import com.soradgaming.simplehudenhanced.cache.Cache;
 import com.soradgaming.simplehudenhanced.cache.UpdateCacheEvent;
-import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.Window;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
