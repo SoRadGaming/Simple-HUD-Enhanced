@@ -5,7 +5,6 @@ import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
 import com.soradgaming.simplehudenhanced.hud.EquipmentInfoStack;
 import com.soradgaming.simplehudenhanced.hud.ScreenManager;
 import com.soradgaming.simplehudenhanced.utli.TrinketAccessor;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -14,6 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 
 import java.util.List;
+
+import static com.soradgaming.simplehudenhanced.SimpleHudEnhanced.isTrinketsInstalled;
 
 public class EquipmentCache {
     private static EquipmentCache instance; // Singleton instance
@@ -56,7 +57,7 @@ public class EquipmentCache {
     }
 
     public List<EquipmentInfoStack> getEquipmentInfo(ClientPlayerEntity player) {
-        if (!isCacheValid() || isTrinketInstalled()) {
+        if (!isCacheValid() || isBreakingModInstalled()) {
             updateCache(player);
         }
         return equipmentInfo;
@@ -243,7 +244,7 @@ public class EquipmentCache {
         screenManager.saveScale(Scale);
     }
 
-    private boolean isTrinketInstalled() {
-        return FabricLoader.getInstance().isModLoaded("trinkets");
+    private boolean isBreakingModInstalled() {
+        return isTrinketsInstalled();
     }
 }
