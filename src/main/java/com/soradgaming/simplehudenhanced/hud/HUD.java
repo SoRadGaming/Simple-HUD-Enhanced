@@ -15,6 +15,8 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
+import static com.soradgaming.simplehudenhanced.SimpleHudEnhanced.isXaerosMinimapInstalled;
+
 public class HUD {
     private static HUD instance;  // Singleton instance
 
@@ -30,6 +32,7 @@ public class HUD {
 
     // Sprint Timer Variables
     public boolean sprintTimerRunning = false;  // Variable to store if the timer is running
+    public long sprintTimer = 3000;  // X seconds in milliseconds (default 3 seconds)
 
     private HUD(MinecraftClient client, SimpleHudEnhancedConfig config) {
         this.client = client;
@@ -48,6 +51,8 @@ public class HUD {
         instance = new HUD(client, config);
         // Create Cache
         instance.equipmentCache = EquipmentCache.getInstance(config);
+        // Set Sprint Timer
+        instance.sprintTimer = config.paperDoll.paperDollTimeOut;
     }
 
     // Singleton instance getter
@@ -75,6 +80,11 @@ public class HUD {
                 Equipment equipment = new Equipment(context, config, equipmentCache);
                 equipment.init();
             }
+
+            // Xaeros Minimap Compatibility
+            if (isXaerosMinimapInstalled()) {
+                Equipment.renderXaerosMinimapFix(context);
+            }
         }, MinecraftClient.getInstance()::executeTask);
 
         // Draw Movement Status
@@ -83,7 +93,7 @@ public class HUD {
             if (config.movementStatus.toggleMovementStatus) {
                 movement.init(GameInformation);
             }
-            if (sprintTimerRunning) {
+            if (sprintTimerRunning || !config.paperDoll.togglePaperDollTimer) {
                 movement.drawPaperDoll(context);
             }
         }
