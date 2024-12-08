@@ -19,7 +19,7 @@ public class Equipment {
     private final SimpleHudEnhancedConfig config;
     private final MatrixStack matrixStack;
     private final EquipmentCache cache;
-    
+
     public Equipment(MatrixStack matrixStack, SimpleHudEnhancedConfig config, EquipmentCache equipmentCache) {
         MinecraftClient client = MinecraftClient.getInstance();
         this.textRenderer = client.textRenderer;
