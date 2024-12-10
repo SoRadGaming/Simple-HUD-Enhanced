@@ -9,6 +9,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
 import java.util.List;
 
@@ -27,6 +28,11 @@ public class Equipment {
 
         // Get the player
         this.player = MinecraftClient.getInstance().player;
+    }
+
+    public static void renderXaerosMinimapFix(DrawContext context) {
+        ItemStack item = new ItemStack(Items.WAXED_WEATHERED_CUT_COPPER_STAIRS);
+        context.drawItem(item, -512, -512);
     }
 
     public void init() {

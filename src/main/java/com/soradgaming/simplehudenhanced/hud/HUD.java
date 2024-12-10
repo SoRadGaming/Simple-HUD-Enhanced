@@ -15,6 +15,8 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
+import static com.soradgaming.simplehudenhanced.SimpleHudEnhanced.isXaerosMinimapInstalled;
+
 public class HUD {
     private static HUD instance;  // Singleton instance
 
@@ -77,6 +79,11 @@ public class HUD {
             if (config.toggleEquipmentStatus) {
                 Equipment equipment = new Equipment(context, config, equipmentCache);
                 equipment.init();
+            }
+
+            // Xaeros Minimap Compatibility
+            if (isXaerosMinimapInstalled()) {
+                Equipment.renderXaerosMinimapFix(context);
             }
         }, MinecraftClient.getInstance()::executeTask);
 
