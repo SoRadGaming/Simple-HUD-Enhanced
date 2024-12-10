@@ -12,7 +12,12 @@
     "alerouzic",
     "johnvictorfs",
     "A5b84",
-    "mooziii"
+    "mooziii",
+    "Translators:",
+    "Russian: Alexander317",
+    "Mandarin: FyrGlow",
+    "Spanish: David253_",
+    "Korean: gumio3842"
   ],
   "contact": {
     "homepage": "https://github.com/soradgaming/Simple-HUD-Enhanced",
@@ -41,6 +46,6 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": ">=${fabric_version}",
-    "minecraft": "=${minecraft_version}"
+    "minecraft": "${minecraft_support_version_key}"
   }
 }

@@ -244,7 +244,8 @@ public class EquipmentCache {
         screenManager.saveScale(Scale);
     }
 
+    // Disable Cache if Trinkets is installed or player is on a server (Temp Fix for Cache not updating)
     private boolean isBreakingModInstalled() {
-        return isTrinketsInstalled();
+        return isTrinketsInstalled() || MinecraftClient.getInstance().getCurrentServerEntry() != null;
     }
 }
