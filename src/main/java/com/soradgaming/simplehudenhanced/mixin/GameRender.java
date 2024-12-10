@@ -73,7 +73,7 @@ public class GameRender {
     // Injects into the renderStatusEffectOverlay method in the InGameHud class to render the status effect bars on the HUD
     @Inject(method = "renderStatusEffectOverlay",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/StatusEffectSpriteManager;getSprite(Lnet/minecraft/entity/effect/StatusEffect;)Lnet/minecraft/client/texture/Sprite;", ordinal = 0),
-            locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+            locals = LocalCapture.CAPTURE_FAILHARD)
     private void onRenderStatusEffectOverlay(
             DrawContext context, CallbackInfo ci,
             Collection<StatusEffectInstance> effects, int beneficialColumn,
