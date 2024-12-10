@@ -1,5 +1,6 @@
 package com.soradgaming.simplehudenhanced.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
 import com.soradgaming.simplehudenhanced.hud.HUD;
@@ -10,9 +11,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.texture.StatusEffectSpriteManager;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.ActionResult;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,11 +20,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Environment(EnvType.CLIENT)
@@ -61,8 +56,26 @@ public class GameRender {
         this.hud = HUD.getInstance();
     }
 
+    @Unique private boolean hudHiddenChecked = false;
+    @Unique private boolean prevState = false;
+    @Unique private void autoHideHud() {
+        if (this.client.options.hudHidden && !hudHiddenChecked) {
+            hudHiddenChecked = true;
+            prevState = config.uiConfig.toggleSimpleHUDEnhanced;
+            config.uiConfig.toggleSimpleHUDEnhanced = false;
+        }
+
+        if (!this.client.options.hudHidden && hudHiddenChecked) {
+            hudHiddenChecked = false;
+            config.uiConfig.toggleSimpleHUDEnhanced = prevState;
+        }
+    }
+
     @Inject(method = "render", at = @At("HEAD"))
-    private void onDraw(DrawContext context, float esp, CallbackInfo ci) {
+    private void onDraw(DrawContext context, float tickDelta, CallbackInfo ci) {
+        // Auto hide HUD on F1
+        autoHideHud();
+
         if (!this.client.inGameHud.getDebugHud().shouldShowDebugHud()) {
             // Call async rendering
             CompletableFuture.runAsync(() -> this.hud.drawAsyncHud(context), MinecraftClient.getInstance()::executeTask);
@@ -71,9 +84,9 @@ public class GameRender {
 
     // Injects into the renderStatusEffectOverlay method in the InGameHud class to render the status effect bars on the HUD
     @Inject(method = "renderStatusEffectOverlay",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/StatusEffectSpriteManager;getSprite(Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/client/texture/Sprite;", ordinal = 0),
-            locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    private void onRenderStatusEffectOverlay(DrawContext context, float tickDelta, CallbackInfo ci, Collection collection, int i, int j, StatusEffectSpriteManager statusEffectSpriteManager, List list, Iterator var8, StatusEffectInstance statusEffectInstance, RegistryEntry registryEntry, int k, int l, float f) {
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/StatusEffectSpriteManager;getSprite(Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/client/texture/Sprite;", ordinal = 0)
+    )
+    private void onRenderStatusEffectOverlay(DrawContext context, float tickDelta, CallbackInfo ci, @Local StatusEffectInstance statusEffectInstance, @Local(ordinal = 2) int k, @Local(ordinal = 3) int l) {
         StatusEffectBarRenderer.render(context, statusEffectInstance, k, l, 24, 24, this.config);
         RenderSystem.enableBlend(); // disabled by DrawableHelper#fill
     }
