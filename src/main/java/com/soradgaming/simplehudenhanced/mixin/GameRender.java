@@ -9,7 +9,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.texture.StatusEffectSpriteManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.effect.StatusEffect;
@@ -73,7 +72,7 @@ public class GameRender {
     // Injects into the renderStatusEffectOverlay method in the InGameHud class to render the status effect bars on the HUD
     @Inject(method = "renderStatusEffectOverlay",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/StatusEffectSpriteManager;getSprite(Lnet/minecraft/entity/effect/StatusEffect;)Lnet/minecraft/client/texture/Sprite;", ordinal = 0),
-            locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+            locals = LocalCapture.CAPTURE_FAILHARD)
     private void onRenderStatusEffectOverlay(
             MatrixStack matrixStack, CallbackInfo ci,
             Collection<StatusEffectInstance> effects, int beneficialColumn,

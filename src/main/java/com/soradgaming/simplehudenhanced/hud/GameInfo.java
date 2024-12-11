@@ -48,9 +48,9 @@ public class GameInfo {
             return "";
         }
         if (config.statusElements.coordinates.toggleOffset) {
-            return String.format(" (%s", Utilities.capitalise(this.player.getHorizontalFacing().asString()));
+            return String.format(" (%s", Utilities.translatable("text.direction.simplehudenhanced." + this.player.getHorizontalFacing().asString()).getString());
         } else {
-            return String.format(" (%s)", Utilities.capitalise(this.player.getHorizontalFacing().asString()));
+            return String.format(" (%s)", Utilities.translatable("text.direction.simplehudenhanced." + this.player.getHorizontalFacing().asString()).getString());
         }
     }
 
