@@ -2,14 +2,10 @@ package com.soradgaming.simplehudenhanced.mixin;
 
 import com.soradgaming.simplehudenhanced.cache.Cache;
 import com.soradgaming.simplehudenhanced.cache.UpdateCacheEvent;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.Window;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -60,23 +56,6 @@ public class CacheListener {
         private void onScaleChange(double scaleFactor, CallbackInfo ci) {
             // Call event to update the equipment cache
             UpdateCacheEvent.EVENT.invoker().updateCache(Cache.EQUIPMENT);
-        }
-
-    }
-
-    @Mixin(MinecraftClient.class)
-    public static class MinecraftClientMixins {
-        @Final @Shadow public GameOptions options;
-
-        // Called on Hotkey press
-        @Inject(method = "handleInputEvents", at = @At("TAIL"))
-        private void onHotkeyPress(CallbackInfo ci) {
-            for(int i = 0; i < 9; ++i) {
-                if (this.options.hotbarKeys[i].wasPressed()) {
-                    // Call event to update the equipment cache
-                    UpdateCacheEvent.EVENT.invoker().updateCache(Cache.EQUIPMENT);
-                }
-            }
         }
     }
 }

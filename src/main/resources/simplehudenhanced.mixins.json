@@ -9,7 +9,6 @@
     "TpsMixin$ClientConnectionMixin"
   ],
   "client": [
-    "CacheListener$MinecraftClientMixins",
     "CacheListener$WindowMixins",
     "ConfigButton",
     "GameRender",
