@@ -65,10 +65,10 @@ public class TrinketAccessor {
             // Trinket is not installed, handle accordingly
             equipmentInfo = new ArrayList<>(
                     Arrays.asList(
-                            new EquipmentInfoStack(this.player.getInventory().getArmorStack(3)),
-                            new EquipmentInfoStack(this.player.getInventory().getArmorStack(2)),
-                            new EquipmentInfoStack(this.player.getInventory().getArmorStack(1)),
-                            new EquipmentInfoStack(this.player.getInventory().getArmorStack(0)),
+                            new EquipmentInfoStack(this.player.getInventory().getStack(39)),
+                            new EquipmentInfoStack(this.player.getInventory().getStack(38)),
+                            new EquipmentInfoStack(this.player.getInventory().getStack(37)),
+                            new EquipmentInfoStack(this.player.getInventory().getStack(36)),
                             new EquipmentInfoStack(this.player.getOffHandStack()),
                             new EquipmentInfoStack(this.player.getMainHandStack())
                     )
@@ -106,10 +106,10 @@ public class TrinketAccessor {
     // Assuming you have a method to get default items based on the slot
     private ItemStack getDefaultItemForSlot(String group) {
         return switch (group) {
-            case "head" -> this.player.getInventory().getArmorStack(3);
-            case "chest" -> this.player.getInventory().getArmorStack(2);
-            case "legs" -> this.player.getInventory().getArmorStack(1);
-            case "feet" -> this.player.getInventory().getArmorStack(0);
+            case "head" -> this.player.getInventory().getStack(39);
+            case "chest" -> this.player.getInventory().getStack(38);
+            case "legs" -> this.player.getInventory().getStack(37);
+            case "feet" -> this.player.getInventory().getStack(36);
             case "hand" -> this.player.getMainHandStack();
             case "offhand" -> this.player.getOffHandStack();
             default -> null;

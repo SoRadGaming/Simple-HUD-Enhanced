@@ -1,6 +1,8 @@
 package com.soradgaming.simplehudenhanced.hud;
 
 import com.soradgaming.simplehudenhanced.cache.EquipmentCache;
+import com.soradgaming.simplehudenhanced.cache.MovementCache;
+import com.soradgaming.simplehudenhanced.cache.StatusCache;
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
 import com.soradgaming.simplehudenhanced.config.TextAlignment;
 import com.soradgaming.simplehudenhanced.utli.Colours;
@@ -8,14 +10,10 @@ import com.soradgaming.simplehudenhanced.utli.Utilities;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
-
-import static com.soradgaming.simplehudenhanced.SimpleHudEnhanced.isXaerosMinimapInstalled;
 
 public class HUD {
     private static HUD instance;  // Singleton instance
@@ -29,6 +27,8 @@ public class HUD {
 
     // Cache
     private EquipmentCache equipmentCache;
+    private MovementCache movementCache;
+    private StatusCache statusCache;
 
     // Sprint Timer Variables
     public boolean sprintTimerRunning = false;  // Variable to store if the timer is running
@@ -51,6 +51,8 @@ public class HUD {
         instance = new HUD(client, config);
         // Create Cache
         instance.equipmentCache = EquipmentCache.getInstance(config);
+        instance.movementCache = MovementCache.getInstance();
+        instance.statusCache = StatusCache.getInstance(config);
         // Set Sprint Timer
         instance.sprintTimer = config.paperDoll.paperDollTimeOut;
     }
@@ -64,7 +66,7 @@ public class HUD {
         return instance;
     }
 
-    public void drawAsyncHud(DrawContext context) {
+    public void drawHud(DrawContext context) {
         // Check if HUD is enabled
         if (!config.uiConfig.toggleSimpleHUDEnhanced) return;
 
@@ -72,24 +74,17 @@ public class HUD {
         GameInfo GameInformation = new GameInfo(this.client, config);
 
         // Draw HUD
-        CompletableFuture<Void> statusElementsFuture = CompletableFuture.runAsync(() -> drawStatusElements(context, GameInformation), MinecraftClient.getInstance()::executeTask);
+        drawStatusElements(context, GameInformation);
 
         // Draw Equipment Status
-        CompletableFuture<Void> equipmentFuture = CompletableFuture.runAsync(() -> {
-            if (config.toggleEquipmentStatus) {
-                Equipment equipment = new Equipment(context, config, equipmentCache);
-                equipment.init();
-            }
-
-            // Xaeros Minimap Compatibility
-            if (isXaerosMinimapInstalled()) {
-                Equipment.renderXaerosMinimapFix(context);
-            }
-        }, MinecraftClient.getInstance()::executeTask);
+        if (config.toggleEquipmentStatus) {
+            Equipment equipment = new Equipment(context, config, equipmentCache);
+            equipment.init();
+        }
 
         // Draw Movement Status
         if (config.toggleMovementStatus) {
-            Movement movement = new Movement(context, config);
+            Movement movement = new Movement(context, config, movementCache);
             if (config.movementStatus.toggleMovementStatus) {
                 movement.init(GameInformation);
             }
@@ -99,36 +94,10 @@ public class HUD {
         }
 
         // Draw Time
-        drawTime(context, GameInformation.getSystemTime());
+        drawTime(context, statusCache.getSystemTime());
 
-        // Ensure completion of all tasks before moving forward
-        CompletableFuture.allOf(equipmentFuture, statusElementsFuture).join();
-    }
-
-    @NotNull
-    private static ArrayList<String> getHudInfo(GameInfo GameInformation) {
-        ArrayList<String> hudInfo = new ArrayList<>();
-
-        // Add all the lines to the array
-        hudInfo.add(GameInformation.getCords() + GameInformation.getDirection() + GameInformation.getOffset());
-        hudInfo.add(GameInformation.getNether());
-        hudInfo.add(GameInformation.getChunkCords());
-        hudInfo.add(GameInformation.getSubChunkCords());
-        hudInfo.add(GameInformation.getFPS());
-        hudInfo.add(GameInformation.getSpeed());
-        hudInfo.add(GameInformation.getLightLevel());
-        hudInfo.add(GameInformation.getBiome());
-        hudInfo.add(GameInformation.getTime());
-        hudInfo.add(GameInformation.getDay());
-        hudInfo.add(GameInformation.getPlayerName());
-        hudInfo.add(GameInformation.getPing());
-        hudInfo.add(GameInformation.getTPS());
-        hudInfo.add(GameInformation.getServer());
-        hudInfo.add(GameInformation.getServerAddress());
-        hudInfo.add(GameInformation.getChunkCount());
-        hudInfo.add(GameInformation.getEntityCount());
-        hudInfo.add(GameInformation.getParticleCount());
-        return hudInfo;
+        // Ensure the Hud is drawn (thx rk_01)
+        context.draw();
     }
 
     public int getColor(String line, GameInfo GameInformation) {
@@ -136,23 +105,21 @@ public class HUD {
 
         // FPS Colour Check
         if (Objects.equals(line, GameInformation.getFPS())) {
-            if (config.statusElements.fps.toggleColourFPS) {
-                // convert line to int format (102 fps)
-                String[] fps = line.split(" ");
-                int fpsInt = Integer.parseInt(fps[0]);
+            // convert line to int format (102 fps)
+            String[] fps = line.split(" ");
+            int fpsInt = Integer.parseInt(fps[0]);
 
-                // Check FPS and return colour
-                if (fpsInt < 15) {
-                    return Colours.RED;
-                } else if (fpsInt < 30) {
-                    return Colours.lightRed;
-                } else if (fpsInt < 45) {
-                    return Colours.lightOrange;
-                } else if (fpsInt < 60) {
-                    return Colours.lightYellow;
-                } else {
-                    return Colours.GREEN;
-                }
+            // Check FPS and return colour
+            if (fpsInt < 15) {
+                return Colours.RED;
+            } else if (fpsInt < 30) {
+                return Colours.lightRed;
+            } else if (fpsInt < 45) {
+                return Colours.lightOrange;
+            } else if (fpsInt < 60) {
+                return Colours.lightYellow;
+            } else {
+                return Colours.GREEN;
             }
         }
 
@@ -161,10 +128,7 @@ public class HUD {
 
     private void drawStatusElements(DrawContext context, GameInfo gameInformation) {
         // Get all the lines to be displayed
-        ArrayList<String> hudInfo = getHudInfo(gameInformation);
-
-        //Remove empty lines from the array
-        hudInfo.removeIf(String::isEmpty);
+        ArrayList<String> hudInfo = getStatusCache().getHudInfo();
 
         // Draw HUD
         int Xcords = config.statusElements.Xcords;
@@ -200,7 +164,10 @@ public class HUD {
                 offset = (BoxWidth - lineLength) / 2;
             }
             // Colour Check
-            int colour = getColor(line, gameInformation);
+            int colour = config.uiConfig.textColor;
+            if (config.statusElements.fps.toggleColourFPS) {
+                colour = getColor(line, gameInformation);
+            }
             // Render the line
             if (config.uiConfig.textBackground) {
                 // Draw Background
@@ -235,5 +202,13 @@ public class HUD {
 
     public EquipmentCache getEquipmentCache() {
         return equipmentCache;
+    }
+
+    public MovementCache getMovementCache() {
+        return movementCache;
+    }
+
+    public StatusCache getStatusCache() {
+        return statusCache;
     }
 }

@@ -10,11 +10,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
 
 import java.util.List;
-
-import static com.soradgaming.simplehudenhanced.SimpleHudEnhanced.isTrinketsInstalled;
 
 public class EquipmentCache {
     private static EquipmentCache instance; // Singleton instance
@@ -22,12 +19,17 @@ public class EquipmentCache {
     private int longestString = 0;
     private final SimpleHudEnhancedConfig config;
     private ClientPlayerEntity player;
+    // Deadlock prevention
+    private boolean getLongestStringDeadlock;
+    private int longestStringOLD;
+    private boolean screenManagerDeadlock;
+    private ScreenManager screenManagerOLD;
+    private boolean getEquipmentInfoDeadlock;
+    private List<EquipmentInfoStack> equipmentInfoOLD;
 
 
     private EquipmentCache(SimpleHudEnhancedConfig config) {
         this.config = config;
-        // Register Events
-        registerEvent();
     }
 
     public static EquipmentCache getInstance(SimpleHudEnhancedConfig config) {
@@ -37,33 +39,24 @@ public class EquipmentCache {
         return instance;
     }
 
-    private void registerEvent() {
-        UpdateCacheEvent.EVENT.register((cache) -> {
-            if (cache == Cache.EQUIPMENT) {
-                // Run Code on Event
-                setCacheValid(false);
-                return ActionResult.SUCCESS;
-            }
-
-            return ActionResult.PASS;
-        });
-    }
-
-    private void updateCache(ClientPlayerEntity player) {
+    public void updateCache(ClientPlayerEntity player) {
         createEquipment(player);
         calculateLongestString();
         calculateScreen();
-        setCacheValid(true);
     }
 
-    public List<EquipmentInfoStack> getEquipmentInfo(ClientPlayerEntity player) {
-        if (!isCacheValid() || isBreakingModInstalled()) {
-            updateCache(player);
+    public synchronized List<EquipmentInfoStack> getEquipmentInfo() {
+        if (getEquipmentInfoDeadlock) {
+            return equipmentInfoOLD;
+        } else {
+            return equipmentInfo;
         }
-        return equipmentInfo;
     }
 
     private void createEquipment(ClientPlayerEntity player) {
+        equipmentInfoOLD = equipmentInfo;
+        getEquipmentInfoDeadlock = true;
+
         // Save Player for later use
         this.player = player;
 
@@ -88,16 +81,16 @@ public class EquipmentCache {
 
         // Check Config for Item Slot Disabled
         if (!config.equipmentStatus.slots.Head) {
-            equipmentInfo.removeIf(equipment -> equipment.getItem().equals(this.player.getInventory().getArmorStack(3)));
+            equipmentInfo.removeIf(equipment -> equipment.getItem().equals(this.player.getInventory().getStack(39)));
         }
         if (!config.equipmentStatus.slots.Body) {
-            equipmentInfo.removeIf(equipment -> equipment.getItem().equals(this.player.getInventory().getArmorStack(2)));
+            equipmentInfo.removeIf(equipment -> equipment.getItem().equals(this.player.getInventory().getStack(38)));
         }
         if (!config.equipmentStatus.slots.Legs) {
-            equipmentInfo.removeIf(equipment -> equipment.getItem().equals(this.player.getInventory().getArmorStack(1)));
+            equipmentInfo.removeIf(equipment -> equipment.getItem().equals(this.player.getInventory().getStack(37)));
         }
         if (!config.equipmentStatus.slots.Boots) {
-            equipmentInfo.removeIf(equipment -> equipment.getItem().equals(this.player.getInventory().getArmorStack(0)));
+            equipmentInfo.removeIf(equipment -> equipment.getItem().equals(this.player.getInventory().getStack(36)));
         }
         if (!config.equipmentStatus.slots.OffHand) {
             equipmentInfo.removeIf(equipment -> equipment.getItem().equals(this.player.getOffHandStack()));
@@ -105,6 +98,8 @@ public class EquipmentCache {
         if (!config.equipmentStatus.slots.MainHand) {
             equipmentInfo.removeIf(equipment -> equipment.getItem().equals(this.player.getMainHandStack()));
         }
+
+        getEquipmentInfoDeadlock = false;
     }
 
     private void getDurability() {
@@ -158,27 +153,34 @@ public class EquipmentCache {
             return !config.equipmentStatus.Durability.slots.MainHand;
         } else if (item.equals(this.player.getOffHandStack())) {
             return !config.equipmentStatus.Durability.slots.OffHand;
-        } else if (item.equals(this.player.getInventory().getArmorStack(0))) {
+        } else if (item.equals(this.player.getInventory().getStack(36))) {
             return !config.equipmentStatus.Durability.slots.Boots;
-        } else if (item.equals(this.player.getInventory().getArmorStack(1))) {
+        } else if (item.equals(this.player.getInventory().getStack(37))) {
             return !config.equipmentStatus.Durability.slots.Legs;
-        } else if (item.equals(this.player.getInventory().getArmorStack(2))) {
+        } else if (item.equals(this.player.getInventory().getStack(38))) {
             return !config.equipmentStatus.Durability.slots.Body;
-        } else if (item.equals(this.player.getInventory().getArmorStack(3))) {
+        } else if (item.equals(this.player.getInventory().getStack(39))) {
             return !config.equipmentStatus.Durability.slots.Head;
         } else {
             return false;
         }
     }
 
-    public int getLongestString(ClientPlayerEntity player) {
-        if (!isCacheValid()) {
-            updateCache(player);
+    public int getLongestString() {
+        if (getLongestStringDeadlock) {
+            return longestStringOLD;
+        } else {
+            return longestString;
         }
-        return longestString;
     }
 
     private void calculateLongestString() {
+        // Save the old longest string
+        longestStringOLD = longestString;
+
+        // Set the deadlock to true
+        getLongestStringDeadlock = true;
+
         // Get the longest string in the array
         int longestString = 0;
         int BoxWidth = 0;
@@ -190,16 +192,7 @@ public class EquipmentCache {
             }
         }
         this.longestString = BoxWidth;
-    }
-
-    private boolean isCacheValid = false;
-
-    private boolean isCacheValid() {
-        return isCacheValid;
-    }
-
-    public void setCacheValid(boolean cacheValid) {
-        isCacheValid = cacheValid;
+        getLongestStringDeadlock = false;
     }
 
     /***************************
@@ -207,14 +200,18 @@ public class EquipmentCache {
      ***************************/
     private ScreenManager screenManager;
 
-    public ScreenManager getScreenManager(ClientPlayerEntity player) {
-        if (!isCacheValid()) {
-            updateCache(player);
+    public synchronized ScreenManager getScreenManager() {
+        if (screenManagerDeadlock) {
+            return screenManagerOLD;
+        } else {
+            return screenManager;
         }
-        return screenManager;
     }
 
     private void calculateScreen() {
+        screenManagerOLD = screenManager;
+        screenManagerDeadlock = true;
+
         MinecraftClient client = MinecraftClient.getInstance();
         TextRenderer renderer = client.textRenderer;
 
@@ -242,10 +239,7 @@ public class EquipmentCache {
         screenManager.saveXAxis(xAxis);
         screenManager.saveYAxis(yAxis);
         screenManager.saveScale(Scale);
-    }
 
-    // Disable Cache if Trinkets is installed or player is on a server (Temp Fix for Cache not updating)
-    private boolean isBreakingModInstalled() {
-        return isTrinketsInstalled() || MinecraftClient.getInstance().getCurrentServerEntry() != null;
+        screenManagerDeadlock = false;
     }
 }
