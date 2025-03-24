@@ -16,7 +16,6 @@ public class SimpleHudEnhanced implements ModInitializer {
         // Check if Trinket mod is installed
         if (isTrinketsInstalled()) {
             System.out.println("Trinket mod is installed! Adding compatibility features...");
-            System.out.println("Disabling Render Cache for Trinket mod compatibility...");
         } else {
             System.out.println("Trinket mod is not installed. Skipping compatibility features...");
         }

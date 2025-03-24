@@ -7,14 +7,12 @@ import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
 public class Equipment {
     private final TextRenderer renderer;
-    private final ClientPlayerEntity player;
     private final SimpleHudEnhancedConfig config;
     private final DrawContext context;
     private final EquipmentCache cache;
@@ -24,19 +22,16 @@ public class Equipment {
         this.config = config;
         this.context = context;
         this.cache = equipmentCache;
-
-        // Get the player
-        this.player = MinecraftClient.getInstance().player;
     }
 
     public void init() {
         // Draw Items
-        draw(cache.getEquipmentInfo(player));
+        draw(cache.getEquipmentInfo());
     }
 
     private void draw(List<EquipmentInfoStack> equipmentInfo) {
-        int BoxWidth = cache.getLongestString(this.player);
-        ScreenManager screenManager = cache.getScreenManager(player);
+        int BoxWidth = cache.getLongestString();
+        ScreenManager screenManager = cache.getScreenManager();
         int xAxis = screenManager.getXAxis();
         int yAxis = screenManager.getYAxis();
         float Scale = screenManager.getScale();

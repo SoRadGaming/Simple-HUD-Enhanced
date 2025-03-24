@@ -22,7 +22,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Environment(EnvType.CLIENT)
 @Mixin(value = InGameHud.class)
@@ -43,9 +45,7 @@ public class GameRender {
             // Update local config when new settings are saved
             this.config = data;
 
-            // Invalidate Cache
             HUD hud = HUD.getInstance();
-            if (hud != null) hud.getEquipmentCache().setCacheValid(false);
 
             // Update Sprint Timer
             if (hud != null) hud.sprintTimer = data.paperDoll.paperDollTimeOut;
@@ -55,13 +55,26 @@ public class GameRender {
         // Start Mixin
         HUD.initialize(client, config);
         this.hud = HUD.getInstance();
+
+        // Start a new thread to update the equipment cache in the background
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(() -> {
+            // Update Equipment Cache
+            HUD hud = HUD.getInstance();
+            if (hud != null && MinecraftClient.getInstance().player != null) {
+                hud.getEquipmentCache().updateCache(MinecraftClient.getInstance().player);
+                hud.getMovementCache().updateCache(MinecraftClient.getInstance().player);
+                hud.getStatusCache().updateCache();
+            }
+        }, 0, 50, TimeUnit.MILLISECONDS); // 20 times a second TimeUnit.MILLISECONDS
+
     }
 
     @Inject(method = "render", at = @At("HEAD"))
     private void onDraw(DrawContext context, float esp, CallbackInfo ci) {
         if (!this.client.inGameHud.getDebugHud().shouldShowDebugHud()) {
             // Call async rendering
-            CompletableFuture.runAsync(() -> this.hud.drawAsyncHud(context), MinecraftClient.getInstance()::executeTask);
+            this.hud.drawHud(context);
         }
     }
 
