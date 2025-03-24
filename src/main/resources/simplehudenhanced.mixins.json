@@ -4,13 +4,10 @@
   "package": "com.soradgaming.simplehudenhanced.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "CacheListener$PlayerEntityMixins",
-    "CacheListener$PlayerInventoryMixins",
     "LivingEntityMixin",
     "TpsMixin$ClientConnectionMixin"
   ],
   "client": [
-    "CacheListener$WindowMixins",
     "ConfigButton",
     "GameRender",
     "MovementMixin",
