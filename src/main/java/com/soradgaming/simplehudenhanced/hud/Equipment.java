@@ -7,8 +7,6 @@ import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 
@@ -16,8 +14,6 @@ import java.util.List;
 
 public class Equipment {
     private final TextRenderer textRenderer;
-    private final ItemRenderer itemRenderer;
-    private final ClientPlayerEntity player;
     private final SimpleHudEnhancedConfig config;
     private final MatrixStack matrixStack;
     private final EquipmentCache cache;
@@ -25,23 +21,19 @@ public class Equipment {
     public Equipment(MatrixStack matrixStack, SimpleHudEnhancedConfig config, EquipmentCache equipmentCache) {
         MinecraftClient client = MinecraftClient.getInstance();
         this.textRenderer = client.textRenderer;
-        this.itemRenderer = client.getItemRenderer();
         this.config = config;
         this.matrixStack = matrixStack;
         this.cache = equipmentCache;
-
-        // Get the player
-        this.player = MinecraftClient.getInstance().player;
     }
 
     public void init() {
         // Draw Items
-        draw(cache.getEquipmentInfo(player));
+        draw(cache.getEquipmentInfo());
     }
 
     private void draw(List<EquipmentInfoStack> equipmentInfo) {
-        int BoxWidth = cache.getLongestString(this.player);
-        ScreenManager screenManager = cache.getScreenManager(player);
+        int BoxWidth = cache.getLongestString();
+        ScreenManager screenManager = cache.getScreenManager();
         int xAxis = screenManager.getXAxis();
         int yAxis = screenManager.getYAxis();
         float Scale = screenManager.getScale();
