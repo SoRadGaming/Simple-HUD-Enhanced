@@ -164,12 +164,12 @@ public class GameInfo {
         }
 
         Vec3d playerPosVec = this.player.getPos();
-        double travelledX = playerPosVec.x - this.player.prevX;
-        double travelledZ = playerPosVec.z - this.player.prevZ;
+        double travelledX = playerPosVec.x - this.player.lastX;
+        double travelledZ = playerPosVec.z - this.player.lastZ;
         double currentSpeed = MathHelper.sqrt((float)(travelledX * travelledX + travelledZ * travelledZ));
 
         if (config.statusElements.playerSpeed.togglePlayerVerticalSpeed) {
-            double currentVertSpeed = playerPosVec.y - this.player.prevY;
+            double currentVertSpeed = playerPosVec.y - this.player.lastY;
             currentSpeed = MathHelper.sqrt((float)(currentSpeed * currentSpeed + currentVertSpeed * currentVertSpeed));
         }
 
