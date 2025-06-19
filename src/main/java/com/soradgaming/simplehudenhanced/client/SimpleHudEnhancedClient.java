@@ -1,6 +1,7 @@
 package com.soradgaming.simplehudenhanced.client;
 
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
+import com.soradgaming.simplehudenhanced.hud.HUD;
 import com.soradgaming.simplehudenhanced.utli.Utilities;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
@@ -8,19 +9,34 @@ import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 public class SimpleHudEnhancedClient implements ClientModInitializer {
     private ConfigHolder<SimpleHudEnhancedConfig> configHolder;
+    private HUD hud;
 
     @Override
     public void onInitializeClient() {
-        System.out.println("Simple Hud Enhanced Mod started.");
-
+        // Register the config holder for SimpleHudEnhancedConfig
         this.configHolder = AutoConfig.register(SimpleHudEnhancedConfig.class, Toml4jConfigSerializer::new);
-
+        // Register the keybindings
         this.registerKeybindings();
+        // Initialize the HUD instance
+        HudElementRegistry.attachElementBefore(VanillaHudElements.HELD_ITEM_TOOLTIP ,Identifier.of("simplehudenhanced", "hud"), (context, tickCounter) -> {
+            if (!MinecraftClient.getInstance().getDebugHud().shouldShowDebugHud()) {
+                if (this.hud == null) {
+                    this.hud = HUD.getInstance();
+                    // Render the HUD on next tick
+                } else {
+                    this.hud.drawHud(context);
+                }
+            }
+        });
     }
 
     void registerKeybindings() {

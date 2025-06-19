@@ -1,10 +1,11 @@
 package com.soradgaming.simplehudenhanced.config;
 
+import com.soradgaming.simplehudenhanced.utli.Colours;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import com.soradgaming.simplehudenhanced.utli.Colours;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.util.Colors;
 
 import java.util.function.ToIntBiFunction;
 
@@ -60,7 +61,7 @@ public class SimpleHudEnhancedConfig implements ConfigData {
         public boolean toggleSimpleHUDEnhanced = true;
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.ColorPicker
-        public int textColor = Colours.WHITE;
+        public int textColor = 0xFFFFFF; // Default white color
         @ConfigEntry.Gui.Tooltip
         public boolean textBackground = false;
         @ConfigEntry.Gui.Tooltip

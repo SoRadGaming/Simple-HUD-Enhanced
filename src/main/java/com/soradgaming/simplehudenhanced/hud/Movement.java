@@ -6,11 +6,13 @@ import com.soradgaming.simplehudenhanced.utli.Utilities;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.DiffuseLighting;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.joml.Quaternionf;
+import org.joml.Vector3f;
+
+import static com.soradgaming.simplehudenhanced.utli.Utilities.addAlpha;
+import static net.minecraft.client.gui.screen.ingame.InventoryScreen.drawEntity;
 
 public class Movement {
     private final MinecraftClient client;
@@ -52,7 +54,7 @@ public class Movement {
         screenManager.setScale(context, Scale);
 
         // Draw Info
-        context.drawTextWithShadow(this.renderer, text, xAxis, yAxis, config.uiConfig.textColor);
+        context.drawTextWithShadow(this.renderer, text, xAxis, yAxis, addAlpha(config.uiConfig.textColor));
 
         screenManager.resetScale(context);
     }
@@ -80,56 +82,47 @@ public class Movement {
         int yAxis = screenManager.calculateYAxis(0, 1, this.config.paperDoll.paperDollLocationY, 1);
 
         // Draw the Paper Doll
-        drawEntity(context, xAxis, yAxis, size, entity);
+        int x1 = Math.round((xAxis - (60 * scale)));
+        int y1 = Math.round((yAxis - (60 * scale)));
+        int x2 = Math.round((xAxis + (60 * scale)));
+        int y2 = Math.round((yAxis + (60 * scale)));
+        drawEntityInternal(context, x1, y1, x2, y2, size, entity);
     }
 
-    // InventoryScreen.java
-    private void drawEntity(DrawContext context, int xAxis, int yAxis, float size, LivingEntity entity) {
-        // Setup Matrix
-        context.getMatrices().push();
-        context.getMatrices().translate(xAxis, yAxis, 250.0);
-        context.getMatrices().scale(size, size, -size);
+    // Custom method for rendering the paper doll. FROM InventoryScreen.java
+    private void drawEntityInternal(DrawContext context, int x1, int y1, int x2, int y2, float size, LivingEntity entity) {
+        // --- Calculate Scissor Area ---
+        context.enableScissor(x1, y1, x2, y2);
         Quaternionf quaternionZ = new Quaternionf().rotateZ(180.0F * 0.017453292F);
         Quaternionf quaternionX = new Quaternionf().rotateX(15.0F * 0.017453292F);
         quaternionZ.mul(quaternionX);
-        context.getMatrices().multiply(quaternionZ); // Flip form Upside Down
 
-        // Setup Environment
-        DiffuseLighting.disableGuiDepthLighting();
-        EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
+        // --- Save Entity's Original Rotation State ---
+        // This is crucial so the paper doll rendering doesn't affect the main player model.
+        float originalPitch = entity.getPitch();
+        float originalBodyYaw = entity.bodyYaw;
+        float originalHeadYaw = entity.headYaw;
+        float originalPrevPitch = entity.lastPitch;
+        float originalPrevBodyYaw = entity.lastBodyYaw;
+        float originalPrevHeadYaw = entity.lastHeadYaw;
 
-        // Save Rotation
-        float xRot = entity.getPitch();
-        float yBodyRot = entity.bodyYaw;
-        float yHeadRot = entity.headYaw;
-        float xRotO = entity.lastPitch;
-        float yBodyRotO = entity.lastBodyYaw;
-        float yHeadRotO = entity.getYaw();
-
-        // Modify Rotation
+        // --- Modify Entity's Rotation for Paper Doll Display ---
         applyEntityRotations(entity);
 
-        // Disable Shadows
-        entityRenderDispatcher.setRenderShadows(false);
+        // --- Calculate Entity Position and Scale ---
+        float yOffset = (entity.getHeight() + (1.0F - movementCache.getCurrentHeightOffset())) * 0.5F;
+        context.drawTextWithShadow(this.renderer, "X", x1, (int) (y1 + yOffset), addAlpha(config.uiConfig.textColor));
+        Vector3f vector3f = new Vector3f(0.0F, yOffset, 0.0F);
+        drawEntity(context, x1, y1, x2, y2, size, vector3f, quaternionZ, quaternionX, entity);
 
-        // Render Entity
-        float xOffset = 0;
-        float yOffset = (entity.getHeight() + (1.0F - movementCache.getCurrentHeightOffset())) * -0.5F;
-
-        context.draw((vertexConsumers) -> entityRenderDispatcher.render(entity, xOffset, yOffset, 0.0, 0.0F, this.context.getMatrices(), vertexConsumers, 15728880));
-
-        // Restore Rotation
-        entity.setPitch(xRot);
-        entity.bodyYaw = yBodyRot;
-        entity.headYaw = yHeadRot;
-        entity.lastPitch = xRotO;
-        entity.lastBodyYaw = yBodyRotO;
-        entity.lastHeadYaw = yHeadRotO;
-
-        // Reset Environment
-        entityRenderDispatcher.setRenderShadows(true);
-        context.getMatrices().pop();
-        DiffuseLighting.enableGuiDepthLighting();
+        // --- Restore Entity's Original Rotation State ---
+        entity.setPitch(originalPitch);
+        entity.bodyYaw = originalBodyYaw;
+        entity.headYaw = originalHeadYaw;
+        entity.lastPitch = originalPrevPitch;
+        entity.lastBodyYaw = originalPrevBodyYaw;
+        entity.lastHeadYaw = originalPrevHeadYaw;
+        context.disableScissor();
     }
 
     private void applyEntityRotations(LivingEntity entity) {

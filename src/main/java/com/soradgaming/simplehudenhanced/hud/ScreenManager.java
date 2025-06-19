@@ -46,26 +46,13 @@ public class ScreenManager {
 
     public void setScale(DrawContext context, float scale) {
         // Change Matrix Stack to draw on the screen
-        context.getMatrices().push();
-        context.getMatrices().scale(scale, scale, scale);
+        context.getMatrices().pushMatrix();
+        context.getMatrices().scale(scale);
     }
 
     public void resetScale(DrawContext context) {
         // Change Matrix Stack back to normal
-        context.getMatrices().pop();
-    }
-
-    private float lastZ = 0;
-
-    public void zSet(DrawContext context, float z) {
-        // Change Matrix Stack to draw on the screen
-        lastZ = z;
-        context.getMatrices().translate(0.0D, 0.0D, z);
-    }
-
-    public void zRevert(DrawContext context) {
-        // Change Matrix Stack back to normal
-        context.getMatrices().translate(0.0D, 0.0D, -lastZ);
+        context.getMatrices().popMatrix();
     }
 
     // xAxis & yAxis Setters and Getters

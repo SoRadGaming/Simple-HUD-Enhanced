@@ -20,6 +20,10 @@ public class Utilities {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
+    public static int addAlpha(int color) {
+        return (color & 0x00FFFFFF) | 0xFF000000; // Add full opacity to the color
+    }
+
     /**********************************************************
      Mod Version Management - Separate for Version Management
      **********************************************************/

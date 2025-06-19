@@ -2,6 +2,8 @@ package com.soradgaming.simplehudenhanced.hud;
 
 import net.minecraft.item.ItemStack;
 
+import static com.soradgaming.simplehudenhanced.utli.Utilities.addAlpha;
+
 public class EquipmentInfoStack {
     private final ItemStack item;
     private int color;
@@ -26,7 +28,7 @@ public class EquipmentInfoStack {
     }
 
     public int getColor() {
-        return color;
+        return addAlpha(color);
     }
 
     public String getText() {

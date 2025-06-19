@@ -4,10 +4,10 @@ import com.soradgaming.simplehudenhanced.cache.EquipmentCache;
 import com.soradgaming.simplehudenhanced.config.EquipmentAlignment;
 import com.soradgaming.simplehudenhanced.config.EquipmentOrientation;
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Colors;
 
 import java.util.List;
 
@@ -17,8 +17,8 @@ public class Equipment {
     private final DrawContext context;
     private final EquipmentCache cache;
 
-    public Equipment(DrawContext context, SimpleHudEnhancedConfig config, EquipmentCache equipmentCache) {
-        this.renderer = MinecraftClient.getInstance().textRenderer;
+    public Equipment(DrawContext context,TextRenderer textRenderer, SimpleHudEnhancedConfig config, EquipmentCache equipmentCache) {
+        this.renderer = textRenderer;
         this.config = config;
         this.context = context;
         this.cache = equipmentCache;
@@ -84,8 +84,8 @@ public class Equipment {
             int j = item.getItemBarColor();
             int k = xAxis + 2;
             int l = yAxis + 13;
-            this.context.fill(k, l, k + 13, l + 2, 200, -16777216);
-            this.context.fill(k, l, k + i, l + 1, 200, j | -16777216);
+            this.context.fill(k, l, k + 13, l + 2, Colors.BLACK);
+            this.context.fill(k, l, k + i, l + 1, j | Colors.BLACK);
         }
     }
 }

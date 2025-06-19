@@ -13,6 +13,8 @@ import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
+import static com.soradgaming.simplehudenhanced.utli.Utilities.addAlpha;
+
 public class EquipmentCache {
     private static EquipmentCache instance; // Singleton instance
     private List<EquipmentInfoStack> equipmentInfo;
@@ -129,7 +131,7 @@ public class EquipmentCache {
                 if (config.equipmentStatus.Durability.showColour && item.getDamage() != 0) {
                     index.setColor(item.getItemBarColor());
                 } else {
-                    index.setColor(config.uiConfig.textColor);
+                    index.setColor(addAlpha(config.uiConfig.textColor));
                 }
 
             } else {

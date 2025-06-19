@@ -1,7 +1,6 @@
 package com.soradgaming.simplehudenhanced.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.soradgaming.simplehudenhanced.config.SimpleHudEnhancedConfig;
 import com.soradgaming.simplehudenhanced.hud.HUD;
 import com.soradgaming.simplehudenhanced.hud.StatusEffectBarRenderer;
@@ -30,8 +29,6 @@ import java.util.concurrent.TimeUnit;
 @Mixin(value = InGameHud.class)
 public class GameRender {
     @Unique
-    private HUD hud;
-    @Unique
     private SimpleHudEnhancedConfig config;
     @Shadow
     @Final
@@ -54,7 +51,6 @@ public class GameRender {
         });
         // Start Mixin
         HUD.initialize(client, config);
-        this.hud = HUD.getInstance();
 
         // Start a new thread to update the equipment cache in the background
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -67,38 +63,11 @@ public class GameRender {
                 hud.getStatusCache().updateCache();
             }
         }, 0, 50, TimeUnit.MILLISECONDS); // 20 times a second TimeUnit.MILLISECONDS
-
-    }
-
-    @Unique private boolean hudHiddenChecked = false;
-    @Unique private boolean prevState = false;
-    @Unique private void autoHideHud() {
-        if (this.client.options.hudHidden && !hudHiddenChecked) {
-            hudHiddenChecked = true;
-            prevState = config.uiConfig.toggleSimpleHUDEnhanced;
-            config.uiConfig.toggleSimpleHUDEnhanced = false;
-        }
-
-        if (!this.client.options.hudHidden && hudHiddenChecked) {
-            hudHiddenChecked = false;
-            config.uiConfig.toggleSimpleHUDEnhanced = prevState;
-        }
-    }
-
-    @Inject(method = "render", at = @At("HEAD"))
-    private void onDraw(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
-        // Auto hide HUD on F1
-        autoHideHud();
-
-        if (!this.client.inGameHud.getDebugHud().shouldShowDebugHud()) {
-            // Call async rendering
-            this.hud.drawHud(context);
-        }
     }
 
     // Injects into the renderStatusEffectOverlay method in the InGameHud class to render the status effect bars on the HUD
-    @Inject(method = "renderStatusEffectOverlay",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/StatusEffectSpriteManager;getSprite(Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/client/texture/Sprite;", ordinal = 0)
+    @Inject(method = "renderStatusEffectOverlay(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/client/render/RenderTickCounter;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/util/Identifier;IIIII)V", ordinal = 0)
     )
     private void onRenderStatusEffectOverlay(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci, @Local StatusEffectInstance statusEffectInstance, @Local(ordinal = 2) int k, @Local(ordinal = 3) int l) {
         StatusEffectBarRenderer.render(context, statusEffectInstance, k, l, 24, 24, this.config);
