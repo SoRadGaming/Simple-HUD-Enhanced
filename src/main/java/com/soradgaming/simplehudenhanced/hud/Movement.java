@@ -111,7 +111,6 @@ public class Movement {
 
         // --- Calculate Entity Position and Scale ---
         float yOffset = (entity.getHeight() + (1.0F - movementCache.getCurrentHeightOffset())) * 0.5F;
-        context.drawTextWithShadow(this.renderer, "X", x1, (int) (y1 + yOffset), addAlpha(config.uiConfig.textColor));
         Vector3f vector3f = new Vector3f(0.0F, yOffset, 0.0F);
         drawEntity(context, x1, y1, x2, y2, size, vector3f, quaternionZ, quaternionX, entity);
 

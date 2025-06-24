@@ -1,11 +1,9 @@
 package com.soradgaming.simplehudenhanced.config;
 
-import com.soradgaming.simplehudenhanced.utli.Colours;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.util.Colors;
 
 import java.util.function.ToIntBiFunction;
 

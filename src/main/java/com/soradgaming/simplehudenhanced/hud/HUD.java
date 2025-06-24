@@ -10,7 +10,6 @@ import com.soradgaming.simplehudenhanced.utli.Utilities;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.util.Colors;
 
 import java.util.ArrayList;
 import java.util.Objects;
