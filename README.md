@@ -21,6 +21,7 @@ tailored to individual preferences though the [Mod Menu mod](https://www.cursefo
 ## Code Contributions
 This mod has been built from the ground up to be modular and faster to update, 
 originally as a fork of Simple Utilities Mod by [johnvictorfs](https://github.com/johnvictorfs/simple-utilities-mod).
+multiloader template port by alchemyyy
 
 This mod has also been built with the help of the following mods:
 - For Status Effect Rings:

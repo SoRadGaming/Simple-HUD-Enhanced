@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.soradgaming.simplehudenhanced.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "LivingEntityMixin",
+    "TpsMixin$ClientConnectionMixin"
+  ],
+  "client": [
+    "ConfigButton",
+    "GameRender",
+    "MovementMixin",
+    "ScreenInvoker",
+    "TpsMixin$ClientPlayNetworkHandlerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

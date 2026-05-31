@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "${description}",
+  "authors": [
+    "${mod_author}"
+  ],
+  "contributors": [
+    "yutotakano",
+    "alerouzic",
+    "johnvictorfs",
+    "A5b84",
+    "mooziii",
+    "alchemyyy",
+    "Translators: Russian: Alexander317, Mandarin: FyrGlow, Spanish: David253_, Korean: gumio3842"
+  ],
+  "contact": {
+    "homepage": "https://github.com/soradgaming/Simple-HUD-Enhanced",
+    "issues": "https://github.com/soradgaming/Simple-HUD-Enhanced/issues"
+  },
+  "license": "${license}",
+  "icon": "assets/${mod_id}/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "main": [
+      "com.soradgaming.simplehudenhanced.fabric.FabricSimpleHudEnhanced"
+    ],
+    "client": [
+      "com.soradgaming.simplehudenhanced.fabric.client.FabricSimpleHudEnhancedClient"
+    ],
+    "modmenu": [
+      "com.soradgaming.simplehudenhanced.fabric.config.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "${mod_id}.fabric.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": ">=${fabric_version}",
+    "cloth-config": ">=${cloth_config_version}",
+    "minecraft": "${fabric_minecraft_version_range}",
+    "java": ">=${java_version}"
+  },
+  "suggests": {
+    "modmenu": ">=${modmenu_version}",
+    "trinkets": ">=${trinkets_version}"
+  }
+}
